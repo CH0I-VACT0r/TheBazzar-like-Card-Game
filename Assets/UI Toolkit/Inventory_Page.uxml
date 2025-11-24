@@ -1,0 +1,40 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3#Combat Scene Styles" />
+    <ui:VisualElement name="InventoryPageRoot" class="page-root inventory-bg" style="flex-grow: 1;">
+        <ui:VisualElement name="HeadContainer" style="flex-grow: 1;">
+            <ui:Label text="Label" name="TitleLabel" />
+            <ui:Button text="X" name="Btn_CloseInventory" class="btn-close" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TabGroup" style="flex-grow: 1;">
+            <ui:Button text="Button" name="Btn_Tab_Mercenary" class="tab-button" />
+            <ui:Button text="Button" name="Btn_Tab_Consumable" class="tab-button" />
+            <ui:Button text="Button" name="Btn_Tab_Material" class="tab-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="InventoryGrid" class="inventory-grid" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_0" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_1" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_2" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_3" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_4" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_5" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_6" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvSlot_7" class="CardSlot" style="flex-grow: 1;">
+                <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

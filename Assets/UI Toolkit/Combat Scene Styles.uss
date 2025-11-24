@@ -6,7 +6,6 @@ VisualElement {
     flex-grow: 1;       /* 남은 공간 꽉 채우기 */
     width: 100%;
     height: 100%;
-    flex-direction: column; /* 자식들을 위->아래로 배치 */
 }
 
 .page-root {
@@ -18,6 +17,36 @@ VisualElement {
     justify-content: center;
     align-items: center;
 }
+
+.layer-game {
+    flex-grow: 1;       /* 화면 꽉 채우기 */
+    height: 100%;
+    flex-direction: column; /* 상단(몬스터)/하단(플레이어) 나누기 위해 */
+}
+
+/* 2층: HUD 레이어 (중간) */
+.layer-hud {
+    position: absolute; /* 1층 위에 겹치기 */
+    width: 100%;
+    height: 100%;
+    /* 배경색 없음 (투명) */
+    
+    /* 정렬은 자식(UI_HUD)에서 처리하므로 여기선 기본값 */
+}
+
+/* 3층: 오버레이 레이어 (최상단) */
+.layer-overlay {
+    position: absolute; /* 모든 것 위에 겹치기 */
+    width: 100%;
+    height: 100%;
+    
+    /* [핵심] 팝업 창을 화면 정중앙에 띄우기 */
+    justify-content: center;
+    align-items: center;
+    
+    /* 배경색 없음 (팝업 창 자체에 배경색 있음) */
+}
+
 
 /* 위쪽 영역 (몬스터, 상점 등) */
 .top-container {
