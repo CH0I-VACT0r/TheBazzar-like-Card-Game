@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// 전투 씬의 메인 컨트롤러입니다.
+// 전투 씬 메인 컨트롤러
 /// 이 스크립트는 공통 로직만 가지며, 어떤 영주나 몬스터가 선택되었는지에 대해서는 다루지 않음
 public class BattleManager : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class BattleManager : MonoBehaviour
     private float m_CurrentNightDamage = 1f;        // 초기 대미지 5
     private float m_NightDamageIncrease = 1f;       // 틱당 대미지 증가량 2
 
-    // (선택사항) 밤이 시작될 때 알림을 줄 이벤트
+    // (선택 사항) 밤이 시작될 때 알림을 줄 이벤트
     public System.Action OnNightStarted;
 
 
@@ -81,10 +81,11 @@ public class BattleManager : MonoBehaviour
         IsNight = true;
         Debug.LogWarning("[밤이 찾아왔습니다! 지속 피해가 시작됩니다.]");
 
+        // 추후 로직
         // 1. 비주얼 변경 (예: 배경 어둡게) -> UIManager나 Controller를 통해 호출
         // ChangeBackgroundToNight(); 
 
-        // 2. 밤 시작 이벤트 발동 (나중에 늑대인간 카드 변신 등에 사용)
+        // 2. 밤 시작 이벤트 발동 (나중에 폼 변신 카드 등에 사용)
         OnNightStarted?.Invoke();
     }
 
@@ -110,7 +111,7 @@ public class BattleManager : MonoBehaviour
 
             Debug.Log($"밤의 저주! 양쪽에 {m_CurrentNightDamage} 피해!");
             CheckConcurrentDeath();
-            // 다음 틱을 위해 대미지 증가 (점점 아파짐)
+            // 다음 틱 대미지 증가
             m_CurrentNightDamage += m_NightDamageIncrease;
         }
     }
@@ -125,8 +126,8 @@ public class BattleManager : MonoBehaviour
         if (playerDead && monsterDead)
         {
             // --- 동시 사망 발생! ---
-            float playerHP = playerController.CurrentHP;   // 예: -5
-            float monsterHP = monsterController.CurrentHP; // 예: -12 (더 많이 죽음)
+            float playerHP = playerController.CurrentHP;
+            float monsterHP = monsterController.CurrentHP; 
 
             Debug.LogWarning($"동시 사망! PlayerHP: {playerHP} vs MonsterHP: {monsterHP}");
 
@@ -138,9 +139,9 @@ public class BattleManager : MonoBehaviour
             {
                 EndBattle("Monster");
             }
-            else // 진짜 완벽하게 똑같은 체력으로 죽었다면?
+            else 
             {
-                // (기획에 따라 무승부 혹은 플레이어 패배 처리)
+                // 진짜 딱 무승부면 플레이어 승리로 함
                 Debug.LogWarning("체력까지 완벽하게 동일함. 플레이어 승리로 판정.");
                 EndBattle("Player");
             }
@@ -161,7 +162,7 @@ public class BattleManager : MonoBehaviour
         CheckConcurrentDeath();
     }
 
-    // 다음 전투를 위해 상태 초기화 (필수)
+    // 다음 전투를 위해 상태 초기화
     public void ResetBattleState()
     {
         m_BattleTimer = 0f;

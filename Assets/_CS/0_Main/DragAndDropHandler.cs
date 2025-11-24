@@ -4,13 +4,13 @@ using UnityEngine.UIElements;
 public class DragAndDropHandler : PointerManipulator
 {
     private bool m_IsDragging = false;
-    private VisualElement m_Root; // 전체 화면 루트 (고스트를 띄울 공간)
+    private VisualElement m_Root; // 전체 화면 루트
     private VisualElement m_GhostIcon; // 마우스 따라다닐 가짜 아이콘
 
     public int StartSlotIndex { get; private set; } = -1;
     private object m_OwnerController;
 
-    // 드래그 시작 시점의 오프셋 (마우스가 카드의 어디를 잡았는지)
+    // 드래그 시작 시점의 오프셋
     private Vector2 m_PointerOffset;
 
     public DragAndDropHandler(VisualElement target, VisualElement root, object controller)
@@ -39,24 +39,24 @@ public class DragAndDropHandler : PointerManipulator
     {
         if (m_OwnerController is PlayerController playerOwner)
         {
-            // 1. 잠금 확인
+            // 잠금 확인
             if (!playerOwner.GetBattleManager().IsDeckEditingAllowed) return;
             if (m_IsDragging || m_Root == null) return;
 
-            // 2. 데이터 확인
+            // 데이터 확인
             StartSlotIndex = playerOwner.GetSlotIndexFromTarget(target);
             Card card = playerOwner.GetCardAtIndex(StartSlotIndex);
             if (card == null) return;
 
-            // 3. 드래그 시작
+            // 드래그 시작
             m_IsDragging = true;
             target.CapturePointer(evt.pointerId);
             playerOwner.ClearTooltipScheduler();
 
-            // 4. [핵심] 고스트 아이콘 생성 (Root에 붙임)
+            // 고스트 아이콘 생성 (Root에 붙임)
             CreateGhostIcon(card, evt.position);
 
-            // 5. 원본 슬롯은 흐릿하게 처리 (데이터는 아직 그대로 있음!)
+            // 원본 슬롯은 흐릿하게 처리 (데이터는 아직 그대로 있음)
             target.style.opacity = 0.3f;
 
             evt.StopPropagation();
@@ -67,7 +67,7 @@ public class DragAndDropHandler : PointerManipulator
     {
         if (!m_IsDragging || !target.HasPointerCapture(evt.pointerId)) return;
 
-        // 6. 고스트 아이콘 이동
+        // 고스트 아이콘 이동
         if (m_GhostIcon != null)
         {
             // 마우스 위치(World)를 Root 기준 로컬 좌표로 변환
@@ -87,7 +87,7 @@ public class DragAndDropHandler : PointerManipulator
         m_IsDragging = false;
         target.ReleasePointer(evt.pointerId);
 
-        // 7. 드롭 위치 계산
+        // 드롭 위치 계산
         if (m_OwnerController is PlayerController playerOwner)
         {
             // 마우스 아래에 있는 요소 찾기
@@ -108,7 +108,7 @@ public class DragAndDropHandler : PointerManipulator
                 depth++;
             }
 
-            // 8. [핵심] 데이터 이동 (MoveCard)
+            // 데이터 이동 (MoveCard)
             if (dropIndex != -1 && dropIndex != StartSlotIndex)
             {
                 Debug.Log($"[D&D] {StartSlotIndex} -> {dropIndex} 이동");
@@ -119,7 +119,7 @@ public class DragAndDropHandler : PointerManipulator
                 Debug.Log("[D&D] 원래 위치로 복귀");
             }
 
-            // 9. 뒷정리
+            // 뒷정리
             target.style.opacity = 1f; // 원본 불투명도 복구
 
             if (m_GhostIcon != null)
@@ -135,7 +135,7 @@ public class DragAndDropHandler : PointerManipulator
         evt.StopPropagation();
     }
 
-    // [헬퍼] 고스트 아이콘 생성 함수
+    // 고스트 아이콘 생성 함수
     private void CreateGhostIcon(Card card, Vector2 mousePosition)
     {
         m_GhostIcon = new VisualElement();
@@ -159,7 +159,7 @@ public class DragAndDropHandler : PointerManipulator
         m_GhostIcon.style.left = localPos.x - m_PointerOffset.x;
         m_GhostIcon.style.top = localPos.y - m_PointerOffset.y;
 
-        // 터치 무시 (드롭 시 밑에 있는 슬롯을 감지해야 하므로 필수!)
+        // 터치 무시 (드롭 시 밑에 있는 슬롯을 감지해야 하므로 필수)
         m_GhostIcon.pickingMode = PickingMode.Ignore;
 
         m_Root.Add(m_GhostIcon);

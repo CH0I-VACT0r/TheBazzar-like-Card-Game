@@ -4,12 +4,16 @@ VisualElement {}
 
 /* 1. 큰 박스 (전체 틀) */
 .inventory-box {
-    flex-grow: 1;         /* 화면 꽉 채우기 */
-    width: 100%;
-    height: 100%;
+    flex-grow: 0;         /* 화면 꽉 채우기 */
+    width: auto;
+    height: auto;
+    align-self: center;    /* 부모(TopContainer) 안에서 나 스스로를 중앙 정렬 */
+    margin-top: 25px;      /* 상하 중앙 정렬을 위한 팁 (위 여백 자동) */
+    margin-bottom: auto;
     background-color: rgba(30, 30, 30, 0.4); /* 배경색 */
     padding: 20px;        /* 안쪽 여백 */
     flex-direction: column;
+    border-radius: 15px;
 }
 
 /* 2. 헤더 (좌우 정렬) */
@@ -93,5 +97,12 @@ VisualElement {}
     border-color: rgb(34, 34, 34);
     margin-left: 2.5px;
     margin-right : 2.5px;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    /* 이미지가 슬롯 크기에 딱 맞게 들어가도록 */
+    -unity-background-scale-mode: scale-to-fit; 
 }
 /* (참고) .card-slot, .text-title, .btn-close 는 기존 스타일 사용 */

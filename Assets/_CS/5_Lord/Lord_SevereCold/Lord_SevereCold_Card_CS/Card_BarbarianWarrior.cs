@@ -15,6 +15,7 @@ public class Card_BarbarianWarrior : Card
         this.CardImage = Resources.Load<Sprite>("CardImages/Lord_SevereCold/Barbarian_Warrior");
         SetInitPrice(3);
         this.Rarity = CardRarity.Bronze;
+        this.ItemType = CardType.Mercenary;
 
         // --- 2. 태그 키 할당 ---
         this.TagKeys.Add("tag_mercenary");

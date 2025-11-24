@@ -11,25 +11,25 @@
             <ui:Button text="MATERIAL" name="Btn_Tab_Material" class="tab-button" />
         </ui:VisualElement>
         <ui:VisualElement name="InventoryGridBox" class="inventory-grid-box" style="flex-grow: 1;">
-            <ui:VisualElement name="InvSlot_0" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_0" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_1" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_1" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_2" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_2" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_3" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_3" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_4" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_4" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_5" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_5" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="InvSlot_6" class="card-slot" style="flex-grow: 1;">
+            <ui:VisualElement name="InvSlot_6" class="card-slot" style="flex-grow: 0;">
                 <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
             </ui:VisualElement>
         </ui:VisualElement>

@@ -3,6 +3,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+public enum CardType
+{
+    Mercenary,  // 용병
+    Consumable, // 아이템/소모품
+    Material    // 재료
+}
+
 public abstract class Card
 {
     // 1. 공통 데이터 
@@ -10,6 +17,7 @@ public abstract class Card
     public string CardNameKey { get; protected set; }                         // 카드 이름
     public Sprite CardImage { get; protected set; }                           // 카드 이미지
     public List<string> TagKeys { get; protected set; } = new List<string>(); // 카드 태그 키
+    public CardType ItemType { get; protected set; } = CardType.Mercenary;    // 카드 타입 - 인벤토리 카테고리 분류용 : 디폴트값 : 용병
     public CardRarity Rarity { get; protected set; }                          // 카드 등급
     public int CardPrice { get; protected set; } = 0;                         // 카드 가격 (변동 가능)
     public int BasePrice { get; protected set; } = 0;                         // 원래 가격 (고정)
@@ -23,9 +31,8 @@ public abstract class Card
     protected int InnateEchoCount { get; set; } = 1;                          // 기본 스킬 시전 횟수
     private int m_BonusEchoStacks = 0;                                        // 추가 시전 횟수 변수
     public bool ShowCooldownUI { get; protected set; } = true;                // 쿨타운 UI 표기 여부 : 패시브 스킬만 있는 카드는 표기 안 함
-    public int PriceInflateAmount { get; protected set; } = 0;                // 인상량
-    public int PriceExtortAmount { get; protected set; } = 0;                 // 인하량
-    public int TriggersChainCount { get; protected set; } = 0;                // 연쇄
+    public int PriceInflateAmount { get; protected set; } = 0;                // 가격 인상량
+    public int PriceExtortAmount { get; protected set; } = 0;                 // 가격 인하량
 
     public string SummonCardNameKey { get; protected set; } = "";             // 소환할 카드 이름
     public int SummonCount { get; protected set; } = 0;                       // 소환 개체 수
@@ -37,6 +44,7 @@ public abstract class Card
     public float PolymorphDurationToApply { get; protected set; } = 0f;       // 변이 툴팁용 시간
     public string PolymorphTargetNameKey { get; protected set; } = "";        // 변이 대상의 이름 키 
     public float TriggersTargetShuffle { get; protected set; } = 0f;          // 교란
+    public int TriggersChainCount { get; protected set; } = 0;                // 연쇄
 
     // 툴팁
     public string CardSkillDescriptionKey { get; protected set; } = "";  // 카드 스킬 설명
