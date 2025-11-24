@@ -1,0 +1,97 @@
+VisualElement {}
+
+/* --- 인벤토리 스타일 (피드백 반영 버전) --- */
+
+/* 1. 큰 박스 (전체 틀) */
+.inventory-box {
+    flex-grow: 1;         /* 화면 꽉 채우기 */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 30, 30, 0.4); /* 배경색 */
+    padding: 20px;        /* 안쪽 여백 */
+    flex-direction: column;
+}
+
+/* 2. 헤더 (좌우 정렬) */
+.header-row {
+    flex-direction: row;            /* 가로 배치 */
+    justify-content: space-between; /* 양 끝으로 벌리기 */
+    align-items: center;            /* 세로 중앙 정렬 */
+    height: 60px;
+    margin-bottom: 10px;
+}
+.text-title {
+    font-size: 32px;
+    color: white;
+    -unity-font-style: bold;
+    margin-left: 10px; /* 왼쪽 벽이랑 너무 딱 붙지 않게 */
+}
+
+.btn-close {
+    width: 45px;
+    height: 45px;
+    background-color: #C62828; /* 진한 빨강 */
+    color: white;
+    font-size: 24px;
+    border-radius: 8px;
+    border-width: 0;
+}
+
+.btn-close:hover {
+    background-color: #FF5252; /* 마우스 올리면 밝은 빨강 */
+}
+/* 3. 탭 컨테이너 (좌측 옹기종기) */
+.tab-container-left {
+    flex-direction: row;      /* 가로 배치 */
+    align-self: flex-start;   /* [핵심] 부모의 왼쪽 벽에 붙음 */
+    
+    height: 45px;
+    margin-bottom: 15px;      /* 슬롯 박스와의 간격 */
+}
+
+/* 탭 버튼 디자인 */
+.tab-button {
+    width: 120px;             /* 적당한 너비 */
+    height: 100%;
+    font-size: 16px;
+    background-color: rgba(150, 150, 150, 0.4);
+    color: #BDBDBD;
+    border-width: 2px;
+    border-color: #000000;
+    margin-right: 5px;        /* 버튼 사이 간격 (옹기종기) */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.tab-button:hover {
+    background-color: #616161;
+}
+
+/* 4. 슬롯 박스 (파티 패널 느낌의 큰 박스) */
+.inventory-grid-box {
+    flex-grow: 1;             /* 남은 공간 다 차지 */
+    background-color: rgba(150, 150, 150, 0.4); /* 어두운 박스 배경 */
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: #000000;    /* 갈색 테두리 */
+    
+    /* 내용물(슬롯) 중앙 정렬 */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.card-slot {
+    width: 140px;
+    height: 210px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: rgba(50, 50, 50, 0.7);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-color: rgb(34, 34, 34);
+    margin-left: 2.5px;
+    margin-right : 2.5px;
+}
+/* (참고) .card-slot, .text-title, .btn-close 는 기존 스타일 사용 */

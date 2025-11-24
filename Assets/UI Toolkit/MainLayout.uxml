@@ -5,7 +5,7 @@
             <ui:VisualElement name="TopContentContainer" class="top-container" style="flex-grow: 1;" />
             <ui:VisualElement name="BottomFixedContainer" class="bottom-container" style="flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:VisualElement name="HUDContainer" class="layer-hud" style="flex-grow: 1;" />
+        <ui:VisualElement name="HUDContainer" picking-mode="Ignore" class="layer-hud" style="flex-grow: 1;" />
         <ui:VisualElement name="TooltipRoot" class="tooltip-root" style="flex-grow: 1; display: none;">
             <ui:Label text="Label" name="TooltipName" class="tooltip-name" />
             <ui:VisualElement name="TooltipTagContainer" class="tooltip-tag-container" style="flex-grow: 1;" />
@@ -28,6 +28,6 @@
             </ui:VisualElement>
             <ui:Label text="Label" name="TooltipFlavorText" class="tooltip-flavor-text" />
         </ui:VisualElement>
-        <ui:VisualElement name="OverlayContainer" class="layer-overlay" style="flex-grow: 1;" />
+        <ui:VisualElement name="OverlayContainer" picking-mode="Ignore" class="layer-overlay" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -152,6 +152,9 @@ MonoBehaviour:
   mainLayoutAsset: {fileID: 9197481963319205126, guid: 6fd66ad37e38cb0448a685e8128a8d61, type: 3}
   fixedPlayerAsset: {fileID: 9197481963319205126, guid: f2e7b22cc5f4e6b4d884a72aa9ff073b, type: 3}
   battlePageAsset: {fileID: 9197481963319205126, guid: 4697ca51d27072043aff6cca6de3868c, type: 3}
+  hudAsset: {fileID: 9197481963319205126, guid: cba75a22f4186264f9ba227388b646d2, type: 3}
+  inventoryPageAsset: {fileID: 9197481963319205126, guid: 257e195fc99100a49b87d85935722faf, type: 3}
+  document: {fileID: 782401218}
 --- !u!4 &782401217
 Transform:
   m_ObjectHideFlags: 0

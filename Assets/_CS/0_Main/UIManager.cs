@@ -3,22 +3,51 @@ using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance; // 싱글톤 접근용
+
     [Header("UXML Files")]
     public VisualTreeAsset mainLayoutAsset;    // "MainLayout"
     public VisualTreeAsset fixedPlayerAsset;   // "Fixed_Player"
     public VisualTreeAsset battlePageAsset;    // "Battle_Page"
+    public VisualTreeAsset hudAsset;             // UI_HUD (버튼, 판매존) [신규]
+    public VisualTreeAsset inventoryPageAsset;   // Page_Inventory (인벤토리) [신규]
 
+    [Header("Controllers")]
     private PlayerController playerController;
     private MonsterController monsterController;
 
+    [Header("Document")]
+    public UIDocument document;
+
     // 내부 변수
-    private UIDocument _uiDocument;
     private VisualElement _root;            // 전체 화면 루트 (MainLayout)
+    private bool _isBattleActive = false;   // 전투 중인지 체크
+
+    // 레이어 컨테이너
+    private VisualElement _gameLayer;       // 1층
+    private VisualElement _hudContainer;    // 2층
+    private VisualElement _overlayContainer;// 3층
+
     private VisualElement _topContainer;    // 교체 영역 (위)
     private VisualElement _bottomContainer; // 고정 영역 (아래)
 
+    public bool IsInventoryOpen
+    {
+        get
+        {
+            if (_overlayContainer == null) return false;
+            return _overlayContainer.childCount > 0;
+        }
+    }
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+    }
+
     void Start()
     {
+        // 0. BattleManager에서 컨트롤러 가져오기
         BattleManager bm = FindFirstObjectByType<BattleManager>();
         if (bm != null)
         {
@@ -30,58 +59,136 @@ public class UIManager : MonoBehaviour
             Debug.LogError("[UIManager] BattleManager를 찾을 수 없습니다!");
         }
 
-        // 1. 뼈대(MainLayout) 로드
-        _uiDocument = GetComponent<UIDocument>();
-        _uiDocument.visualTreeAsset = mainLayoutAsset;
-        _root = _uiDocument.rootVisualElement;
+        // 1. 메인 레이아웃(뼈대) 로드
+        if (document == null) document = GetComponent<UIDocument>();
+        _root = document.rootVisualElement;
 
-        // 2. 컨테이너 찾기
-        _topContainer = _root.Q<VisualElement>("TopContentContainer");
-        _bottomContainer = _root.Q<VisualElement>("BottomFixedContainer");
+        if (mainLayoutAsset != null)
+        {
+            _root.Clear();
+            mainLayoutAsset.CloneTree(_root);
+        }
+        else
+        {
+            Debug.LogError("MainLayoutAsset이 연결되지 않았습니다!");
+            return;
+        }
 
+        // 2. 각 층(Layer) 찾기
+        _gameLayer = _root.Q<VisualElement>("GameLayer");
+        _hudContainer = _root.Q<VisualElement>("HUDContainer");
+        _overlayContainer = _root.Q<VisualElement>("OverlayContainer");
 
-        // [이름 확인용 로그]
-        if (_topContainer == null) Debug.LogError("MainLayout.uxml에서 'TopContentContainer'를 찾을 수 없습니다.");
-        if (_bottomContainer == null) Debug.LogError("MainLayout.uxml에서 'BottomFixedContainer'를 찾을 수 없습니다.");
+        // 2-1. GameLayer 안의 위/아래 찾기
+        if (_gameLayer != null)
+        {
+            _topContainer = _gameLayer.Q<VisualElement>("TopContentContainer");
+            _bottomContainer = _gameLayer.Q<VisualElement>("BottomFixedContainer");
+        }
 
-        if (_topContainer == null || _bottomContainer == null) return; // 여기서 중단
+        // 3. UI 배치 시작 (순서대로 착착)
+        InitializeGameLayer(); // 플레이어(아래)
+        InitializeHUD();       // 버튼(위)
+        SwitchToBattlePage();  // 몬스터(제일 위) -> 시작 화면!
+        SetBattleState(false);
+    }
 
-        // 3. [고정] 플레이어 UI 생성 및 부착
+    // --- [1층 하단] 플레이어 UI 초기화 ---
+    private void InitializeGameLayer()
+    {
+        if (fixedPlayerAsset == null || _bottomContainer == null) return;
+
         VisualElement playerUI = fixedPlayerAsset.Instantiate();
         playerUI.style.flexGrow = 1;
         _bottomContainer.Add(playerUI);
 
-        // 4. PlayerController 초기화
+        // 컨트롤러 연결
         if (playerController != null)
         {
-            // 여기서 비로소 UI가 연결됩니다.
             playerController.InitializeUI(playerUI, _root);
         }
-
-        // 5. [초기 상태] 전투 페이지 로드
-        SwitchToBattlePage();
     }
 
-    // --- 페이지 교체 함수 ---
-
-    /// <summary>
-    /// 전투 화면(몬스터 파티)으로 전환합니다.
-    /// </summary>
+    // --- [1층 상단] 몬스터(전투) 페이지 전환 ---
     public void SwitchToBattlePage()
     {
+        if (IsInventoryOpen)
+        {
+            Debug.LogWarning("인벤토리가 열려 있어서 전투를 시작할 수 없습니다!");
+            return;
+        }
+
+        if (battlePageAsset == null || _topContainer == null) return;
+
         _topContainer.Clear(); // 기존 내용 비우기
 
-        if (battlePageAsset != null)
-        {
-            VisualElement battleUI = battlePageAsset.Instantiate();
-            battleUI.style.flexGrow = 1;
-            _topContainer.Add(battleUI);
+        VisualElement battleUI = battlePageAsset.Instantiate();
+        battleUI.style.flexGrow = 1;
+        _topContainer.Add(battleUI);
 
-            if (monsterController != null)
-            {
-                // [수정!] 여기서 _root를 두 번째 인자로 넘겨줘야 에러가 해결됩니다.
-                monsterController.InitializeUI(battleUI, _root);
-            }
+        // 몬스터 컨트롤러 연결
+        if (monsterController != null)
+        {
+            monsterController.InitializeUI(battleUI, _root);
         }
+    }
+
+    // --- [2층] HUD (버튼, 판매존) 초기화 ---
+    private void InitializeHUD()
+    {
+        if (hudAsset == null || _hudContainer == null) return;
+
+        VisualElement hudUI = hudAsset.Instantiate();
+        hudUI.style.flexGrow = 1;
+        hudUI.pickingMode = PickingMode.Ignore; // 빈 공간 클릭 통과
+        _hudContainer.Add(hudUI);
+
+        // [가방 버튼] 기능 연결
+        Button btnBag = hudUI.Q<Button>("Btn_OpenInventory");
+        if (btnBag != null)
+        {
+            btnBag.clicked += OpenInventory;
+        }
+    }
+
+    public void SetBattleState(bool isActive)
+    {
+        _isBattleActive = isActive;
+        Debug.Log($"전투 상태 변경: {isActive}");
+    }
+
+    // --- [3층] 인벤토리 열기/닫기 ---
+    public void OpenInventory()
+    {
+        // 1. 버튼 클릭 자체가 안 되는 경우
+        Debug.Log(">>> [디버그] OpenInventory 함수가 호출됨! (버튼 연결 성공)");
+        if (_isBattleActive)
+        {
+            Debug.Log("전투 중에는 인벤토리를 열 수 없습니다!");
+            return;
+        }
+
+        if (inventoryPageAsset == null || _topContainer == null) return;
+
+        // 2. [핵심 변경] 기존 TopContainer 내용(몬스터 UI)을 비웁니다.
+        _topContainer.Clear();
+
+        // 3. 인벤토리 생성 및 배치
+        VisualElement invUI = inventoryPageAsset.Instantiate();
+        invUI.style.flexGrow = 1; // 부모 크기 꽉 채우기
+        _topContainer.Add(invUI); // Top 자리에 인벤토리 부착
+
+        // 4. 닫기 버튼 연결
+        Button btnClose = invUI.Q<Button>("Btn_CloseInventory");
+        if (btnClose != null)
+        {
+            btnClose.clicked += CloseInventory;
+        }
+    }
+
+    public void CloseInventory()
+    {
+        _topContainer.Clear();
+        SwitchToBattlePage();
     }
 }

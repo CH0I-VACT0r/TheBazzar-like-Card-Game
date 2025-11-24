@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/HUD.uss?fileID=7433441132597879392&amp;guid=44a8d242bf75e854693cd48f9a4a8d96&amp;type=3#HUD" />
-    <ui:VisualElement name="HUDRoot" class="hud-root" style="flex-grow: 1;">
+    <Style src="project://database/Assets/UI%20Toolkit/HUD/HUD.uss?fileID=7433441132597879392&amp;guid=44a8d242bf75e854693cd48f9a4a8d96&amp;type=3#HUD" />
+    <ui:VisualElement name="HUDRoot" picking-mode="Ignore" class="hud-root" style="flex-grow: 1;">
         <ui:VisualElement name="LeftHUD" class="hud-left" style="flex-grow: 1;">
             <ui:Label text="0 G" name="GoldDisplay" class="text-gold" />
             <ui:Button text="INVENTORY" name="Btn_OpenInventory" class="btn-square" />

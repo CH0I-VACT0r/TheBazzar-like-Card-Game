@@ -196,5 +196,10 @@ public class BattleManager : MonoBehaviour
         {
             gameManager.SetPhase(GameManager.GamePhase.Reward); // GameManager의 Reward 단계로 진입
         }
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.SetBattleState(false);
+        }
     }
 }

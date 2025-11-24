@@ -71,33 +71,49 @@ public class GameManager : MonoBehaviour
     {
         currentPhase = newPhase;
 
-        switch (newPhase)
+        if (UIManager.Instance != null)
         {
-            case GamePhase.Preparation:
-                // 덱 편집 허용: D&D 활성화!
-                battleManager.IsDeckEditingAllowed = true;
-                Debug.Log($"--- Day {CurrentDay} ({GetCurrentWeekday()}) 정비 단계 시작: 덱 편집 허용 ---");
-                // TODO: 여기에 Inventory UI 등을 켜는 로직 추가
-                break;
+            switch (newPhase)
+            {
+                case GamePhase.Preparation:
+                    // 1. 정비 단계
+                    // 덱 편집 허용
+                    battleManager.IsDeckEditingAllowed = true;
 
-            case GamePhase.Battle:
-                // 덱 편집 잠금: D&D 비활성화
-                battleManager.IsDeckEditingAllowed = false;
-                Debug.Log("--- 전투 시작! D&D 잠금 ---");
-                // TODO: 여기에 BattleManager에게 '전투 시작' 명령을 내리는 로직 추가
-                break;
+                    // [추가] 인벤토리 잠금 해제 (이제 가방 열 수 있음)
+                    UIManager.Instance.SetBattleState(false);
 
-            case GamePhase.Reward:
-                // 전투 보상 지급 (BattleManager가 EndBattle을 호출한 후)
-                Debug.Log("--- 전투 종료: 보상 지급 단계 ---");
-                // TODO: 여기에 보상 UI를 띄우는 로직 추가
-                // (보상 지급 후, SetPhase(GamePhase.DayEnd) 호출)
-                break;
+                    Debug.Log($"--- Day {CurrentDay} ({GetCurrentWeekday()}) 정비 단계 시작: 덱 편집 허용 ---");
+                    break;
 
-            case GamePhase.DayEnd:
-                Debug.Log("--- 하루 종료: 다음 날 시작 대기 ---");
-                // TODO: 여기에 End of Day UI/Summary를 띄우는 로직 추가
-                break;
+                case GamePhase.Battle:
+                    // 2. 전투 단계
+                    // 덱 편집 잠금
+                    battleManager.IsDeckEditingAllowed = false;
+
+                    // [추가] 인벤토리가 열려있다면 강제로 닫기
+                    if (UIManager.Instance.IsInventoryOpen)
+                    {
+                        UIManager.Instance.CloseInventory();
+                    }
+                    // [추가] 인벤토리 잠금 (이제 가방 못 멂)
+                    UIManager.Instance.SetBattleState(true);
+
+                    Debug.Log("--- 전투 시작! D&D 잠금 & 인벤토리 잠금 ---");
+                    break;
+
+                case GamePhase.Reward:
+                    // 3. 보상 단계
+                    // [추가] 전투 끝났으니 인벤토리 다시 허용
+                    UIManager.Instance.SetBattleState(false);
+
+                    Debug.Log("--- 전투 종료: 보상 지급 단계 ---");
+                    break;
+
+                case GamePhase.DayEnd:
+                    Debug.Log("--- 하루 종료: 다음 날 시작 대기 ---");
+                    break;
+            }
         }
     }
 
