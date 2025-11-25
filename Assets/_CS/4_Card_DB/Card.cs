@@ -24,7 +24,7 @@ public abstract class Card
     public LordType OwnerLord { get; protected set; } = LordType.Common;      // 소속 영주
     public float BaseCooldownTime { get; protected set; }                     // 카드의 기본 스킬 쿨타임 (초)
     public float CurrentCooldown { get; set; }                                // 현재 남은 쿨타임. 0이 되면 스킬 발동
-    public object Owner;                                                    // 이 카드를 소유하고 관리하는 플레이어 또는 몬스터
+    public object Owner;                                                      // 이 카드를 소유하고 관리하는 플레이어 또는 몬스터
     public int OriginalSlotIndex { get; private set; }                        // 전투 시작 시 슬롯 인덱스 (불변)
     public int SlotIndex { get; private set; }                                // 현재 카드 슬롯 인덱스
     public int Durability { get; protected set; } = -1;                       // 내구도
