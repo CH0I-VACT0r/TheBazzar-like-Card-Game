@@ -996,6 +996,7 @@ public class MonsterController
         if (m_HealthBarFill != null)
         {
             float healthPercent = (MaxHP > 0) ? (CurrentHP / MaxHP) : 0f;
+            healthPercent = Mathf.Clamp01(healthPercent);
             m_HealthBarFill.style.width = Length.Percent(healthPercent * 100f);
         }
 

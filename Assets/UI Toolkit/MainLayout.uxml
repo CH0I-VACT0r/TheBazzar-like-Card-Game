@@ -29,5 +29,8 @@
             <ui:Label text="Label" name="TooltipFlavorText" class="tooltip-flavor-text" />
         </ui:VisualElement>
         <ui:VisualElement name="OverlayContainer" picking-mode="Ignore" class="layer-overlay" style="flex-grow: 1;" />
+        <ui:VisualElement name="GhostIcon" picking-mode="Ignore" style="flex-grow: 1;">
+            <ui:VisualElement name="GhostImage" picking-mode="Ignore" style="flex-grow: 1;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

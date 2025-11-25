@@ -14,7 +14,7 @@ public class Card_Witch : Card
 
     public override void ExecuteSkill()
     {
-        MonsterController owner = m_Owner as MonsterController;
+        MonsterController owner = Owner as MonsterController;
         if (owner == null)
         {
             UnityEngine.Debug.LogError("[WITCH] ExecuteSkill: Owner is not PlayerController!");

@@ -105,4 +105,10 @@ VisualElement {}
     /* 이미지가 슬롯 크기에 딱 맞게 들어가도록 */
     -unity-background-scale-mode: scale-to-fit; 
 }
-/* (참고) .card-slot, .text-title, .btn-close 는 기존 스타일 사용 */
+
+.tab-button.active {
+    background-color: #757575; /* 호버보다 살짝 더 밝은 회색 */
+    color: #FFFFFF;            /* 글자색 흰색 강조 */
+    border-bottom-color: #D32F2F; /* (선택사항) 바닥에 빨간 줄 포인트 */
+    border-bottom-width: 3px;
+}

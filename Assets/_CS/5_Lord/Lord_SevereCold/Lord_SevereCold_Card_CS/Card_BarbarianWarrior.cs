@@ -47,8 +47,8 @@ public class Card_BarbarianWarrior : Card
         float realDamage = GetCurrentDamage() * CheckForCrit();
 
         // 2. 주인(Owner)이 플레이어인지 몬스터인지 확인
-        PlayerController playerOwner = m_Owner as PlayerController;
-        MonsterController monsterOwner = m_Owner as MonsterController;
+        PlayerController playerOwner = Owner as PlayerController;
+        MonsterController monsterOwner = Owner as MonsterController;
 
         // 3. 타겟에게 피해 입히기
         if (playerOwner != null)

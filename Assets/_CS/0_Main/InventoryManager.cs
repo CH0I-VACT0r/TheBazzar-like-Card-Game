@@ -81,4 +81,43 @@ public class InventoryManager : MonoBehaviour
         Gold += amount;
         return true;
     }
+
+    // 카드 객체 자체를 다시 인벤토리에 넣는 함수
+    public void AddCardObject(Card card)
+    {
+        if (card == null) return;
+
+        // 주인 정보 초기화
+        card.Owner = null;
+        card.SetSlotIndex(-1);
+
+        switch (card.ItemType)
+        {
+            case CardType.Mercenary: mercenaryList.Add(card); break;
+            case CardType.Consumable: consumableList.Add(card); break;
+            case CardType.Material: materialList.Add(card); break;
+        }
+    }
+
+    // 인덱스로 카드 가져오는 함수
+    public Card GetCardAtIndex(CardType type, int index)
+    {
+        List<Card> list = GetListByType(type);
+        if (list != null && index >= 0 && index < list.Count)
+        {
+            return list[index];
+        }
+        return null;
+    }
+
+    // 리스트에서 카드 제거하는 함수 (장착/판매 시 사용)
+    public void RemoveCard(Card card)
+    {
+        switch (card.ItemType)
+        {
+            case CardType.Mercenary: mercenaryList.Remove(card); break;
+            case CardType.Consumable: consumableList.Remove(card); break;
+            case CardType.Material: materialList.Remove(card); break;
+        }
+    }
 }

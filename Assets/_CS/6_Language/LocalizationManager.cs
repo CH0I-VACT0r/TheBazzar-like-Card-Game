@@ -13,6 +13,11 @@ public static class LocalizationManager
     private static Dictionary<string, string> m_KoreanDict = new Dictionary<string, string>()
     {
         // TODO: 여기에 모든 카드 텍스트 키 추가
+        // 인벤토리
+        { "ui_inventory_title", "인벤토리" },
+        { "ui_tab_mercenary", "용병" },
+        { "ui_tab_consumable", "소모품" },
+        { "ui_tab_material", "재료" },
 
         // 툴팁 UI
         { "quest_status_complete", "완료" },
@@ -87,6 +92,12 @@ public static class LocalizationManager
     // 영어 사전 (en)
     private static Dictionary<string, string> m_EnglishDict = new Dictionary<string, string>()
     {
+        // TODO: 여기에 모든 카드 텍스트 키 추가
+        // 인벤토리
+        { "ui_inventory_title", "INVENTORY" },
+        { "ui_tab_mercenary", "Mercenary" },
+        { "ui_tab_consumable", "Items" },
+        { "ui_tab_material", "Material" },
         // 툴팁 UI
         { "quest_status_complete", "Complete" },
         { "quest_status_incomplete", "In Progress" },

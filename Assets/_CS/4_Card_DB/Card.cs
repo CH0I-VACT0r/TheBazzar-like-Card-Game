@@ -24,7 +24,7 @@ public abstract class Card
     public LordType OwnerLord { get; protected set; } = LordType.Common;      // 소속 영주
     public float BaseCooldownTime { get; protected set; }                     // 카드의 기본 스킬 쿨타임 (초)
     public float CurrentCooldown { get; set; }                                // 현재 남은 쿨타임. 0이 되면 스킬 발동
-    protected object m_Owner;                                                 // 이 카드를 소유하고 관리하는 플레이어 또는 몬스터
+    public object Owner;                                                    // 이 카드를 소유하고 관리하는 플레이어 또는 몬스터
     public int OriginalSlotIndex { get; private set; }                        // 전투 시작 시 슬롯 인덱스 (불변)
     public int SlotIndex { get; private set; }                                // 현재 카드 슬롯 인덱스
     public int Durability { get; protected set; } = -1;                       // 내구도
@@ -200,7 +200,7 @@ public abstract class Card
     /// 새 카드를 생성할 때 호출됩니다.
     public Card(object owner, int index, float cooldown)
     {
-        this.m_Owner = owner;
+        this.Owner = owner;
         this.SlotIndex = index;
         this.BaseCooldownTime = cooldown;
         this.CurrentCooldown = GetCurrentCooldownTime(); 
@@ -244,13 +244,13 @@ public abstract class Card
                 Card neighborRight = null;
                 Card neighborLeft = null;
 
-                if (m_Owner is PlayerController playerOwner)
+                if (Owner is PlayerController playerOwner)
                 {
                     // PlayerController의 GetRight/LeftNeighbor 호출
                     neighborRight = playerOwner.GetRightNeighbor(this.SlotIndex);
                     neighborLeft = playerOwner.GetLeftNeighbor(this.SlotIndex);
                 }
-                else if (m_Owner is MonsterController monsterOwner)
+                else if (Owner is MonsterController monsterOwner)
                 {
                     // MonsterController의 GetRight/LeftNeighbor 호출
                     neighborRight = monsterOwner.GetRightNeighbor(this.SlotIndex);
@@ -314,8 +314,8 @@ public abstract class Card
             if (PolymorphTimer <= 0f)
             {
                 // 시간 다 되면 복구
-                if (m_Owner is PlayerController player) player.RevertMutation(this.SlotIndex);
-                else if (m_Owner is MonsterController monster) monster.RevertMutation(this.SlotIndex);
+                if (Owner is PlayerController player) player.RevertMutation(this.SlotIndex);
+                else if (Owner is MonsterController monster) monster.RevertMutation(this.SlotIndex);
 
                 return;
             }
@@ -409,11 +409,11 @@ public abstract class Card
                 string targetID = string.IsNullOrEmpty(extraData) ? "card_sheep" : extraData;
 
                 // Controller에게 구체적인 ID로 변이 요청
-                if (m_Owner is PlayerController player)
+                if (Owner is PlayerController player)
                 {
                     player.MutateCard(this.SlotIndex, targetID, duration);
                 }
-                else if (m_Owner is MonsterController monster)
+                else if (Owner is MonsterController monster)
                 {
                     monster.MutateCard(this.SlotIndex, targetID, duration);
                 }
@@ -456,11 +456,11 @@ public abstract class Card
         if (this.Durability <= 0)
         {
             // 파괴
-            if (m_Owner is PlayerController playerOwner)
+            if (Owner is PlayerController playerOwner)
             {
                 playerOwner.DestroyCard(this.SlotIndex);
             }
-            else if (m_Owner is MonsterController monsterOwner)
+            else if (Owner is MonsterController monsterOwner)
             {
                 monsterOwner.DestroyCard(this.SlotIndex);
             }

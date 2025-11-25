@@ -16,6 +16,7 @@ public class PlayerController
     protected VisualElement m_PlayerParty; // 7칸 카드 슬롯 패널
     protected VisualElement m_StatusPanel; // 상태 패널 UI
     public List<VisualElement> Slots { get; protected set; } = new List<VisualElement>(7); // 7개의 카드 슬롯 UI 요소 리스트
+    public int Gold { get; private set; } = 15;
 
     // 툴팁 UI 요소
     protected VisualElement m_Root;
@@ -167,7 +168,7 @@ public class PlayerController
         for (int i = 0; i < 7; i++)
         {
             // 이름 규칙: CardSlot1
-            VisualElement slot = playerUiRoot.Q<VisualElement>($"CardSlot{i + 1}");
+            VisualElement slot = playerUiRoot.Q<VisualElement>($"CardSlot_{i}");
             Slots.Add(slot);
 
             if (slot != null)
@@ -243,9 +244,21 @@ public class PlayerController
             UpdateCardSlotUI(i);
         }
 
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateGoldUI(Gold);
+        }
+
         Debug.Log("PlayerController UI 초기화 및 연결 완료");
     }
- 
+
+    public void UpdatePartyUI()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            UpdateCardSlotUI(i);
+        }
+    }
 
     public virtual void BattleUpdate(float deltaTime)
     {
@@ -1029,6 +1042,7 @@ public class PlayerController
         if (m_HealthBarFill != null)
         {
             float healthPercent = (MaxHP > 0) ? (CurrentHP / MaxHP) : 0f;
+            healthPercent = Mathf.Clamp01(healthPercent);
             m_HealthBarFill.style.width = Length.Percent(healthPercent * 100f);
         }
 
@@ -1297,6 +1311,8 @@ public class PlayerController
             // 쿨타임/역할 UI도 모두 숨김
             if (cooldownOverlay != null) cooldownOverlay.style.display = DisplayStyle.None;
             if (roleUIContainer != null) roleUIContainer.Clear();
+            if (costContainer != null) costContainer.style.display = DisplayStyle.None;
+            if (costLabel != null) costLabel.text = "";
         }
     }
 
@@ -1499,6 +1515,115 @@ public class PlayerController
             UpdateCardSlotUI(i);
         }
     }
+
+    // 14. 인벤토리 관련 함수
+
+    // 장착 (인벤토리 -> 파티 슬롯)
+    public void EquipCard(int inventoryIndex, int partySlotIndex)
+    {
+        // 현재 보고 있는 탭의 리스트에서 카드를 가져옴
+        CardType currentTab = UIManager.Instance.CurrentTab;
+        Card cardToEquip = InventoryManager.Instance.GetCardAtIndex(currentTab, inventoryIndex);
+
+        if (cardToEquip == null) return;
+
+        // 만약 해당 파티 슬롯에 이미 카드가 있다면? -> 교체(Swap)
+        if (m_Cards[partySlotIndex] != null)
+        {
+            Card oldCard = m_Cards[partySlotIndex];
+            Debug.Log($"[Equip] 교체됨: {oldCard.CardNameKey} -> 인벤토리로 이동");
+
+            // 기존 카드를 인벤토리로 반환
+            InventoryManager.Instance.AddCardObject(oldCard);
+        }
+
+        // 새 카드 장착
+        m_Cards[partySlotIndex] = cardToEquip;
+
+        // 카드 정보 업데이트 (주인: 나, 위치: 여기)
+        cardToEquip.Owner = this; // (setter가 없다면 필드 직접 할당 or 메서드 사용)
+        cardToEquip.SetSlotIndex(partySlotIndex);
+
+        // 인벤토리 리스트에서는 삭제
+        InventoryManager.Instance.RemoveCard(cardToEquip);
+
+        // UI 갱신 (파티창 & 인벤토리 둘 다)
+        UpdateAllUI();
+    }
+
+    // 해제 (파티 슬롯 -> 인벤토리)
+    public void UnequipCard(int partySlotIndex)
+    {
+        Card cardToUnequip = m_Cards[partySlotIndex];
+        if (cardToUnequip == null) return;
+
+        // 인벤토리로 보내기
+        InventoryManager.Instance.AddCardObject(cardToUnequip);
+
+        // 파티 슬롯 비우기
+        m_Cards[partySlotIndex] = null;
+
+        // UI 갱신
+        UpdateAllUI();
+    }
+
+    // 판매 (어디서든 -> 판매 존)
+    public void SellCard(int slotIndex, bool fromInventory)
+    {
+        Card cardToSell = null;
+
+        // 인벤토리에서 판매
+        if (fromInventory)
+        {
+            CardType currentTab = UIManager.Instance.CurrentTab;
+            cardToSell = InventoryManager.Instance.GetCardAtIndex(currentTab, slotIndex);
+
+            if (cardToSell != null)
+            {
+                InventoryManager.Instance.RemoveCard(cardToSell);
+            }
+        }
+        // 파티 창에서 바로 판매
+        else
+        {
+            cardToSell = m_Cards[slotIndex];
+            if (cardToSell != null)
+            {
+                m_Cards[slotIndex] = null; // 슬롯 비우기
+            }
+        }
+
+        if (cardToSell == null) return;
+
+        // 골드 획득 로직
+        int price = cardToSell.GetCurrentPrice(); // Card 클래스에 있는 함수
+        Gold += price;
+        Debug.Log($"[Sell] {cardToSell.CardNameKey} 판매 완료! (+{price} G)");
+
+        // UI 갱신
+        UpdateAllUI();
+    }
+
+    // 모든 UI 갱신
+    private void UpdateAllUI()
+    {
+        // 파티 UI 갱신
+        // (PlayerController의 InitializeUI에서 등록한 refresh 메서드나 UIManager 호출)
+        // 예: UpdatePartyUI(); 
+        // 만약 UIManager를 통해 갱신한다면:
+        UIManager.Instance.RefreshPlayerUI();
+
+        // 인벤토리 UI 갱신
+        if (UIManager.Instance.IsInventoryOpen)
+        {
+            UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
+        }
+
+        // 골드 UI 갱신 
+        UIManager.Instance.UpdateGoldUI(Gold);
+    }
+
+
 
     // -------------------------- 프로토타입용 덱 설정 함수 ---------------------------------
     // --------------------------------------------------------------------------------------

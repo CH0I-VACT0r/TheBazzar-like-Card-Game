@@ -42,7 +42,7 @@ public class Card_Goblin : Card
         float realDamage = GetCurrentDamage() * CheckForCrit();
 
         // 2. 이 카드는 '몬스터' 전용이므로, 주인(Owner)을 MonsterController로 간주
-        MonsterController monsterOwner = m_Owner as MonsterController;
+        MonsterController monsterOwner = Owner as MonsterController;
 
         // 3. 타겟(플레이어)에게 피해 입히기
         if (monsterOwner != null)

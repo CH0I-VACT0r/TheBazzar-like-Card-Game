@@ -45,8 +45,8 @@ public class Card_BarbarianShieldbearer : Card
         float realShield = GetCurrentShield() * critMultiplier;
 
         // 2. 주인(Owner)이 플레이어인지 몬스터인지 확인
-        PlayerController playerOwner = m_Owner as PlayerController;
-        MonsterController monsterOwner = m_Owner as MonsterController;
+        PlayerController playerOwner = Owner as PlayerController;
+        MonsterController monsterOwner = Owner as MonsterController;
 
         // 3. '본체(Owner)'에게 쉴드 추가
         if (playerOwner != null)
