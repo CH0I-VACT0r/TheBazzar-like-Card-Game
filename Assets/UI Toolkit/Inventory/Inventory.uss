@@ -4,13 +4,19 @@ VisualElement {}
 
 /* 1. 큰 박스 (전체 틀) */
 .inventory-box {
-    flex-grow: 0;         /* 화면 꽉 채우기 */
+    position: absolute; 
+    
+    /* 초기 위치 (화면 정중앙) */
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+
     width: auto;
     height: auto;
     align-self: center;    /* 부모(TopContainer) 안에서 나 스스로를 중앙 정렬 */
     margin-top: 25px;      /* 상하 중앙 정렬을 위한 팁 (위 여백 자동) */
     margin-bottom: auto;
-    background-color: rgba(30, 30, 30, 0.4); /* 배경색 */
+    background-color: rgba(30, 30, 30, 1.0); /* 배경색 */
     padding: 20px;        /* 안쪽 여백 */
     flex-direction: column;
     border-radius: 15px;
@@ -73,7 +79,7 @@ VisualElement {}
 /* 4. 슬롯 박스 (파티 패널 느낌의 큰 박스) */
 .inventory-grid-box {
     flex-grow: 1;             /* 남은 공간 다 차지 */
-    background-color: rgba(150, 150, 150, 0.4); /* 어두운 박스 배경 */
+    background-color: rgba(150, 150, 150, 1.0); /* 어두운 박스 배경 */
     border-radius: 15px;
     border-width: 2px;
     border-color: #000000;    /* 갈색 테두리 */

@@ -1554,6 +1554,9 @@ public class PlayerController
     // 해제 (파티 슬롯 -> 인벤토리)
     public void UnequipCard(int partySlotIndex)
     {
+        if (InventoryManager.Instance == null) return;
+        if (partySlotIndex < 0 || partySlotIndex >= m_Cards.Length) return;
+
         Card cardToUnequip = m_Cards[partySlotIndex];
         if (cardToUnequip == null) return;
 
@@ -1563,6 +1566,16 @@ public class PlayerController
         // 파티 슬롯 비우기
         m_Cards[partySlotIndex] = null;
 
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.SwitchTab(cardToUnequip.ItemType);
+
+            // 만약 인벤토리가 닫혀있다면, 자동으로 열어주는 센스
+            if (!UIManager.Instance.IsInventoryOpen)
+            {
+                UIManager.Instance.OpenInventory();
+            }
+        }
         // UI 갱신
         UpdateAllUI();
     }

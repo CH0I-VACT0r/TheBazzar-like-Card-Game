@@ -38,8 +38,8 @@ public class UIManager : MonoBehaviour
     {
         get
         {
-            if (_topContainer == null) return false;
-            return _topContainer.Q(null, "inventory-box") != null;
+            if (_overlayContainer == null) return false;
+            return _overlayContainer.childCount > 0;
         }
     }
 
@@ -170,14 +170,26 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if (inventoryPageAsset == null || _topContainer == null) return;
-
-        _topContainer.Clear();
+        if (inventoryPageAsset == null || _overlayContainer == null) return;
 
         // 인벤토리 생성 및 배치
         VisualElement invUI = inventoryPageAsset.Instantiate();
-        invUI.style.flexGrow = 1; 
-        _topContainer.Add(invUI); 
+        invUI.pickingMode = PickingMode.Ignore;
+        invUI.style.flexGrow = 1;
+        invUI.style.justifyContent = Justify.Center; // 중앙 정렬 보조
+        invUI.style.alignItems = Align.Center;
+
+        _overlayContainer.Add(invUI);
+
+        VisualElement windowBox = invUI.Q<VisualElement>("InventoryRoot"); // 움직일 몸체
+        VisualElement header = invUI.Q<VisualElement>("HeaderRow"); // 잡고 흔들 손잡이 (이름이 HeaderRow인지 확인!)
+
+        // 창 이동 핸들러 부착
+        if (header != null && windowBox != null)
+        {
+            WindowDragHandler dragHandler = new WindowDragHandler(header, windowBox);
+            header.AddManipulator(dragHandler);
+        }
 
         // 닫기 버튼 연결
         Button btnClose = invUI.Q<Button>("Btn_CloseInventory");
@@ -211,8 +223,10 @@ public class UIManager : MonoBehaviour
 
     public void CloseInventory()
     {
-        _topContainer.Clear();
-        SwitchToBattlePage();
+        if (_overlayContainer != null)
+        {
+            _overlayContainer.Clear();
+        }
     }
 
     public void ToggleInventory()
@@ -229,8 +243,8 @@ public class UIManager : MonoBehaviour
 
     public void RefreshInventoryGrid(CardType type)
     {
-        if (_topContainer == null) return;
-        VisualElement invUI = _topContainer.Q<VisualElement>("InventoryRoot");
+        if (_overlayContainer == null) return;
+        VisualElement invUI = _overlayContainer.Q<VisualElement>("InventoryRoot");
         if (invUI == null) return;
 
         // 데이터 리스트 가져오기
@@ -319,8 +333,8 @@ public class UIManager : MonoBehaviour
     // 탭 버튼의 스타일과 텍스트를 갱신하는 함수
     private void UpdateTabState()
     {
-        if (_topContainer == null) return;
-        VisualElement invUI = _topContainer.Q<VisualElement>("InventoryRoot");
+        if (_overlayContainer == null) return;
+        VisualElement invUI = _overlayContainer.Q<VisualElement>("InventoryRoot");
         if (invUI == null) return;
 
         // 버튼들 찾기
@@ -354,6 +368,18 @@ public class UIManager : MonoBehaviour
             case CardType.Material:
                 btnMat.AddToClassList("active");
                 break;
+        }
+    }
+
+    public void SwitchTab(CardType type)
+    {
+        CurrentTab = type; // 탭 변수 변경
+
+        // 인벤토리가 열려있을 때만 UI를 갱신합니다.
+        if (IsInventoryOpen)
+        {
+            UpdateTabState(); // 1. 버튼 스타일/텍스트 갱신
+            RefreshInventoryGrid(type); // 2. 그리드 내용 갱신
         }
     }
 }
