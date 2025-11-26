@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 /// 이 스크립트는 공통 로직만 가지며, 어떤 영주나 몬스터가 선택되었는지에 대해서는 다루지 않음
 public class BattleManager : MonoBehaviour
 {
+    public static BattleManager Instance;
+
     // --- 1. 컨트롤러 참조 ---
     public PlayerController playerController; //플레이어 진영을 관리하는 컨트롤러의 기본 형태 : 컨트롤러팩토리 에서 생성
     public MonsterController monsterController; // 몬스터 진영을 관리하는 컨트롤러의 '기본' 형태
@@ -33,6 +35,16 @@ public class BattleManager : MonoBehaviour
     // --- 3. Unity 수명 주기 함수 ---
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject); // 중복 방지
+            return;
+        }
+
         Debug.Log("[BattleManager] 컨트롤러 객체 생성 중...");
         playerController = ControllerFactory.CreatePlayerController(this);
         monsterController = ControllerFactory.CreateMonsterController(this);

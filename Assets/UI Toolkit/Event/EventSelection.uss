@@ -1,0 +1,96 @@
+VisualElement {}
+
+/* --- EventSelection.uss --- */
+
+/* 1. 전체 페이지 (TopContentContainer 꽉 채우기) */
+.event-page-root {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    
+    /* 배경을 살짝 어둡게 해서 카드에 집중시키기 */
+    background-color: rgba(0, 0, 0, 0); 
+    
+    /* 내용물 중앙 정렬 */
+    align-items: center;
+    justify-content: center;
+}
+
+.event-window {
+    flex-grow: 0;          /* 화면 꽉 채우지 않음! (핵심) */
+    width: auto;           /* 내용물만큼만 크기 차지 */
+    height: auto;
+    
+    align-items: center;   /* 내부 요소(제목, 카드통) 중앙 정렬 */
+}
+
+/* 3. 카드 3개를 담을 컨테이너 (가로 배치) */
+.event-card-container {
+    flex-direction: row;      /* 가로로 나열 */
+    justify-content: center;  /* 중앙 정렬 */
+    align-items: center;      /* 세로축 중앙 */
+    padding-bottom : 60px;
+}
+
+/* 4. 개별 이벤트 카드 디자인 */
+.event-card {
+    width: 300px;             /* 카드 너비 */
+    height: 240px;            /* 카드 높이 */
+    
+    background-color: #EFE7DA; /* 짙은 갈색 배경 */
+    border-width: 4px;
+    border-color: #8D6E63;     /* 테두리 색 */
+    border-radius: 15px;       /* 둥근 모서리 */
+    
+    margin: 100px;              /* 카드끼리의 간격 */
+    padding: 15px;             /* 내부 여백 */
+    
+    align-items: center;       /* 내부 텍스트/이미지 중앙 정렬 */
+    
+    /* 부드러운 애니메이션 효과 */
+    transition-duration: 0.1s; 
+    transition-property: scale, border-color, background-color;
+}
+
+/* [핵심] 마우스 올렸을 때 (Hover) 효과 */
+.event-card:hover {
+    scale: 1.1;                /* 1.1배 커짐 */
+    border-color: #FFD54F;     /* 금색 테두리로 변경 */
+    background-color: #CAB399; /* 배경색 살짝 밝게 */
+}
+
+/* 5. 카드 내부 이미지 */
+.event-image {
+    width: 100%;
+    height: 100%;               /* 카드 높이의 80% 차지 */
+    background-color: #1a1a1a; /* 이미지가 없을 때 기본색 */
+    margin-bottom: 15px;
+    border-radius: 10px;
+    -unity-background-scale-mode: scale-to-fit; /* 비율 유지하며 맞춤 */
+}
+
+/* 6. 이벤트 이름 텍스트 */
+.event-name-label {
+    font-size: 22px;
+    color: black;
+    -unity-font-style: bold;
+    white-space: normal;       /* 글자가 길면 줄바꿈 */
+    -unity-text-align: middle-center;
+    margin-bottom: 5px;
+}
+
+.border-bronze {
+    border-color: #CD7F32; /* 구리색 */
+}
+
+.border-silver {
+    border-color: #C0C0C0; /* 은색 */
+}
+
+.border-gold {
+    border-color: #FFD700; /* 금색 */
+}
+
+.border-diamond {
+    border-color: #00FFFF; /* 하늘색/다이아색 */
+}

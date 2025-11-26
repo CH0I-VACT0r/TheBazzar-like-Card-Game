@@ -83,7 +83,8 @@ VisualElement {
     border-top-width: 1px;
     border-bottom-width: 1px;
     border-color: rgb(34, 34, 34);
-    margin-left: 5px
+    margin-left: 5px;
+    border-radius: 5%;
 }
 
 .card-image-background {
@@ -289,18 +290,19 @@ VisualElement {
 
 .card-role-ui-container {
     position: absolute;
-    top: -10px;
+    top: -15px;
     left: 50%;
     translate: -50% 0;
     width: 120px;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    border-radius: 5%;
 }
 
 .card-role-icon {
-    width: 50px;
-    height: 20px;
+    width: 60px;
+    height: 25px;
     border-radius: 3px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.5);
@@ -312,7 +314,7 @@ VisualElement {
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     color: white;
-    font-size: 16px;
+    font-size: 21px;
    -unity-text-outline-width: 1px;
    -unity-text-outline-color: black;
 }
@@ -401,12 +403,12 @@ VisualElement {
 .cost-container {
     /* 1. 위치: 좌측 하단 절대 배치 */
     position: absolute;
-    bottom: -4px; 
-    left: -4px;
+    bottom: -6px; 
+    left: -6px;
 
     /* 2. 크기 및 모양 (동그라미) */
-    width: 25px;  /* 원의 지름 */
-    height: 25px; /* 원의 지름 */
+    width: 40px;  /* 원의 지름 */
+    height: 40px; /* 원의 지름 */
     border-radius: 50%; /* 50% = 완벽한 원 */
 
     /* 3. 디자인 */
@@ -425,7 +427,7 @@ VisualElement {
     right: 0;
     top: 0;
     bottom: 1px;
-    font-size: 15px;
+    font-size: 24px;
     color: white;
     -unity-font-style: bold;
     -unity-text-outline-width: 1px;
@@ -443,7 +445,7 @@ VisualElement {
     display: none;
     
     /* 디자인 */
-    background-color: rgba(0, 0, 0, 0.85); /* 어두운 반투명 배경 */
+    background-color: rgb(0, 0, 0); /* 어두운 반투명 배경 */
     border-color: white;
     border-width: 2px;
     border-radius: 5px;
@@ -596,4 +598,46 @@ VisualElement {
     width: 100%;
     height: 100%;
     -unity-background-scale-mode: scale-to-fit;
+}
+
+.event-tooltip-box {
+    position: absolute;
+    width: 280px;          /* 적당한 너비 */
+    height: auto;          /* 높이는 내용물에 맞춤 */
+    
+    background-color: rgba(20, 20, 20, 0.95); /* 아주 진한 회색 */
+    border-width: 2px;
+    border-color: #FFD54F; /* 금색 테두리 */
+    border-radius: 10px;
+    
+    padding: 15px;
+    align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+/* 제목 */
+.evt-tip-title {
+    font-size: 20px;
+    color: white;
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: #555;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+/* 설명 */
+.evt-tip-desc {
+    font-size: 14px;
+    color: #E0E0E0;
+    white-space: normal; /* 줄바꿈 허용 */
+    margin-bottom: 10px;
+}
+
+/* 등급 표시 */
+.evt-tip-rarity {
+    font-size: 14px;
+    color: #FFD700;
+    align-self: flex-end; /* 오른쪽 구석으로 보냄 */
+    -unity-font-style: italic;
 }

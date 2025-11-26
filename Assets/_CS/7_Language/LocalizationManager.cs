@@ -13,13 +13,13 @@ public static class LocalizationManager
     private static Dictionary<string, string> m_KoreanDict = new Dictionary<string, string>()
     {
         // TODO: 여기에 모든 카드 텍스트 키 추가
-        // 인벤토리
+        // --- 인벤토리 ---
         { "ui_inventory_title", "인벤토리" },
         { "ui_tab_mercenary", "용병" },
         { "ui_tab_consumable", "소모품" },
         { "ui_tab_material", "재료" },
 
-        // 툴팁 UI
+        // --- 툴팁 UI ---
         { "quest_status_complete", "완료" },
         { "quest_status_incomplete", "진행 중" },
         { "stat_cooldown", "쿨타임: {0}초" },
@@ -48,7 +48,7 @@ public static class LocalizationManager
         { "stat_triggers_shuffle", "교란 : {0}칸" },
         { "stat_triggers_chain", "연쇄" },
 
-        // 태그
+        // --- 태그 ---
         { "tag_mercenary", "용병" },
         { "tag_dealer", "딜러" },
         { "tag_tanker", "탱커" },
@@ -59,6 +59,7 @@ public static class LocalizationManager
         { "tag_monster", "몬스터" },
         { "tag_goblin", "고블린" },
 
+        // --- 카드 ---
         // 양
         { "card_sheep_name", "양"},
         { "card_sheep_desc", "양입니다." },
@@ -84,7 +85,20 @@ public static class LocalizationManager
         { "card_witch_name", "마녀" },
         { "card_witch_skill_desc", "상대 카드를 양으로 변이시킵니다." },
 
+        // --- 상점 이벤트 제목 & 설명 ---
+        { "evt_shop_bronze_title", "허름한 용병 길드" },
+        { "evt_shop_bronze_desc", "초보 모험가들이 모이는 곳입니다.\n저렴하게 용병을 고용할 수 있습니다." },
 
+        { "evt_shop_barbarian_title", "야만전사 야영지" },
+        { "evt_shop_barbarian_desc", "거친 숨소리가 들려옵니다.\n야만전사들이 당신을 기다립니다." },
+
+        { "evt_shop_potion_title", "잡화 상점" },
+        { "evt_shop_potion_desc", "마을에 중심에 위치한 잡화 상점입니다.\n다양한 물약을 팔고 있습니다." },
+
+        // --- 상점 주인 인사말 (Greeting) ---
+        { "greet_shop_common", "어서 오세요! 좋은 물건 많습니다." },
+        { "greet_shop_rough", "강한 녀석을 원하나? 잘 찾아왔군." },
+        { "greet_shop_mystic", "무엇이 필요하신가요?" },
 
 
     };
@@ -93,12 +107,13 @@ public static class LocalizationManager
     private static Dictionary<string, string> m_EnglishDict = new Dictionary<string, string>()
     {
         // TODO: 여기에 모든 카드 텍스트 키 추가
-        // 인벤토리
+        // --- 인벤토리 ---
         { "ui_inventory_title", "INVENTORY" },
         { "ui_tab_mercenary", "Mercenary" },
         { "ui_tab_consumable", "Items" },
         { "ui_tab_material", "Material" },
-        // 툴팁 UI
+
+        // --- 툴팁 UI ---
         { "quest_status_complete", "Complete" },
         { "quest_status_incomplete", "In Progress" },
         { "stat_cooldown", "Cooldown: {0}s" },
@@ -127,7 +142,7 @@ public static class LocalizationManager
         { "stat_triggers_shuffle", "Disruption : {0} slots" },
         { "stat_triggers_chain", "Chain" },
         
-        // 태그
+        // --- 태그 ---
         { "tag_mercenary", "Mercenary" },
         { "tag_barbarian", "Barbarian" },
         { "tag_dealer", "Dealer" },
@@ -137,6 +152,7 @@ public static class LocalizationManager
         { "tag_beast", "Beast" },
         { "tag_goblin", "Goblin" },
 
+        // --- 카드 ---
         // 양
         { "card_sheep_name", "Sheep"},
         { "card_sheep_desc", "It's a sheep." },
@@ -161,6 +177,21 @@ public static class LocalizationManager
         // 마녀
         { "card_witch_name", "Witch" },
         { "card_witch_skill_desc", "Polymorph the opponent card into a sheep." },
+
+        // --- 상점 이벤트 제목 & 설명 ---
+        { "evt_shop_bronze_title", "Run-down Mercenary Guild" },
+        { "evt_shop_bronze_desc", "A gathering place for novice adventurers.\nYou can hire mercenaries at a low price." },
+
+        { "evt_shop_barbarian_title", "Barbarian Encampment" },
+        { "evt_shop_barbarian_desc", "The sound of heavy breathing fills the air.\nBarbarians represent strength." }, 
+
+        { "evt_shop_potion_title", "General Store" },
+        { "evt_shop_potion_desc", "A general store located in the town center.\nThey sell a variety of potions." },
+
+        // --- 상점 주인 인사말 (Greeting) ---
+        { "greet_shop_common", "Welcome! Take a look at my wares." },
+        { "greet_shop_rough", "Looking for strength? You've come to the right place." },
+        { "greet_shop_mystic", "What is it that you need?" },
     };
 
     // "키"를 주면 현재 언어에 맞는 "텍스트"를 반환합니다.

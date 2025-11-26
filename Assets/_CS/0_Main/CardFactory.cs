@@ -4,6 +4,22 @@ using UnityEngine;
 // '카드 ID' 문자열을 기반 실제 Card 객체 생성 데이터베이스
 public static class CardFactory
 {
+    private static string[] allCardIDs =
+    {
+        "barbarian_warrior",
+        "barbarian_shieldbearer",
+        // "potion_hp", ...
+    };
+
+    public static Card CreateRandomCard(CardRarity rarity)
+    {
+        // (나중에 rarity에 맞는 ID만 추려서 뽑는 로직 추가 가능)
+        string randomID = allCardIDs[Random.Range(0, allCardIDs.Length)];
+
+        // 상점용 생성 (주인 없음)
+        return CreateCard(randomID, null, -1);
+    }
+
     //카드 ID, 주인, 슬롯을 받아 카드 생성
     public static Card CreateCard(string cardID, object owner, int index)
     {
@@ -52,9 +68,8 @@ public static class CardFactory
                 break;
         }
 
-        // 덱 설정이 잘못되었거나, 알 수 없는 ID일 경우
-        Debug.LogError($"[CardFactory] 알 수 없는 cardID({cardID})이거나, " +
-                       $"잘못된 주인(Owner) 타입입니다! (Owner: {owner.GetType()})");
+        string ownerType = (owner != null) ? owner.GetType().Name : "null (Inventory/Shop)";
+        Debug.LogError($"[CardFactory] ID를 찾을 수 없거나 생성 실패: {cardID} (요청자: {ownerType})");
         return null;
     }
 }

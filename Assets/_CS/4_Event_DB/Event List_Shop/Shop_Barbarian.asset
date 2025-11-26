@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391e57ead98f27a4cab48f5dfead2709, type: 3}
+  m_Name: Shop_Barbarian
+  m_EditorClassIdentifier: Assembly-CSharp::Event_Shop
+  eventID: shop_barbarian
+  titleKey: evt_shop_barbarian_title
+  descKey: evt_shop_barbarian_desc
+  eventImage: {fileID: 0}
+  rarity: 0
+  eventType: 0
+  priceMultiplier: 1
+  rerollPrice: 50
+  targetRarity: 0
+  targetType: 0
+  requiredTag: tag_barbarian
+  shopkeeperImage: {fileID: 0}
+  greetingKey: greet_shop_rough

@@ -1636,7 +1636,42 @@ public class PlayerController
         UIManager.Instance.UpdateGoldUI(Gold);
     }
 
+    public void SpendGold(int amount)
+    {
+        if (Gold >= amount)
+        {
+            Gold -= amount;
 
+            // UI 갱신
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.UpdateGoldUI(Gold);
+            }
+        }
+    }
+
+    // 빈 파티 슬롯 찾기 (없으면 -1 반환)
+    public int GetFirstEmptyPartySlot()
+    {
+        for (int i = 0; i < m_Cards.Length; i++)
+        {
+            if (m_Cards[i] == null) return i;
+        }
+        return -1;
+    }
+
+    // 카드 즉시 장착 (상점에서 바로 파티로)
+    public void EquipCardDirectly(Card card, int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= m_Cards.Length) return;
+
+        m_Cards[slotIndex] = card;
+        card.Owner = this;
+        card.SetSlotIndex(slotIndex);
+
+        // 파티 UI 갱신
+        UpdateCardSlotUI(slotIndex);
+    }
 
     // -------------------------- 프로토타입용 덱 설정 함수 ---------------------------------
     // --------------------------------------------------------------------------------------

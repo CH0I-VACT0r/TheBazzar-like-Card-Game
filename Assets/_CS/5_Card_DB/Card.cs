@@ -160,7 +160,7 @@ public abstract class Card
 
     // --- [가격 컨트롤] ---
     // 초기 가격 설정
-    protected void SetInitPrice(int price)
+    public void SetInitPrice(int price)
     {
         this.CardPrice = price;
         this.BasePrice = price;

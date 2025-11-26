@@ -1,0 +1,21 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Event/EventSelection.uss?fileID=7433441132597879392&amp;guid=14ee7769b30861446b617228c4d63643&amp;type=3#EventSelection" />
+    <ui:VisualElement name="EventSelectionRoot" class="event-page-root" style="flex-grow: 1;">
+        <ui:VisualElement name="EventWindow" style="flex-grow: 1;">
+            <ui:VisualElement name="EventCardContainer" class="event-card-container" style="flex-grow: 1;">
+                <ui:VisualElement name="EventSlot_0" class="event-card" style="flex-grow: 1;">
+                    <ui:VisualElement name="EventImage" class="event-image" style="flex-grow: 1;" />
+                    <ui:Label text="Event Name&#10;" name="EventName" class="event-name-label" />
+                </ui:VisualElement>
+                <ui:VisualElement name="EventSlot_1" class="event-card" style="flex-grow: 1;">
+                    <ui:VisualElement name="EventImage" class="event-image" style="flex-grow: 1;" />
+                    <ui:Label text="Event Name&#10;" name="EventName" class="event-name-label" />
+                </ui:VisualElement>
+                <ui:VisualElement name="EventSlot_2" class="event-card" style="flex-grow: 1;">
+                    <ui:VisualElement name="EventImage" class="event-image" style="flex-grow: 1;" />
+                    <ui:Label text="Event Name&#10;" name="EventName" class="event-name-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

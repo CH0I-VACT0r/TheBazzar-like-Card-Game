@@ -103,6 +103,7 @@ VisualElement {}
     border-color: rgb(34, 34, 34);
     margin-left: 2.5px;
     margin-right : 2.5px;
+    border-radius: 5%;
 }
 
 .card-image {

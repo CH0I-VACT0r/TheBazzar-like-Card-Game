@@ -1,0 +1,166 @@
+VisualElement {
+}
+
+.shop-page-root {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    align-items: center;
+    justify-content: center;
+}
+
+.shopkeeper-area {
+    flex-direction: column;
+    align-items: center;
+    margin-right: 80px;
+    height: 210px;
+    width: 140px;
+    flex-shrink: 0;
+}
+
+.shop-window {
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 20px;
+}
+
+.shopkeeper-image {
+    width: 140px;
+    height: 140px;
+    background-color: rgb(93, 64, 55);
+    border-width: 4px;
+    border-color: rgb(255, 215, 0);
+    border-radius: 20px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.dialogue-tail {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    bottom: -10px;
+    rotate: 45deg;
+}
+
+.shop-right-panel {
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.shop-shelf {
+    flex-direction: row;
+    margin-bottom: 40px;
+}
+
+.shop-slot {
+    width: 140px;
+    height: 210px;
+    background-color: rgba(60, 40, 30, 0.9);
+    border-width: 2px;
+    border-color: rgb(141, 110, 99);
+    border-radius: 5px;
+    margin-right: 60px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 5%;
+}
+
+.shop-slot:hover {
+    scale: 1.05;
+    border-color: rgb(255, 215, 0);
+}
+
+.price-tag {
+    position: absolute;
+    bottom: -10px; 
+    left: -10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    /* 3. 디자인 (파티창과 동일) */
+    background-color: rgb(200, 130, 35); /* 주황빛 갈색 */
+    border-width: 2px;
+    border-color: black;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.price-text {
+    position: absolute;
+    left: 3px;
+    right: 0;
+    top: 0;
+    bottom: 1px;
+    font-size: 24px;
+    color: white;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: black;
+    -unity-text-align: middle-center;
+}
+
+.sold-out-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.sold-out-text {
+    color: rgb(255, 82, 82);
+    font-size: 32px;
+    -unity-font-style: bold;
+    rotate: -15deg;
+    text-shadow: 2px 2px 0 black;
+}
+
+.shop-bottom-panel {
+    flex-direction: row;
+    top: 30px;
+    margin-bottom: 80px;
+    padding: 15px;
+    justify-content: flex-end;
+    margin-left: 330px;
+}
+
+.btn-shop {
+    width: 160px;
+    height: 50px;
+    font-size: 20px;
+    color: white;
+    border-radius: 8px;
+    border-width: 0;
+    transition-duration: 0.1s;
+    margin-left: 350px;
+}
+
+.btn-shop:hover {
+    scale: 1.05;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%; /* 부모(슬롯) 크기에 꽉 차게 */
+    
+    /* 비율 유지하며 채우기 */
+    -unity-background-scale-mode: scale-to-fit; 
+    
+    /* (선택) 이미지가 없을 때 영역 확인용 색상 */
+    /* background-color: rgba(255, 255, 255, 0.1); */
+}

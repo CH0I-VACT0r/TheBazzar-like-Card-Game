@@ -1,0 +1,45 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Shop/Shop.uss?fileID=7433441132597879392&amp;guid=3669d4bfe0bec7a4f81811a218faad93&amp;type=3#Shop" />
+    <ui:VisualElement name="ShopRoot" class="shop-page-root" style="flex-grow: 1;">
+        <ui:VisualElement name="BottomPanel" class="shop-bottom-panel" style="flex-grow: 0; flex-shrink: 0; justify-content: flex-end; align-content: flex-end;">
+            <ui:Button text="Reroll" name="Btn_Reroll" class="btn-reroll btn-shop" style="justify-content: flex-end; align-self: flex-end; white-space: pre; align-items: flex-end;" />
+            <ui:Button text="Leave" name="Btn_Leave" class="btn-leave btn-shop" style="align-items: flex-end; -unity-text-align: middle-center;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ShopWindow" class="shop-window" style="flex-grow: 0;">
+            <ui:VisualElement name="ShopKeeperArea" class="shopkeeper-area" style="flex-grow: 0;">
+                <ui:VisualElement name="ShopKeeperImage" class="shopkeeper-image" style="flex-grow: 0; flex-shrink: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="RightPanel" class="shop-right-panel" style="flex-grow: 1;">
+                <ui:VisualElement name="ShopShelf" class="shop-shelf" style="flex-grow: 1;">
+                    <ui:VisualElement name="ShopSlot_0" class="shop-slot" style="flex-grow: 1;">
+                        <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
+                        <ui:VisualElement name="PriceTag" picking-mode="Ignore" class="price-tag" style="flex-grow: 1;">
+                            <ui:Label text="Label" name="PriceLabel" picking-mode="Ignore" class="price-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
+                            <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ShopSlot_1" class="shop-slot" style="flex-grow: 1;">
+                        <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
+                        <ui:VisualElement name="PriceTag" picking-mode="Ignore" class="price-tag" style="flex-grow: 1;">
+                            <ui:Label text="Label" name="PriceLabel" picking-mode="Ignore" class="price-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
+                            <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ShopSlot_2" class="shop-slot" style="flex-grow: 1;">
+                        <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
+                        <ui:VisualElement name="PriceTag" picking-mode="Ignore" class="price-tag" style="flex-grow: 1;">
+                            <ui:Label text="Label" name="PriceLabel" picking-mode="Ignore" class="price-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
+                            <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
