@@ -1,5 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Shop/Shop.uss?fileID=7433441132597879392&amp;guid=3669d4bfe0bec7a4f81811a218faad93&amp;type=3#Shop" />
+    <Style src="project://database/Assets/UI%20Toolkit/Battle/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3#Combat Scene Styles" />
     <ui:VisualElement name="ShopRoot" class="shop-page-root" style="flex-grow: 1;">
         <ui:VisualElement name="BottomPanel" class="shop-bottom-panel" style="flex-grow: 0; flex-shrink: 0; justify-content: flex-end; align-content: flex-end;">
             <ui:Button text="Reroll" name="Btn_Reroll" class="btn-reroll btn-shop" style="justify-content: flex-end; align-self: flex-end; white-space: pre; align-items: flex-end;" />
@@ -19,6 +20,7 @@
                         <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
                             <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
                         </ui:VisualElement>
+                        <ui:VisualElement name="RoleUIContainer" picking-mode="Ignore" class="shop-role-container" style="flex-grow: 1;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ShopSlot_1" class="shop-slot" style="flex-grow: 1;">
                         <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
@@ -28,6 +30,7 @@
                         <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
                             <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
                         </ui:VisualElement>
+                        <ui:VisualElement name="RoleUIContainer" picking-mode="Ignore" class="shop-role-container" style="flex-grow: 1;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ShopSlot_2" class="shop-slot" style="flex-grow: 1;">
                         <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
@@ -37,6 +40,7 @@
                         <ui:VisualElement name="SoldOutCover" picking-mode="Ignore" class="sold-out-cover" style="flex-grow: 1; display: none;">
                             <ui:Label text="SOLD OUT" name="SoldOutText" picking-mode="Ignore" class="sold-out-text" />
                         </ui:VisualElement>
+                        <ui:VisualElement name="RoleUIContainer" picking-mode="Ignore" class="shop-role-container" style="flex-grow: 1; align-items: auto;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

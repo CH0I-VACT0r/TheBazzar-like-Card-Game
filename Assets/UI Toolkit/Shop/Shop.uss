@@ -124,7 +124,7 @@ VisualElement {
 
 .sold-out-text {
     color: rgb(255, 82, 82);
-    font-size: 32px;
+    font-size: 24px;
     -unity-font-style: bold;
     rotate: -15deg;
     text-shadow: 2px 2px 0 black;
@@ -161,6 +161,18 @@ VisualElement {
     /* 비율 유지하며 채우기 */
     -unity-background-scale-mode: scale-to-fit; 
     
-    /* (선택) 이미지가 없을 때 영역 확인용 색상 */
-    /* background-color: rgba(255, 255, 255, 0.1); */
+
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.shop-role-container {
+     position: absolute;
+    top: -15px;
+    left: 50%;
+    translate: -50% 0;
+    width: 120px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 5%;
 }

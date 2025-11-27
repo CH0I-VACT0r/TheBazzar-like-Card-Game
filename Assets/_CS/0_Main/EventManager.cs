@@ -18,20 +18,34 @@ public class EventManager : MonoBehaviour
     // 특정 등급의 이벤트 중 하나를 랜덤으로 뽑기
     public GameEvent GetRandomEventByRarity(CardRarity targetRarity)
     {
-        // 해당 등급에 맞는 이벤트 추출
         List<GameEvent> filteredList = allEvents.FindAll(e => e.rarity == targetRarity);
 
-        // (만약 해당 등급 이벤트가 하나도 없으면? -> 브론즈에서 찾기)
+        // 해당 등급 없으면 브론즈로 대체
         if (filteredList.Count == 0)
         {
             Debug.LogWarning($"[EventManager] {targetRarity} 등급 이벤트가 없습니다. Bronze로 대체합니다.");
             filteredList = allEvents.FindAll(e => e.rarity == CardRarity.Bronze);
         }
 
-        if (filteredList.Count == 0) return null; // 진짜 아무것도 없으면 null
+        if (filteredList.Count == 0) return null;
 
-        // 랜덤 뽑기
         int randomIndex = Random.Range(0, filteredList.Count);
         return filteredList[randomIndex];
+    }
+
+    // 2. [신규] 특정 등급의 '모든' 이벤트 리스트 반환 (중복 방지 로직용)
+    public List<GameEvent> GetAllEventsByRarity(CardRarity targetRarity)
+    {
+        // 해당 등급만 싹 긁어모으기
+        List<GameEvent> list = allEvents.FindAll(e => e.rarity == targetRarity);
+
+        // 만약 해당 등급이 하나도 없으면? -> 브론즈라도 줘라 (안전장치)
+        if (list.Count == 0)
+        {
+            list = allEvents.FindAll(e => e.rarity == CardRarity.Bronze);
+        }
+
+        // 리스트(목록) 자체를 반환합니다.
+        return list;
     }
 }

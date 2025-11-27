@@ -663,15 +663,59 @@ public class UIManager : MonoBehaviour
             Card item = (stock != null && i < stock.Count) ? stock[i] : null;
 
             VisualElement img = slot.Q<VisualElement>("CardImage");
+            VisualElement priceTag = slot.Q<VisualElement>("PriceTag");
             Label priceLbl = slot.Q<Label>("PriceLabel");
             VisualElement soldCover = slot.Q<VisualElement>("SoldOutCover");
+            VisualElement roleContainer = slot.Q<VisualElement>("RoleUIContainer");
 
             if (item != null)
             {
                 // [판매 중]
-                if (img != null) img.style.backgroundImage = new StyleBackground(item.CardImage);
-                if (priceLbl != null) priceLbl.text = $"{item.GetCurrentPrice()}";
+                if (img != null)
+                {
+                    img.style.backgroundImage = new StyleBackground(item.CardImage);
+                    img.style.backgroundColor = new StyleColor(Color.clear); // 배경 투명
+                }
+
+                if (priceTag != null)
+                {
+                    priceTag.style.display = DisplayStyle.Flex; // 켜기
+                    if (priceLbl != null) priceLbl.text = $"{item.GetCurrentPrice()}";
+                }
                 if (soldCover != null) soldCover.style.display = DisplayStyle.None;
+
+                if (roleContainer != null)
+                {
+                    roleContainer.Clear(); // 기존 아이콘 삭제
+
+                    // 1. 대미지
+                    float dmg = item.GetCurrentDamage();
+                    if (dmg > 0) CreateRoleIcon(roleContainer, "role-attacker", dmg.ToString());
+
+                    // 2. 상태이상 (출혈, 화상, 중독, 빙결)
+                    int bleed = item.GetCurrentBleedStacks();
+                    if (bleed > 0) CreateRoleIcon(roleContainer, "role-bleed", bleed.ToString());
+
+                    int burn = item.GetCurrentBurnStacks();
+                    if (burn > 0) CreateRoleIcon(roleContainer, "role-burn", burn.ToString());
+
+                    int poison = item.GetCurrentPoisonStacks();
+                    if (poison > 0) CreateRoleIcon(roleContainer, "role-poison", poison.ToString());
+
+                    float freeze = item.GetCurrentFreezeDuration();
+                    if (freeze > 0) CreateRoleIcon(roleContainer, "role-freeze", freeze.ToString("0.0"));
+
+                    // 3. 쉴드
+                    float shield = item.GetCurrentShield();
+                    if (shield > 0) CreateRoleIcon(roleContainer, "role-tanker", shield.ToString());
+
+                    // 4. 힐
+                    float heal = item.GetCurrentHeal();
+                    if (heal > 0) CreateRoleIcon(roleContainer, "role-healer", heal.ToString());
+
+                    int healDot = item.GetCurrentHealStacks();
+                    if (healDot > 0) CreateRoleIcon(roleContainer, "role-heal-dot", healDot.ToString());
+                }
 
                 // 슬롯에 클릭 가능 표시 (활성화)
                 slot.userData = item; // 인덱스를 저장해둠
@@ -679,10 +723,17 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                // [품절]
+                // 품절
+                if (img != null)
+                {
+                    img.style.backgroundImage = null;
+                    img.style.backgroundColor = new StyleColor(Color.clear);
+                }
+                if (priceTag != null) priceTag.style.display = DisplayStyle.None;
+                if (roleContainer != null) roleContainer.Clear();
                 if (soldCover != null) soldCover.style.display = DisplayStyle.Flex;
-
                 // 품절된 슬롯은 클릭 안 받음
+                slot.userData = null;
                 slot.pickingMode = PickingMode.Ignore;
             }
         }
@@ -904,6 +955,26 @@ public class UIManager : MonoBehaviour
 
         m_TooltipRoot.style.display = DisplayStyle.Flex;
         m_TooltipRoot.BringToFront();
+    }
+
+    private void CreateRoleIcon(VisualElement container, string roleClass, string valueText)
+    {
+        // 1) 아이콘 생성
+        VisualElement icon = new VisualElement();
+        icon.AddToClassList("card-role-icon"); // 공통 스타일 (Battle.uss에 있음)
+        icon.AddToClassList(roleClass);        // 개별 색상 스타일
+
+        // 2) 텍스트 라벨 생성
+        Label label = new Label(valueText);
+        label.AddToClassList("card-role-label");
+
+        // 3) 조립
+        icon.Add(label);
+        container.Add(icon);
+
+        // (상점에서는 아이콘 클릭 막기)
+        icon.pickingMode = PickingMode.Ignore;
+        label.pickingMode = PickingMode.Ignore;
     }
 
     public void HideTooltip()

@@ -171,19 +171,38 @@ public class GameManager : MonoBehaviour
     // 이벤트 선택
     private void TriggerDailyEventSelection()
     {
-        Debug.Log($"Day {CurrentDay}: 오늘의 랜덤 이벤트 3개를 선정합니다. (Lv.{PlayerLevel})");
-
         List<GameEvent> dailyEvents = new List<GameEvent>();
 
         for (int i = 0; i < 3; i++)
         {
+            // 레벨에 따른 등급 결정
             CardRarity rarity = GetRandomRarityByLevel();
-            GameEvent evt = EventManager.Instance.GetRandomEventByRarity(rarity);
 
-            if (evt != null)
+            if (EventManager.Instance != null)
             {
-                dailyEvents.Add(evt);
-                Debug.Log($"   - 선택지 {i + 1}: [{evt.rarity}] {evt.eventID}");
+                // 해당 등급의 '모든' 후보군 가져오기
+                List<GameEvent> candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
+
+                // 중복 방지
+                candidates.RemoveAll(evt => dailyEvents.Contains(evt));
+
+                // 이벤트 개수 부족 시 중복 허용
+                if (candidates.Count == 0)
+                {
+                    candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
+                }
+
+                if (candidates.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, candidates.Count);
+                    GameEvent selectedEvent = candidates[randomIndex];
+
+                    dailyEvents.Add(selectedEvent);
+                }
+            }
+            else
+            {
+                Debug.LogError("[GameManager] EventManager가 씬에 없습니다");
             }
         }
 

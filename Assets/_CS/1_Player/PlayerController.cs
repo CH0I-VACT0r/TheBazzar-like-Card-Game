@@ -1196,7 +1196,7 @@ public class PlayerController
                 if (cardData.CardPrice > 0)
                 {
                     costContainer.style.display = DisplayStyle.Flex;
-                    costLabel.text = cardData.CardPrice.ToString();
+                    costLabel.text = cardData.GetSellPrice().ToString();
                 }
                 else
                 {
@@ -1609,7 +1609,7 @@ public class PlayerController
         if (cardToSell == null) return;
 
         // 골드 획득 로직
-        int price = cardToSell.GetCurrentPrice(); // Card 클래스에 있는 함수
+        int price = cardToSell.GetSellPrice(); // Card 클래스에 있는 함수
         Gold += price;
         Debug.Log($"[Sell] {cardToSell.CardNameKey} 판매 완료! (+{price} G)");
 

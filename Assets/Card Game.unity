@@ -339,6 +339,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EventManager
   allEvents:
   - {fileID: 11400000, guid: a826d2a89f0b6b04e9d62871f13f8ae3, type: 2}
+  - {fileID: 11400000, guid: 8020a32bcc8d84a4cbe453f253d197bd, type: 2}
+  - {fileID: 11400000, guid: f46301755ca34f244b120e0fa3cbca9a, type: 2}
 --- !u!114 &1148396167
 MonoBehaviour:
   m_ObjectHideFlags: 0

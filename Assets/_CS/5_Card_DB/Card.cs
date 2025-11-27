@@ -193,6 +193,12 @@ public abstract class Card
         return Mathf.Max(0, finalPrice);
     }
 
+    public virtual int GetSellPrice()
+    {
+        // 최소 0원, 원가의 절반
+        return Mathf.Max(0, GetCurrentPrice() / 2);
+    }
+
     public virtual int GetCurrentPriceInflate() { return this.PriceInflateAmount; }
     public virtual int GetCurrentPriceExtort() { return this.PriceExtortAmount; }
 

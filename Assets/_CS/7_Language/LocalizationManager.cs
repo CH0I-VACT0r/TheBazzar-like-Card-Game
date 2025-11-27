@@ -87,13 +87,13 @@ public static class LocalizationManager
 
         // --- 상점 이벤트 제목 & 설명 ---
         { "evt_shop_bronze_title", "허름한 용병 길드" },
-        { "evt_shop_bronze_desc", "초보 모험가들이 모이는 곳입니다.\n저렴하게 용병을 고용할 수 있습니다." },
+        { "evt_shop_bronze_desc", "초보 모험가들이 모이는 곳입니다. 저렴하게 용병을 고용할 수 있습니다." },
 
         { "evt_shop_barbarian_title", "야만전사 야영지" },
-        { "evt_shop_barbarian_desc", "거친 숨소리가 들려옵니다.\n야만전사들이 당신을 기다립니다." },
+        { "evt_shop_barbarian_desc", "거친 숨소리가 들려옵니다. 야만전사들이 당신을 기다립니다." },
 
         { "evt_shop_potion_title", "잡화 상점" },
-        { "evt_shop_potion_desc", "마을에 중심에 위치한 잡화 상점입니다.\n다양한 물약을 팔고 있습니다." },
+        { "evt_shop_potion_desc", "마을에 중심에 위치한 잡화 상점입니다. 다양한 물약을 팔고 있습니다." },
 
         // --- 상점 주인 인사말 (Greeting) ---
         { "greet_shop_common", "어서 오세요! 좋은 물건 많습니다." },

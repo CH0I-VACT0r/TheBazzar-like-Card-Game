@@ -12,7 +12,7 @@ public class Card_BarbarianShieldbearer : Card
         // --- 1. 기본 정보 설정 (키 할당) ---
         this.CardNameKey = "card_barbarianshield_name";
         this.CardImage = Resources.Load<Sprite>("CardImages/Lord_SevereCold/Barbarian_Tanker");
-        SetInitPrice(3);
+        SetInitPrice(2);
         this.Rarity = CardRarity.Bronze;
         this.ItemType = CardType.Mercenary;
 
