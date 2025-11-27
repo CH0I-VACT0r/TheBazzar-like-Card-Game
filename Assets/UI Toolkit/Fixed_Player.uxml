@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3#Combat Scene Styles" />
+    <Style src="project://database/Assets/UI%20Toolkit/Battle/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3#Combat Scene Styles" />
     <ui:VisualElement name="PlayerPageRoot" class="page-root" style="flex-grow: 1;">
         <ui:VisualElement name="PlayerParty" class="PlayerPartyPanel" style="flex-grow: 1;">
             <ui:VisualElement name="CardSlot_0" class="CardSlot" style="flex-grow: 1;">
@@ -28,8 +28,8 @@
             </ui:VisualElement>
             <ui:VisualElement name="CardSlot_3" class="CardSlot" style="flex-grow: 1;">
                 <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
-                <ui:VisualElement name="RoleUIContatiner" picking-mode="Ignore" class="card-role-ui-container" style="flex-grow: 1;" />
                 <ui:VisualElement name="CooldownOverlay" class="card-cooldown-overlay" style="flex-grow: 1; display: none;" />
+                <ui:VisualElement name="RoleUIContatiner" picking-mode="Ignore" class="card-role-ui-container" style="flex-grow: 1;" />
                 <ui:VisualElement name="CostContainer" class="cost-container" style="flex-grow: 1; display: none;">
                     <ui:Label text="0" name="CostLabel" class="cost-label" />
                 </ui:VisualElement>
