@@ -116,6 +116,36 @@ public class DragAndDropHandler : PointerManipulator
         {
             // 드롭한 위치 찾기
             VisualElement dropTarget = m_Root.panel.Pick(evt.position);
+            VisualElement interactionSlot = FindInteractionSlot(dropTarget);
+
+            if (interactionSlot != null)
+            {
+                Debug.Log("[Drop] 이벤트 타겟 슬롯에 드롭 감지!");
+
+                // 드래그 중인 카드 데이터 가져오기
+                Card cardData = null;
+
+                if (IsFromInventory)
+                {
+                    // 인벤토리에서 온 경우 (슬롯의 userData 활용)
+                    VisualElement img = target.Q<VisualElement>("CardImage");
+                    if (img != null && img.userData is Card c) cardData = c;
+                }
+                else
+                {
+                    // 파티 슬롯에서 온 경우 (인덱스로 찾기)
+                    cardData = playerOwner.GetCardAtIndex(StartSlotIndex);
+                }
+
+                // 매니저에게 카드 전달
+                if (cardData != null && EventInteractionManager.Instance != null)
+                {
+                    EventInteractionManager.Instance.SelectCard(cardData);
+                }
+
+                evt.StopPropagation();
+                return; 
+            }
 
             // 판매 존 확인
             if (IsSellZone(dropTarget))
@@ -238,5 +268,15 @@ public class DragAndDropHandler : PointerManipulator
             element = element.parent;
         }
         return false;
+    }
+
+    private VisualElement FindInteractionSlot(VisualElement element)
+    {
+        while (element != null)
+        {
+            if (element.name == "TargetSlot") return element; // Page_EventInteraction.uxml에서 지은 이름
+            element = element.parent;
+        }
+        return null;
     }
 }

@@ -59,7 +59,17 @@ public static class LocalizationManager
         { "tag_monster", "몬스터" },
         { "tag_goblin", "고블린" },
 
-        // --- 카드 ---
+        // --- [카드] ---
+        // --- 재료 ---
+        { "card_torn_book_name", "찢어진 책" },
+        { "card_torn_book_desc", "너무 낡아서 더 이상 읽을 수 없습니다." },
+        { "card_torn_book_flavor", "누군가 치열하게 공부한 흔적이 남아있습니다." },
+
+        // --- 중립 ---
+        { "card_manual_beginner_name", "하급 무술 교본" },
+        { "card_manual_beginner_desc", "왼쪽에 있는 [딜러] 카드의 공격력을 영구적으로 10 증가시킵니다." },
+        { "card_manual_beginner_flavor", "기초적인 검술 동작이 그려져 있습니다." },
+
         // 양
         { "card_sheep_name", "양"},
         { "card_sheep_desc", "양입니다." },
@@ -95,11 +105,8 @@ public static class LocalizationManager
         { "evt_shop_potion_title", "잡화 상점" },
         { "evt_shop_potion_desc", "마을에 중심에 위치한 잡화 상점입니다. 다양한 물약을 팔고 있습니다." },
 
-        // --- 상점 주인 인사말 (Greeting) ---
-        { "greet_shop_common", "어서 오세요! 좋은 물건 많습니다." },
-        { "greet_shop_rough", "강한 녀석을 원하나? 잘 찾아왔군." },
-        { "greet_shop_mystic", "무엇이 필요하신가요?" },
-
+        { "evt_reinforce_title", "낡은 대장간" },
+        { "evt_reinforce_desc", "오래된 모루와 망치가 보입니다. 소비 아이템의 내구도를 소폭 늘릴 수 있습니다." },
 
     };
 
@@ -152,7 +159,17 @@ public static class LocalizationManager
         { "tag_beast", "Beast" },
         { "tag_goblin", "Goblin" },
 
-        // --- 카드 ---
+        // --- [카드] ---
+        // --- 재료 ---
+        { "card_torn_book_name", "Torn Book" },
+        { "card_torn_book_desc", "It is too worn out to read." },
+        { "card_torn_book_flavor", "Traces of someone's intense study remain." },
+        // --- 중립 ---
+        // 하급 무술 교본
+        { "card_manual_beginner_name", "Lesser Martial Arts Manual" },
+        { "card_manual_beginner_desc", "Permanently increases the Attack Damage of the [Dealer] card to the left by 10." },
+        { "card_manual_beginner_flavor", "It depicts basic swordsmanship movements." },
+
         // 양
         { "card_sheep_name", "Sheep"},
         { "card_sheep_desc", "It's a sheep." },
@@ -180,18 +197,16 @@ public static class LocalizationManager
 
         // --- 상점 이벤트 제목 & 설명 ---
         { "evt_shop_bronze_title", "Run-down Mercenary Guild" },
-        { "evt_shop_bronze_desc", "A gathering place for novice adventurers.\nYou can hire mercenaries at a low price." },
+        { "evt_shop_bronze_desc", "A gathering place for novice adventurers. You can hire mercenaries at a low price." },
 
         { "evt_shop_barbarian_title", "Barbarian Encampment" },
-        { "evt_shop_barbarian_desc", "The sound of heavy breathing fills the air.\nBarbarians represent strength." }, 
+        { "evt_shop_barbarian_desc", "The sound of heavy breathing fills the air. Barbarians represent strength." }, 
 
         { "evt_shop_potion_title", "General Store" },
-        { "evt_shop_potion_desc", "A general store located in the town center.\nThey sell a variety of potions." },
+        { "evt_shop_potion_desc", "A general store located in the town center. They sell a variety of potions." },
 
-        // --- 상점 주인 인사말 (Greeting) ---
-        { "greet_shop_common", "Welcome! Take a look at my wares." },
-        { "greet_shop_rough", "Looking for strength? You've come to the right place." },
-        { "greet_shop_mystic", "What is it that you need?" },
+        { "evt_reinforce_title", "Old Smithy" },
+        { "evt_reinforce_desc", "You see an old anvil and hammer. You can tend to your equipment to extend their durability." },
     };
 
     // "키"를 주면 현재 언어에 맞는 "텍스트"를 반환합니다.

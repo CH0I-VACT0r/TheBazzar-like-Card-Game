@@ -8,6 +8,7 @@ public static class CardFactory
     {
         "barbarian_warrior",
         "barbarian_shieldbearer",
+        "manual_beginner"
         // "potion_hp", ...
     };
 
@@ -28,6 +29,15 @@ public static class CardFactory
 
         switch (cardID)
         {
+            // --- '재료' 카드들 --- (상점에 등장 X)
+            case "card_torn_book":
+                return new Card_Torn_Book(owner, index);
+
+            // --- '중립' 카드들 ---
+            case "manual_beginner":
+                return new Card_Manual_Beginner(owner, index);
+
+            
             // --- '혹한의 성주' 카드들 ---
             case "barbarian_warrior":
                 return new Card_BarbarianWarrior(owner, index);

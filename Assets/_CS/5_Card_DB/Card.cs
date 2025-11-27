@@ -283,6 +283,13 @@ public abstract class Card
         }
     }
 
+    // 공격력 증가
+    public void IncreaseBaseDamage(float amount)
+    {
+        this.BaseDamage += amount;
+        Debug.Log($"[{CardNameKey}] 공격력이 {amount}만큼 영구 증가했습니다. (현재: {BaseDamage})");
+    }
+
     // 크리티컬 확인
     protected float CheckForCrit()
     {
@@ -471,5 +478,19 @@ public abstract class Card
                 monsterOwner.DestroyCard(this.SlotIndex);
             }
         }
+    }
+
+    public void IncreaseDurability(int amount)
+    {
+        // 내구도가 무한(-1)인 카드는 강화할 필요 없음
+        if (this.Durability == -1)
+        {
+            Debug.LogWarning($"[{CardNameKey}] 용병 카드는 보강할 수 없습니다.");
+            return;
+        }
+
+        this.Durability += amount;
+
+        Debug.Log($"[{CardNameKey}] 내구도 {amount} 증가! (현재: {this.Durability})");
     }
 }

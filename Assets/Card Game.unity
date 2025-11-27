@@ -156,6 +156,7 @@ MonoBehaviour:
   inventoryPageAsset: {fileID: 9197481963319205126, guid: 257e195fc99100a49b87d85935722faf, type: 3}
   eventSelectionPageAsset: {fileID: 9197481963319205126, guid: 8b354a00a15ce7845ac6799ccfff4381, type: 3}
   shopPageAsset: {fileID: 9197481963319205126, guid: d2e6425c187753b42ab1a2d0762833c0, type: 3}
+  eventInteractionPageAsset: {fileID: 9197481963319205126, guid: 57e33ec2e95c20d4f8d9133dc4379435, type: 3}
   document: {fileID: 782401218}
 --- !u!4 &782401217
 Transform:
@@ -276,6 +277,7 @@ GameObject:
   - component: {fileID: 1148396165}
   - component: {fileID: 1148396166}
   - component: {fileID: 1148396167}
+  - component: {fileID: 1148396168}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -341,6 +343,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a826d2a89f0b6b04e9d62871f13f8ae3, type: 2}
   - {fileID: 11400000, guid: 8020a32bcc8d84a4cbe453f253d197bd, type: 2}
   - {fileID: 11400000, guid: f46301755ca34f244b120e0fa3cbca9a, type: 2}
+  - {fileID: 11400000, guid: 1b056c03f026c254fadfbe7cec565246, type: 2}
 --- !u!114 &1148396167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +356,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27939f17f510cea4f96239f08c27812b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
+--- !u!114 &1148396168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148396162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dd94ec4eb30f814d9eb9f5ae50494c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventInteractionManager
 --- !u!1 &1904013035
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public VisualTreeAsset inventoryPageAsset;      // Page_Inventory (인벤토리)
     public VisualTreeAsset eventSelectionPageAsset; // 이벤트
     public VisualTreeAsset shopPageAsset;           // Shop
+    public VisualTreeAsset eventInteractionPageAsset; // 인터랙션
 
     [Header("Controllers")]
     private PlayerController playerController;
@@ -982,6 +983,95 @@ public class UIManager : MonoBehaviour
         if (m_TooltipRoot != null)
         {
             m_TooltipRoot.style.display = DisplayStyle.None;
+        }
+    }
+
+    // 1. 상호작용 UI 열기
+    public void ShowEventInteractionUI(GameEvent evtData)
+    {
+        if (eventInteractionPageAsset == null || _topContainer == null) return;
+
+        _topContainer.Clear();
+        VisualElement screen = eventInteractionPageAsset.Instantiate();
+        screen.style.flexGrow = 1;
+        _topContainer.Add(screen);
+
+        // 텍스트 설정
+        Label title = screen.Q<Label>("EventTitle");
+        Label desc = screen.Q<Label>("EventDesc");
+        if (title != null) title.text = LocalizationManager.GetText(evtData.titleKey);
+        if (desc != null) desc.text = LocalizationManager.GetText(evtData.descKey);
+
+        // 버튼 연결
+        Button btnAction = screen.Q<Button>("Btn_Action");
+        Button btnLeave = screen.Q<Button>("Btn_Leave");
+
+        if (btnAction != null)
+        {
+            btnAction.clicked += () => EventInteractionManager.Instance.OnActionButtonClick();
+            btnAction.SetEnabled(false); // 처음엔 비활성화
+            btnAction.AddToClassList("disabled"); // 스타일 적용
+        }
+        if (btnLeave != null)
+        {
+            btnLeave.clicked += () => EventInteractionManager.Instance.CloseInteraction();
+        }
+
+        // 타겟 슬롯 초기화 (비우기)
+        UpdateInteractionSlot(null);
+    }
+
+    // 2. 슬롯 갱신 (카드가 드롭되면 호출됨)
+    public void UpdateInteractionSlot(Card card)
+    {
+        if (_topContainer == null) return;
+
+        VisualElement screen = _topContainer.Q<VisualElement>("InteractionWindow");
+        if (screen == null) screen = _topContainer.Q<VisualElement>("InteractionRoot"); // 혹시 모르니
+        if (screen == null) return;
+
+        VisualElement targetSlot = screen.Q<VisualElement>("TargetSlot");
+        VisualElement img = targetSlot?.Q<VisualElement>("CardImage");
+        VisualElement roleContainer = targetSlot?.Q<VisualElement>("RoleUIContainer");
+        Button btnAction = screen.Q<Button>("Btn_Action");
+
+        if (card != null)
+        {
+            // 카드 보여주기
+            if (img != null)
+            {
+                img.style.backgroundImage = new StyleBackground(card.CardImage);
+                img.style.display = DisplayStyle.Flex;
+            }
+
+            // Role UI (기존 함수 재활용!)
+            if (roleContainer != null)
+            {
+                roleContainer.Clear();
+                float dmg = card.GetCurrentDamage();
+                if (dmg > 0) CreateRoleIcon(roleContainer, "role-attacker", dmg.ToString());
+                // ... (필요한 스탯들 추가)
+            }
+
+            // 버튼 활성화
+            if (btnAction != null)
+            {
+                btnAction.SetEnabled(true);
+                btnAction.RemoveFromClassList("disabled");
+            }
+        }
+        else
+        {
+            // 비우기
+            if (img != null) img.style.display = DisplayStyle.None;
+            if (roleContainer != null) roleContainer.Clear();
+
+            // 버튼 비활성화
+            if (btnAction != null)
+            {
+                btnAction.SetEnabled(false);
+                btnAction.AddToClassList("disabled");
+            }
         }
     }
 }

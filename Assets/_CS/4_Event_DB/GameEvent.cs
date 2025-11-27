@@ -23,4 +23,17 @@ public abstract class GameEvent : ScriptableObject
     public EventType eventType;     // 이벤트 종류
 
     public abstract void Execute(PlayerController player);
+
+    // 카드 조건 검사
+    public virtual bool IsValidCard(Card card, out string failReason)
+    {
+        failReason = "";
+        return true;
+    }
+
+    // 실제 효과 적용 (버튼 눌렀을 때) ▼▼▼
+    public virtual void ApplyEffect(Card card)
+    {
+        // 자식 클래스에서 구현
+    }
 }
