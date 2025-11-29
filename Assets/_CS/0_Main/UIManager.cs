@@ -102,6 +102,11 @@ public class UIManager : MonoBehaviour
         _gameLayer = _root.Q<VisualElement>("GameLayer");
         _hudContainer = _root.Q<VisualElement>("HUDContainer");
         _overlayContainer = _root.Q<VisualElement>("OverlayContainer");
+        if (_hudContainer != null) _hudContainer.pickingMode = PickingMode.Ignore;
+        if (_overlayContainer != null) _overlayContainer.pickingMode = PickingMode.Ignore;
+
+        VisualElement evtTooltip = _root.Q<VisualElement>("EventTooltipRoot");
+        if (evtTooltip != null) evtTooltip.pickingMode = PickingMode.Ignore;
 
         // GameLayer 안의 위/아래 찾기
         if (_gameLayer != null)
@@ -138,6 +143,7 @@ public class UIManager : MonoBehaviour
     {
         m_TooltipRoot = _root.Q<VisualElement>("TooltipRoot");
         if (m_TooltipRoot == null) return;
+        m_TooltipRoot.pickingMode = PickingMode.Ignore;
 
         m_TooltipName = m_TooltipRoot.Q<Label>("TooltipName");
         m_TooltipTagContainer = m_TooltipRoot.Q<VisualElement>("TooltipTagContainer");
@@ -994,66 +1000,123 @@ public class UIManager : MonoBehaviour
         _topContainer.Clear();
         VisualElement screen = eventInteractionPageAsset.Instantiate();
         screen.style.flexGrow = 1;
+
+        // [중요] 화면 전체를 덮는 템플릿 컨테이너는 통과시켜야 함
+        screen.pickingMode = PickingMode.Ignore;
+
         _topContainer.Add(screen);
 
-        // 텍스트 설정
         Label title = screen.Q<Label>("EventTitle");
         Label desc = screen.Q<Label>("EventDesc");
         if (title != null) title.text = LocalizationManager.GetText(evtData.titleKey);
         if (desc != null) desc.text = LocalizationManager.GetText(evtData.descKey);
 
-        // 버튼 연결
+        VisualElement targetSlot = screen.Q<VisualElement>("TargetSlot");
+        VisualElement visualSlot = targetSlot?.Q<VisualElement>("VisualCardSlot");
+
+        if (visualSlot != null)
+        {
+            // 핸들러 부착
+            DragAndDropHandler handler = new DragAndDropHandler(visualSlot, _root, playerController, true);
+            visualSlot.AddManipulator(handler);
+
+            Debug.Log("[UIManager] 대장간 슬롯에 DragHandler 부착 완료.");
+
+            visualSlot.RegisterCallback<PointerEnterEvent>(evt =>
+            {
+                if (visualSlot.userData is Card cardData)
+                {
+                    ShowCardTooltip(cardData, visualSlot);
+                }
+            });
+            visualSlot.RegisterCallback<PointerLeaveEvent>(evt => HideTooltip());
+        }
+
         Button btnAction = screen.Q<Button>("Btn_Action");
         Button btnLeave = screen.Q<Button>("Btn_Leave");
 
         if (btnAction != null)
         {
             btnAction.clicked += () => EventInteractionManager.Instance.OnActionButtonClick();
-            btnAction.SetEnabled(false); // 처음엔 비활성화
-            btnAction.AddToClassList("disabled"); // 스타일 적용
+            btnAction.SetEnabled(false);
+            btnAction.AddToClassList("disabled");
         }
         if (btnLeave != null)
         {
             btnLeave.clicked += () => EventInteractionManager.Instance.CloseInteraction();
         }
 
-        // 타겟 슬롯 초기화 (비우기)
         UpdateInteractionSlot(null);
     }
 
-    // 2. 슬롯 갱신 (카드가 드롭되면 호출됨)
+    // [수정] 슬롯 갱신 (자식 요소 강제 투명화)
     public void UpdateInteractionSlot(Card card)
     {
         if (_topContainer == null) return;
 
         VisualElement screen = _topContainer.Q<VisualElement>("InteractionWindow");
-        if (screen == null) screen = _topContainer.Q<VisualElement>("InteractionRoot"); // 혹시 모르니
+        if (screen == null) screen = _topContainer.Q<VisualElement>("InteractionRoot");
         if (screen == null) return;
 
         VisualElement targetSlot = screen.Q<VisualElement>("TargetSlot");
-        VisualElement img = targetSlot?.Q<VisualElement>("CardImage");
-        VisualElement roleContainer = targetSlot?.Q<VisualElement>("RoleUIContainer");
+        // 타겟 슬롯(받침대)은 드롭 감지를 위해 Position
+        if (targetSlot != null) targetSlot.pickingMode = PickingMode.Position;
+
+        VisualElement visualSlot = targetSlot?.Q<VisualElement>("VisualCardSlot");
+        VisualElement img = visualSlot?.Q<VisualElement>("CardImage");
+        VisualElement roleContainer = visualSlot?.Q<VisualElement>("RoleUIContainer");
         Button btnAction = screen.Q<Button>("Btn_Action");
 
         if (card != null)
         {
-            // 카드 보여주기
+            if (visualSlot != null)
+            {
+                visualSlot.userData = card;
+                // [필수] 드래그 시작점이므로 Position이어야 함
+                visualSlot.pickingMode = PickingMode.Position;
+            }
+
             if (img != null)
             {
                 img.style.backgroundImage = new StyleBackground(card.CardImage);
                 img.style.display = DisplayStyle.Flex;
+                img.pickingMode = PickingMode.Ignore;
             }
 
-            // Role UI (기존 함수 재활용!)
             if (roleContainer != null)
             {
                 roleContainer.Clear();
+                roleContainer.pickingMode = PickingMode.Ignore;
+
+                // ... (Role Icon 생성 로직: 기존 코드 유지) ...
                 float dmg = card.GetCurrentDamage();
                 if (dmg > 0) CreateRoleIcon(roleContainer, "role-attacker", dmg.ToString());
-                // ... (필요한 스탯들 추가)
+                float shield = card.GetCurrentShield();
+                if (shield > 0) CreateRoleIcon(roleContainer, "role-tanker", shield.ToString());
+                float heal = card.GetCurrentHeal();
+                if (heal > 0) CreateRoleIcon(roleContainer, "role-healer", heal.ToString());
+                int healDot = card.GetCurrentHealStacks();
+                if (healDot > 0) CreateRoleIcon(roleContainer, "role-heal-dot", healDot.ToString());
+                int bleed = card.GetCurrentBleedStacks();
+                if (bleed > 0) CreateRoleIcon(roleContainer, "role-bleed", bleed.ToString());
+                int burn = card.GetCurrentBurnStacks();
+                if (burn > 0) CreateRoleIcon(roleContainer, "role-burn", burn.ToString());
+                int poison = card.GetCurrentPoisonStacks();
+                if (poison > 0) CreateRoleIcon(roleContainer, "role-poison", poison.ToString());
+                float freeze = card.GetCurrentFreezeDuration();
+                if (freeze > 0) CreateRoleIcon(roleContainer, "role-freeze", freeze.ToString("0.0"));
             }
 
-            // 버튼 활성화
+            // [강력한 수정] visualSlot 내부의 모든 자식 요소를 강제로 PickingMode.Ignore로 설정
+            // 이렇게 하면 실수로 Position으로 설정된 자식이 있어도 드래그를 막지 못함
+            if (visualSlot != null)
+            {
+                foreach (var child in visualSlot.Children())
+                {
+                    child.pickingMode = PickingMode.Ignore;
+                }
+            }
+
             if (btnAction != null)
             {
                 btnAction.SetEnabled(true);
@@ -1062,11 +1125,16 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // 비우기
+            if (visualSlot != null)
+            {
+                visualSlot.userData = null;
+                // 빈 슬롯이어도 드래그 드롭을 받아야 하니 Position 유지 (부모 TargetSlot이 처리하지만 안전하게)
+                // visualSlot.pickingMode = PickingMode.Ignore; // (X) 
+                visualSlot.pickingMode = PickingMode.Position; // (O) 마우스 감지는 켜둠
+            }
             if (img != null) img.style.display = DisplayStyle.None;
             if (roleContainer != null) roleContainer.Clear();
 
-            // 버튼 비활성화
             if (btnAction != null)
             {
                 btnAction.SetEnabled(false);

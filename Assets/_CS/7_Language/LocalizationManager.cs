@@ -58,6 +58,11 @@ public static class LocalizationManager
         { "tag_beast", "야수" },
         { "tag_monster", "몬스터" },
         { "tag_goblin", "고블린" },
+        { "tag_book",  "책" },
+        { "tag_armor", "방어구" },
+        { "tag_weapon", "무기" },
+        { "tag_potion", "포션" },
+
 
         // --- [카드] ---
         // --- 재료 ---
@@ -106,7 +111,13 @@ public static class LocalizationManager
         { "evt_shop_potion_desc", "마을에 중심에 위치한 잡화 상점입니다. 다양한 물약을 팔고 있습니다." },
 
         { "evt_reinforce_title", "낡은 대장간" },
-        { "evt_reinforce_desc", "오래된 모루와 망치가 보입니다. 소비 아이템의 내구도를 소폭 늘릴 수 있습니다." },
+        { "evt_reinforce_desc", "오래된 모루와 망치가 보입니다. 장비 아이템의 내구도를 소폭 늘릴 수 있습니다." },
+
+        { "evt_repair_book_title", "기억의 제본소" },
+        { "evt_repair_book_desc", "오래된 종이 냄새와 잉크 향이 가득합니다. 낡아빠진 책이나 교본을 가져가면 새것처럼 고쳐줍니다." },
+
+        { "evt_repair_consumable_title", "떠돌이 보급 마차" },
+        { "evt_repair_consumable_desc", "모닥불 위에 큰 스튜 냄비가 끓고 있습니다. 지친 모험가들을 위해 식량과 상비약을 보충해 주는 곳입니다." },
 
     };
 
@@ -158,6 +169,10 @@ public static class LocalizationManager
         { "tag_monster", "Monster" },
         { "tag_beast", "Beast" },
         { "tag_goblin", "Goblin" },
+        { "tag_book",  "Book" },
+        { "tag_armor", "Armor" },
+        { "tag_weapon", "Weapon" },
+        { "tag_potion", "Potion" },
 
         // --- [카드] ---
         // --- 재료 ---
@@ -207,6 +222,12 @@ public static class LocalizationManager
 
         { "evt_reinforce_title", "Old Smithy" },
         { "evt_reinforce_desc", "You see an old anvil and hammer. You can tend to your equipment to extend their durability." },
+
+        { "evt_repair_book_title", "The Memory Bindery" },
+        { "evt_repair_book_desc", "The air is filled with the scent of old paper and ink. They can restore worn-out books and manuals as if they were new." },
+
+        { "evt_repair_consumable_title", "Wandering Supply Wagon" },
+        { "evt_repair_consumable_desc", "A large stew pot is boiling over a campfire. It's a place to replenish food and medicine for weary adventurers." },
     };
 
     // "키"를 주면 현재 언어에 맞는 "텍스트"를 반환합니다.

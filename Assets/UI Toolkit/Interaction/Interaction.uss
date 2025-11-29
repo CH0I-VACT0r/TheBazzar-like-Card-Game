@@ -35,9 +35,9 @@ interactionroot {
 .target-drop-zone {
     width: 180px;
     height: 250px;
-    background-color: white;
+    background-color: black;
     border-width: 3px;
-    border-color: black;
+    border-color: white;
     border-radius: 20px;
     align-items: center;
     justify-content: center;
@@ -46,16 +46,16 @@ interactionroot {
 .interaction-card-frame {
     width: 140px;
     height: 210px;
-    background-color: rgba(60, 40, 30, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     border-width: 2px;
-    border-color: rgb(93, 64, 55);
+    border-color: black;
     border-radius: 10px;
     align-items: center;
     justify-content: center;
     transition-duration: 0.1s;
 }
 
-targetdropzone:hover .interaction-card-frame {
+.targetdropzone:hover .interaction-card-frame {
     border-color: rgb(255, 215, 0);
 }
 
@@ -67,10 +67,14 @@ targetdropzone:hover .interaction-card-frame {
     border-color: white;
     border-width: 2px;
     border-radius: 2%;
+    padding-left : 15px;
+    padding-right : 15px;
+    padding-top : 10px;
+    padding-bottom : 10px;
 }
 
 .interaction-title {
-    font-size: 36px;
+    font-size: 32px;
     color: white;
     -unity-font-style: bold;
     width: 100%;
@@ -92,10 +96,10 @@ targetdropzone:hover .interaction-card-frame {
     width: 60%;
     height: 45px;
     background-color: white;
-    color: white;
+    color: black;
     font-size: 18px;
     -unity-font-style: bold;
-    border-radius: 10px;
+    border-radius: 8px;
     border-width: 0;
     margin-bottom: 15px;
     transition-duration: 0.1s;
@@ -119,13 +123,14 @@ targetdropzone:hover .interaction-card-frame {
     background-color: white;
     color: black;
     font-size: 18px;
+    -unity-font-style: bold;
     border-radius: 8px;
     border-width: 0;
     margin-bottom: 20px;
 }
 
 .btn-leave:hover {
-    background-color: rgb(78, 52, 46);
+    background-color: rgb(251, 140, 0);
     scale: 1.05;
 }
 
@@ -138,6 +143,7 @@ targetdropzone:hover .interaction-card-frame {
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-color: rgb(34, 34, 34);
+    border-color: white;
+    border-left-width : 1px;
     border-radius: 5%;
 }

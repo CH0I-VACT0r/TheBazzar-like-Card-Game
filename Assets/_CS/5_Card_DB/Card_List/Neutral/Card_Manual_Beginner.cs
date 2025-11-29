@@ -18,7 +18,7 @@ public class Card_Manual_Beginner : Card
         this.Rarity = CardRarity.Bronze;     // 브론즈
         this.SetInitPrice(2);                // 가격 2G
         this.OwnerLord = LordType.Common;    // 중립
-
+        this.TagKeys.Add("tag_book");
 
         // 4. 내구도 설정 (3회 사용 가능)
         this.Durability = 3;

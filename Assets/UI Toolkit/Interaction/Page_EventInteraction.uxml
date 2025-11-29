@@ -1,13 +1,13 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Battle/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3" />
-    <Style src="project://database/Assets/UI%20Toolkit/Interaction/Interaction.uss?fileID=7433441132597879392&amp;guid=00c96c432acc5e047b5828111f9356a9&amp;type=3" />
+    <Style src="project://database/Assets/UI%20Toolkit/Battle/Combat%20Scene%20Styles.uss?fileID=7433441132597879392&amp;guid=a48c491a29f71064c8cb8761a7204072&amp;type=3#Combat Scene Styles" />
+    <Style src="project://database/Assets/UI%20Toolkit/Interaction/Interaction.uss?fileID=7433441132597879392&amp;guid=00c96c432acc5e047b5828111f9356a9&amp;type=3#Interaction" />
     <ui:VisualElement name="InteractionRoot" class="interaction-root" style="flex-grow: 1;">
         <ui:VisualElement name="InteractionWindow" class="interaction-window" style="flex-grow: 0; flex-shrink: 0;">
             <ui:VisualElement name="LeftArea" class="left-area" style="flex-grow: 0; flex-shrink: 0;">
                 <ui:VisualElement name="TargetSlot" class="target-drop-zone" style="flex-grow: 0; flex-shrink: 0; align-content: center; align-self: center;">
-                    <ui:VisualElement name="VisualCardSlot" class="visual-card-slot" style="flex-grow: 0;">
-                        <ui:VisualElement name="CardImage" class="card-image-background" style="flex-grow: 1;" />
-                        <ui:VisualElement name="RoleUIContainer" class="card-role-ui-container" style="flex-grow: 1;" />
+                    <ui:VisualElement name="VisualCardSlot" picking-mode="Ignore" class="visual-card-slot" style="flex-grow: 0;">
+                        <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image-background" style="flex-grow: 1;" />
+                        <ui:VisualElement name="RoleUIContainer" picking-mode="Ignore" class="card-role-ui-container" style="flex-grow: 1;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

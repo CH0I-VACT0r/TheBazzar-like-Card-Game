@@ -1673,6 +1673,44 @@ public class PlayerController
         UpdateCardSlotUI(slotIndex);
     }
 
+    // 특정 슬롯의 카드를 제거하고 반환 (데이터는 유지, 슬롯만 비움)
+    public Card ExtractCard(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= 7) return null;
+
+        Card card = m_Cards[slotIndex];
+        m_Cards[slotIndex] = null; // 슬롯 비우기
+
+        UpdateCardSlotUI(slotIndex); // 빈 슬롯으로 갱신
+        return card;
+    }
+
+    // 카드를 빈자리에 자동으로 넣기 (파티 -> 인벤토리 순)
+    public void ReturnCardToBestSlot(Card card)
+    {
+        if (card == null) return;
+
+        // 1. 파티 창 빈자리 확인
+        int emptyPartySlot = GetFirstEmptyPartySlot();
+        if (emptyPartySlot != -1)
+        {
+            EquipCardDirectly(card, emptyPartySlot);
+            Debug.Log($"[System] {card.CardNameKey} -> 파티 슬롯 {emptyPartySlot}으로 복귀");
+            return;
+        }
+
+        // 2. 인벤토리로 보내기
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.AddCardObject(card);
+            Debug.Log($"[System] {card.CardNameKey} -> 인벤토리로 복귀");
+        }
+        else
+        {
+            Debug.LogError("[System] 인벤토리 매니저가 없어서 카드가 증발했습니다!");
+        }
+    }
+
     // -------------------------- 프로토타입용 덱 설정 함수 ---------------------------------
     // --------------------------------------------------------------------------------------
 

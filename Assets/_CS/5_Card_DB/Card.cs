@@ -91,8 +91,22 @@ public abstract class Card
     public virtual float GetCurrentPolymorphDuration() { return this.PolymorphDurationToApply; }
     public virtual float GetCurrentTargetShuffle() { return this.TriggersTargetShuffle; }
 
-    // --- [쿨타임 컨트롤] ---
+    // 기본 스탯 증가
+    public void IncreaseBaseDamage(float amount) {this.BaseDamage += amount;}
+    public void IncreaseBaseShield(float amount) { this.BaseShield += amount; }
+    public void IncreaseBaseHeal(float amount) { this.BaseHeal += amount; }
 
+    // 상태 이상 스택 강화
+    public void IncreaseBleedStack(int amount) { this.BleedStacksToApply += amount; }
+    public void IncreasePoisonStack(int amount) { this.PoisonStacksToApply += amount; }
+    public void IncreaseBurnStack(int amount) { this.BurnStacksToApply += amount; }
+    public void IncreaseHealStack(int amount) { this.HealStacksToApply += amount; } // 지속 힐
+    public void IncreaseFreezeDuration(float amount) { this.FreezeDurationToApply += amount; }
+
+    // 가격
+    public void IncreasePriceExtort(int amount) { this.PriceExtortAmount += amount; }
+
+    // --- [쿨타임 컨트롤] ---
     public virtual float GetCurrentCooldownTime()
     {
         return this.BaseCooldownTime;
@@ -122,6 +136,10 @@ public abstract class Card
         return m_IsSlowed;
     }
 
+    public void ReduceBaseCooldownPercent(float percent)
+    {
+        this.BaseCooldownTime *= (1.0f - percent);
+    }
 
     // --- [상태 이상 컨트롤] ---
     public List<StatusEffectType> Immunities { get; protected set; } = new List<StatusEffectType>(); // 면역
@@ -281,13 +299,6 @@ public abstract class Card
         {
             neighbor.TriggerSkill(); // 즉발
         }
-    }
-
-    // 공격력 증가
-    public void IncreaseBaseDamage(float amount)
-    {
-        this.BaseDamage += amount;
-        Debug.Log($"[{CardNameKey}] 공격력이 {amount}만큼 영구 증가했습니다. (현재: {BaseDamage})");
     }
 
     // 크리티컬 확인

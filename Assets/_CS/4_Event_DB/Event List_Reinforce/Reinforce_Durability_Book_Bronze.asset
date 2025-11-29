@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c41bff0815b97664eb138a51b9c1ad2c, type: 3}
-  m_Name: Reinforce_Durability_Bronze
+  m_Name: Reinforce_Durability_Book_Bronze
   m_EditorClassIdentifier: Assembly-CSharp::Event_Reinforce
-  eventID: reinforce_bronze
-  titleKey: evt_reinforce_title
-  descKey: evt_reinforce_desc
+  eventID: repair_bookstore
+  titleKey: evt_repair_book_title
+  descKey: evt_repair_book_desc
   eventImage: {fileID: 0}
   rarity: 0
   eventType: 1
   addAmount: 3
+  requiredTags:
+  - tag_book

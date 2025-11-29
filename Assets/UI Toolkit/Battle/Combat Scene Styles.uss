@@ -317,6 +317,7 @@ VisualElement {
     font-size: 21px;
    -unity-text-outline-width: 1px;
    -unity-text-outline-color: black;
+   margin-bottom : 4px;
 }
 
 .role-attacker {
