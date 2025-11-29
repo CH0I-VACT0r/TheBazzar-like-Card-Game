@@ -6,52 +6,47 @@ public class ShopManager : MonoBehaviour
     public static ShopManager Instance;
 
     private Event_Shop _currentShopData;
-    private List<Card> _currentStock = new List<Card>(); // 현재 매물 (팔리면 null로 바뀜)
-
-    // [테스트용] 상점에 등장할 수 있는 카드 ID 목록 (나중엔 팩토리에서 랜덤으로 가져옴)
-    private string[] _testItemIDs = { "barbarian_warrior", "barbarian_shieldbearer", "potion_hp" };
+    private List<Card> _currentStock = new List<Card>();
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
     }
 
-    // 1. 상점 열기
+    // 상점 열기
     public void OpenShop(Event_Shop shopData)
     {
         _currentShopData = shopData;
-        Debug.Log($"[Shop] {shopData.eventID} 오픈!");
 
-        // 첫 오픈 시 무료 리롤(물건 채우기)
+        // 상점에 입장하면 자동으로 리롤 1회 (무료)
         RerollStock(true);
 
+        // UI 열기
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.ShowShopUI(_currentShopData, _currentStock);
+            UIManager.Instance.ShowShopUI(shopData, _currentStock);
         }
     }
 
-    // 2. 상점 닫기
+    // 상점 닫기
     public void CloseShop()
     {
-        // 다음 날로 넘어가거나, 다시 이벤트 선택창으로 가거나...
-        // 기획상 '다음' 버튼 누르면 하루 종료라면:
-        // FindFirstObjectByType<GameManager>().SetPhase(GameManager.GamePhase.DayEnd);
+        _currentStock.Clear();
+        _currentShopData = null;
 
-        // 일단은 몬스터 화면(기본화면)으로 복귀한다고 가정
-        UIManager.Instance.SwitchToBattlePage();
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.SwitchToBattlePage(); // 원래 화면으로 복귀
+        }
     }
 
-    // 3. 리롤 (물건 새로고침)
+    // 리롤 (상품 갱신)
     public void RerollStock(bool isFree = false)
     {
         PlayerController player = null;
+        if (BattleManager.Instance != null) player = BattleManager.Instance.playerController;
 
-        // PlayerController 찾기 (MonoBehaviour가 아니라면 BattleManager 경유)
-        if (BattleManager.Instance != null)
-            player = BattleManager.Instance.playerController;
-
-        // 돈 체크 (공짜가 아니면)
+        // 돈 체크 (무료가 아니면)
         if (!isFree && player != null)
         {
             if (player.Gold < _currentShopData.rerollPrice)
@@ -63,10 +58,8 @@ public class ShopManager : MonoBehaviour
         }
 
         _currentStock.Clear();
+        List<string> pickedCardNames = new List<string>(); // 중복 방지용
 
-        List<string> pickedCardNames = new List<string>();
-
-        // 슬롯 3개 채우기
         for (int i = 0; i < 3; i++)
         {
             Card newCard = null;
@@ -74,30 +67,47 @@ public class ShopManager : MonoBehaviour
             // [중복 방지 루프]
             for (int attempt = 0; attempt < 10; attempt++)
             {
-                // 1. 등급 결정 & 생성
-                CardRarity rarity = GameManager.Instance != null ?
-                                    GameManager.Instance.GetRandomRarityByLevel() : CardRarity.Bronze;
+                // 1. 등급 결정
+                CardRarity rarity;
 
-                Card candidate = CardFactory.CreateRandomCard(rarity);
+                // 이벤트 파일에 특정 등급이 지정되어 있다면 강제 적용 (None/0이 아니면)
+                // (주의: CardRarity Enum에 None이 없다면 (CardRarity)0 으로 비교)
+                if ((int)_currentShopData.targetRarity != 0)
+                {
+                    rarity = _currentShopData.targetRarity;
+                }
+                else
+                {
+                    // 아니면 레벨 비례 랜덤
+                    rarity = GameManager.Instance != null ?
+                             GameManager.Instance.GetRandomRarityByLevel() : CardRarity.Bronze;
+                }
+
+                // 2. [핵심 수정] 필터링된 카드 생성 요청
+                // Event_Shop에 있는 targetType, requiredTag 정보를 넘겨줍니다.
+                Card candidate = CardFactory.CreateCardByFilter(
+                    rarity,
+                    _currentShopData.targetType,
+                    _currentShopData.requiredTag,
+                    null // 상점 진열품은 아직 주인이 없음
+                );
 
                 if (candidate != null)
                 {
-                    // [핵심 수정] 일단 후보로 등록해둡니다! (중복이라도 비어있는 것보단 나으니까)
-                    // 이렇게 하면 10번 다 실패해도 마지막에 뽑힌 중복 카드가 들어갑니다.
+                    // 일단 후보로 등록 (실패 시 마지막 후보라도 쓰기 위함)
                     if (newCard == null) newCard = candidate;
 
-                    // 2. 중복 체크
+                    // 중복 체크
                     if (!pickedCardNames.Contains(candidate.CardNameKey))
                     {
-                        // 와! 중복 아님! 이걸로 확정!
                         newCard = candidate;
                         pickedCardNames.Add(newCard.CardNameKey);
-                        break; // 루프 탈출
+                        break; // 성공!
                     }
                 }
             }
 
-            // 3. 최종적으로 결정된 카드(유니크하거나, 정 없으면 중복된 것)를 진열
+            // 3. 가격 변동 적용 및 진열
             if (newCard != null)
             {
                 int finalPrice = (int)(newCard.BasePrice * _currentShopData.priceMultiplier);
@@ -106,65 +116,72 @@ public class ShopManager : MonoBehaviour
             }
             else
             {
-                // 팩토리에서조차 카드를 못 만들었을 때만 null (이건 진짜 에러 상황)
+                // 조건에 맞는 카드가 아예 없으면 품절 처리
                 _currentStock.Add(null);
             }
         }
 
         // UI 갱신
-        UIManager.Instance.UpdateShopSlots(_currentStock);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateShopSlots(_currentStock);
+        }
     }
 
-    // 4. 구매 시도
+    // 아이템 구매 시도 (UI에서 호출)
     public void TryBuyItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= _currentStock.Count) return;
-        Card item = _currentStock[slotIndex];
+        if (_currentStock == null || slotIndex < 0 || slotIndex >= _currentStock.Count) return;
 
-        if (item == null)
-        {
-            Debug.Log("이미 팔린 상품입니다.");
-            return;
-        }
+        Card item = _currentStock[slotIndex];
+        if (item == null) return; // 이미 팔림
 
         PlayerController player = null;
         if (BattleManager.Instance != null) player = BattleManager.Instance.playerController;
 
-        if (player == null) return;
-
-        // 돈 체크
-        if (player.Gold < item.GetCurrentPrice())
+        if (player != null)
         {
-            Debug.Log("골드가 부족합니다.");
-            return;
-        }
-
-        // 구매 진행
-        // 1. 돈 차감
-        player.SpendGold(item.GetCurrentPrice());
-
-        // 2. 물건 주기 (파티 우선 -> 인벤토리)
-        bool equippedToParty = false;
-
-        if (item.ItemType == CardType.Mercenary)
-        {
-            int emptySlot = player.GetFirstEmptyPartySlot();
-            if (emptySlot != -1)
+            int price = item.GetCurrentPrice();
+            if (player.Gold >= price)
             {
-                player.EquipCardDirectly(item, emptySlot);
-                equippedToParty = true;
-                Debug.Log($"[Shop] 파티 슬롯 {emptySlot}에 장착됨");
+                // 구매 성공!
+
+                // 1. 빈 슬롯 확인 (파티 -> 인벤 순)
+                int emptySlot = player.GetFirstEmptyPartySlot();
+
+                if (emptySlot != -1)
+                {
+                    // 파티 창으로 즉시 영입
+                    player.SpendGold(price);
+                    player.EquipCardDirectly(item, emptySlot);
+
+                    // 재고에서 제거 (품절 처리)
+                    _currentStock[slotIndex] = null;
+                    UIManager.Instance.UpdateShopSlots(_currentStock);
+
+                    Debug.Log($"[Shop] {item.CardNameKey} 구매 완료 (파티 합류)");
+                }
+                else if (InventoryManager.Instance != null)
+                {
+                    // 인벤토리로 보내기
+                    player.SpendGold(price);
+                    InventoryManager.Instance.AddCardObject(item);
+
+                    // 재고에서 제거
+                    _currentStock[slotIndex] = null;
+                    UIManager.Instance.UpdateShopSlots(_currentStock);
+
+                    Debug.Log($"[Shop] {item.CardNameKey} 구매 완료 (인벤토리 이동)");
+                }
+                else
+                {
+                    Debug.Log("가방이 가득 찼습니다!"); // (UI 메시지 띄우기)
+                }
+            }
+            else
+            {
+                Debug.Log("골드가 부족합니다."); // (UI 메시지 띄우기)
             }
         }
-
-        if (!equippedToParty)
-        {
-            InventoryManager.Instance.AddCardObject(item);
-            Debug.Log($"[Shop] 인벤토리로 이동됨");
-        }
-
-        // 3. 품절 처리
-        _currentStock[slotIndex] = null; // 리스트에서 비움
-        UIManager.Instance.UpdateShopSlots(_currentStock); // UI 갱신 (SOLD 표시)
     }
 }

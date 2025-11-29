@@ -1050,12 +1050,12 @@ public class UIManager : MonoBehaviour
     }
 
     // [수정] 슬롯 갱신 (자식 요소 강제 투명화)
-    public void UpdateInteractionSlot(Card card)
+    public void UpdateInteractionSlot(Card card, bool enableButton = true)
     {
         if (_topContainer == null) return;
 
         VisualElement screen = _topContainer.Q<VisualElement>("InteractionWindow");
-        if (screen == null) screen = _topContainer.Q<VisualElement>("InteractionRoot");
+        if (screen == null) screen = _topContainer.Q<VisualElement>("InteractionRoot"); 
         if (screen == null) return;
 
         VisualElement targetSlot = screen.Q<VisualElement>("TargetSlot");
@@ -1105,6 +1105,8 @@ public class UIManager : MonoBehaviour
                 if (poison > 0) CreateRoleIcon(roleContainer, "role-poison", poison.ToString());
                 float freeze = card.GetCurrentFreezeDuration();
                 if (freeze > 0) CreateRoleIcon(roleContainer, "role-freeze", freeze.ToString("0.0"));
+                int dur = card.Durability;
+                if (dur > -1) CreateRoleIcon(roleContainer, "role-durablity", $"{dur}");
             }
 
             // [강력한 수정] visualSlot 내부의 모든 자식 요소를 강제로 PickingMode.Ignore로 설정
@@ -1121,6 +1123,22 @@ public class UIManager : MonoBehaviour
             {
                 btnAction.SetEnabled(true);
                 btnAction.RemoveFromClassList("disabled");
+            }
+
+            if (btnAction != null)
+            {
+                // 카드가 있어도, 로직에서 '끄라(false)'고 하면 끕니다.
+                if (enableButton)
+                {
+                    btnAction.SetEnabled(true);
+                    btnAction.RemoveFromClassList("disabled");
+                }
+                else
+                {
+                    btnAction.SetEnabled(false);
+                    btnAction.AddToClassList("disabled");
+                    btnAction.text = "Done"; // (선택사항) 버튼 텍스트를 '완료'로 변경
+                }
             }
         }
         else
@@ -1139,6 +1157,7 @@ public class UIManager : MonoBehaviour
             {
                 btnAction.SetEnabled(false);
                 btnAction.AddToClassList("disabled");
+                btnAction.text = "Confirm";
             }
         }
     }

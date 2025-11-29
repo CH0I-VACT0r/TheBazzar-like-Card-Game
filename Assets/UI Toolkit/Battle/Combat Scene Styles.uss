@@ -352,6 +352,10 @@ VisualElement {
     background-color: rgb(0, 116, 217);
     border-color: black;
 }
+.role-durablity {
+    background-color : black;
+    border-color : black;
+}
 
 
 .buff-effect-container {

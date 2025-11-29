@@ -1,5 +1,6 @@
 // 파일명: CardFactory.cs
 using UnityEngine;
+using System.Collections.Generic;
 
 // '카드 ID' 문자열을 기반 실제 Card 객체 생성 데이터베이스
 public static class CardFactory
@@ -12,13 +13,74 @@ public static class CardFactory
         // "potion_hp", ...
     };
 
+    private static Dictionary<string, Card> _prototypeCache;
+
+    //캐시 초기화 함수
+    private static void InitializeCache()
+    {
+        if (_prototypeCache != null) return;
+
+        _prototypeCache = new Dictionary<string, Card>();
+
+        foreach (string id in allCardIDs)
+        {
+            // 주인 없는(null) 견본 카드를 생성
+            Card proto = CreateCard(id, null, -1);
+            if (proto != null)
+            {
+                _prototypeCache[id] = proto;
+            }
+        }
+
+        Debug.Log($"[CardFactory] 카드 견본 {_prototypeCache.Count}개 캐싱 완료.");
+    }
+
+    // 랜덤 생성 (등급 고려)
     public static Card CreateRandomCard(CardRarity rarity)
     {
-        // (나중에 rarity에 맞는 ID만 추려서 뽑는 로직 추가 가능)
+        // 단순 랜덤이 아니라 필터링을 거치는 게 안전합니다.
+        // (여기서는 기존처럼 배열에서 뽑되, 나중에 최적화 가능)
         string randomID = allCardIDs[Random.Range(0, allCardIDs.Length)];
-
-        // 상점용 생성 (주인 없음)
         return CreateCard(randomID, null, -1);
+    }
+
+    // [최적화] 필터링된 랜덤 카드 생성 함수 (Dictionary 캐시 사용)
+    public static Card CreateCardByFilter(CardRarity targetRarity, CardType targetType, string requiredTag, object owner)
+    {
+        // 1. 캐시가 없으면 생성
+        InitializeCache();
+
+        List<string> candidateIDs = new List<string>();
+
+        // 2. 미리 만들어둔 견본품(Prototype)들을 순회 (메모리 할당 X)
+        foreach (var kvp in _prototypeCache)
+        {
+            string id = kvp.Key;
+            Card proto = kvp.Value;
+
+            // A. 등급 체크
+            if ((int)targetRarity != 0 && proto.Rarity != targetRarity) continue;
+
+            // B. 타입 체크 (CardType.None이 0이라고 가정하거나, None 체크)
+            // (None이 없다면 이 조건문은 상황에 맞게 조정)
+            if ((int)targetType != 0 && proto.ItemType != targetType) continue;
+
+            // C. 태그 체크
+            if (!string.IsNullOrEmpty(requiredTag) && !proto.HasTagKey(requiredTag)) continue;
+
+            // 조건 만족!
+            candidateIDs.Add(id);
+        }
+
+        // 3. 후보 중에서 랜덤 선택 후 '진짜' 카드 생성
+        if (candidateIDs.Count > 0)
+        {
+            string pickedID = candidateIDs[Random.Range(0, candidateIDs.Count)];
+            return CreateCard(pickedID, owner, -1);
+        }
+
+        Debug.LogWarning($"[CardFactory] 조건에 맞는 카드가 없습니다! (Rarity: {targetRarity}, Type: {targetType}, Tag: {requiredTag})");
+        return null;
     }
 
     //카드 ID, 주인, 슬롯을 받아 카드 생성

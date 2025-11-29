@@ -9,6 +9,7 @@ public class EventInteractionManager : MonoBehaviour
 
     // 현재 슬롯에 보관 중인 카드
     public Card HeldCard { get; private set; }
+    private bool _isActionUsed = false;
 
     private void Awake()
     {
@@ -91,11 +92,20 @@ public class EventInteractionManager : MonoBehaviour
     {
         if (HeldCard == null || _currentEvent == null) return;
 
-        // 효과 적용
+        // [중요] 이미 행동했다면 중복 실행 방지
+        if (_isActionUsed) return;
+
+        // 1. 효과 적용
         _currentEvent.ApplyEffect(HeldCard);
 
-        // 효과 적용 후 UI 갱신
-        UIManager.Instance.UpdateInteractionSlot(HeldCard);
+        // 2. 사용 완료 플래그 세팅
+        _isActionUsed = true;
+
+        // 3. UI 갱신 (버튼 끄기: false)
+        // 카드는 그대로 슬롯에 남아있어서 툴팁 확인 가능, 하지만 버튼은 비활성화됨
+        UIManager.Instance.UpdateInteractionSlot(HeldCard, false);
+
+        Debug.Log("[Event] 액션 완료. 버튼 비활성화.");
     }
 
     // 4. 나가기
