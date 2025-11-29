@@ -119,6 +119,46 @@ public static class LocalizationManager
         { "evt_repair_consumable_title", "떠돌이 보급 마차" },
         { "evt_repair_consumable_desc", "모닥불 위에 큰 스튜 냄비가 끓고 있습니다. 지친 모험가들을 위해 식량과 상비약을 보충해 주는 곳입니다." },
 
+        // 1. 공격 (Damage)
+        { "evt_train_damage_title", "허수아비 치기" },
+        { "evt_train_damage_desc", "가장 기초적인 훈련입니다. [딜러]의 기본 공격력을 10만큼 강화합니다." },
+
+        // 2. 방어 (Shield)
+        { "evt_train_shield_title", "폭포수 수련" },
+        { "evt_train_shield_desc", "쏟아지는 물줄기를 견뎌냅니다.[탱커]의 기본 방어도를 10만큼 강화합니다." },
+
+        // 3. 회복 (Heal)
+        { "evt_train_heal_title", "성녀의 기도" },
+        { "evt_train_heal_desc", "성녀에게 기도를 받습니다. [힐러]의 회복량을 10만큼 강화합니다." },
+
+        // 지속힐
+        { "evt_train_healdot_title", "기초 약초학 수련" },
+        { "evt_train_healdot_desc", "주변에서 흔히 보는 약초를 구분합니다. [지속 회복] 부여 수치를 3만큼 강화합니다." },
+        
+        // 4. 출혈 (Bleed)
+        { "evt_train_bleed_title", "날카로운 숫돌" },
+        { "evt_train_bleed_desc", "무기를 예리하게 다듬습니다. [출혈] 부여 수치를 2만큼 강화합니다." },
+
+        // 5. 화상 (Burn)
+        { "evt_train_burn_title", "기초 화염 수련" },
+        { "evt_train_burn_desc", "불을 다루는 법을 익힙니다. [화상] 부여 수치를 3만큼 강화합니다." },
+
+        // 6. 중독 (Poison)
+        { "evt_train_poison_title", "독약 주사" },
+        { "evt_train_poison_desc", "맹독 주사를 처방합니다. [중독] 부여 수치를 1만큼 강화합니다." },
+
+        // 7. 빙결 (Freeze)
+        { "evt_train_freeze_title", "얼음물 입수" },
+        { "evt_train_freeze_desc", "극한의 추위에 적응합니다. [빙결] 지속 시간을 0.1초 강화합니다." },
+
+        // 8. 쿨타임 (Cooldown)
+        { "evt_train_cooldown_title", "가벼운 스트레칭" },
+        { "evt_train_cooldown_desc", "몸을 풀어 유연성을 기릅니다. 스킬 쿨타임을 1% 단축시킵니다." },
+
+        // 9. 가치 (Price)
+        { "evt_train_price_title", "말솜씨 연습" },
+        { "evt_train_price_desc", "자신의 가치를 증명하기 위한 연습을 합니다. 상점 판매 가격(가치)을 2G 높입니다." },
+
     };
 
     // 영어 사전 (en)
@@ -228,6 +268,46 @@ public static class LocalizationManager
 
         { "evt_repair_consumable_title", "Wandering Supply Wagon" },
         { "evt_repair_consumable_desc", "A large stew pot is boiling over a campfire. It's a place to replenish food and medicine for weary adventurers." },
+
+        // 1. Damage (허수아비 치기)
+        { "evt_train_damage_title", "Scarecrow Practice" },
+        { "evt_train_damage_desc", "The most basic form of training. Permanently increases the Base Attack of [Dealer] by 10." },
+
+        // 2. Shield (폭포수 수련)
+        { "evt_train_shield_title", "Waterfall Training" },
+        { "evt_train_shield_desc", "Endure the pouring streams of water. Permanently increases the Base Shield of [Tanker] by 10." },
+
+        // 3. Heal (성녀의 기도)
+        { "evt_train_heal_title", "Saint's Prayer" },
+        { "evt_train_heal_desc", "Receive a prayer from the Saintess. Permanently increases the Heal Amount of [Healer] by 10." },
+
+        // 10. Heal Dot (기초 약초학 수련)
+        { "evt_train_healdot_title", "Basic Herbalism" },
+        { "evt_train_healdot_desc", "Learn to distinguish common herbs. Permanently increases the [Heal over Time] amount by 3." },
+
+        // 4. Bleed (날카로운 숫돌)
+        { "evt_train_bleed_title", "Sharp Whetstone" },
+        { "evt_train_bleed_desc", "Sharpen your weapons keenly. Permanently increases the [Bleed] stack application by 2." },
+
+        // 5. Burn (기초 화염 수련)
+        { "evt_train_burn_title", "Basic Pyromancy" },
+        { "evt_train_burn_desc", "Learn how to handle fire. Permanently increases the [Burn] stack application by 3." },
+
+        // 6. Poison (독약 주사)
+        { "evt_train_poison_title", "Venom Injection" },
+        { "evt_train_poison_desc", "Prescribe a deadly venom. Permanently increases the [Poison] stack application by 1." },
+
+        // 7. Freeze (얼음물 입수)
+        { "evt_train_freeze_title", "Ice Plunge" },
+        { "evt_train_freeze_desc", "Adapt to the extreme cold. Permanently increases the [Freeze] duration by 0.1s." },
+
+        // 8. Cooldown (가벼운 스트레칭)
+        { "evt_train_cooldown_title", "Light Stretching" },
+        { "evt_train_cooldown_desc", "Loosen up the body to increase flexibility. Permanently reduces Skill Cooldown by 1%." },
+
+        // 9. Price (말솜씨 연습)
+        { "evt_train_price_title", "Eloquence Practice" },
+        { "evt_train_price_desc", "Practice speech to prove your worth. Permanently increases the Sell Price (Value) by 2G." },
     };
 
     // "키"를 주면 현재 언어에 맞는 "텍스트"를 반환합니다.

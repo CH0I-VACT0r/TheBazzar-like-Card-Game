@@ -19,7 +19,7 @@ MonoBehaviour:
   rarity: 0
   eventType: 0
   priceMultiplier: 1
-  rerollPrice: 50
+  rerollPrice: 3
   targetRarity: 0
   targetType: 0
   requiredTag: tag_barbarian
