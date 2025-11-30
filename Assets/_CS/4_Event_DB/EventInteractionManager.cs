@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class EventInteractionManager : MonoBehaviour
 {
@@ -9,6 +8,8 @@ public class EventInteractionManager : MonoBehaviour
 
     // 현재 슬롯에 보관 중인 카드
     public Card HeldCard { get; private set; }
+
+    // [신규] 현재 '이벤트'에서 행동을 이미 수행했는지 여부 (카드 교체해도 유지)
     private bool _isActionUsed = false;
 
     private void Awake()
@@ -23,16 +24,18 @@ public class EventInteractionManager : MonoBehaviour
 
         _currentEvent = evtData;
 
+        // [중요] 이벤트 시작 시에만 '행동 가능' 상태로 초기화
+        _isActionUsed = false;
+
         if (UIManager.Instance != null)
             UIManager.Instance.ShowEventInteractionUI(evtData);
     }
 
-    // 1. 카드 등록 (드래그 핸들러가 호출)
+    // 1. 카드 등록
     public void PlaceCard(Card card)
     {
         if (_currentEvent == null) return;
 
-        // [중요] 이미 슬롯에 카드가 있다면? -> 플레이어에게 돌려줌 (데이터 반환)
         if (HeldCard != null) ReturnHeldCard();
 
         // 유효성 검사
@@ -41,13 +44,13 @@ public class EventInteractionManager : MonoBehaviour
         {
             Debug.LogWarning($"[Event] 조건 불만족: {reason}");
 
-            // PlayerController 찾기 (BattleManager 경유)
             PlayerController pc = null;
             if (BattleManager.Instance != null) pc = BattleManager.Instance.playerController;
 
-            if (pc != null) pc.ReturnCardToBestSlot(card); // 넣으려던 카드 반환
-            UIManager.Instance.UpdateInteractionSlot(null);
+            if (pc != null) pc.ReturnCardToBestSlot(card);
 
+            // UI 초기화 (실패 시 잔상 제거)
+            UIManager.Instance.UpdateInteractionSlot(null);
             return;
         }
 
@@ -55,15 +58,18 @@ public class EventInteractionManager : MonoBehaviour
         HeldCard = card;
         Debug.Log($"[Event] {card.CardNameKey} 보관 중.");
 
-        // UI 갱신 (성공 시)
-        UIManager.Instance.UpdateInteractionSlot(HeldCard);
+        // UI 갱신 
+        // [중요] 이미 행동을 했다면(_isActionUsed), 카드는 보여주되 버튼은 끈 상태(false)로 갱신
+        bool canUseButton = !_isActionUsed;
+        UIManager.Instance.UpdateInteractionSlot(HeldCard, canUseButton);
     }
 
-    // [신규] 카드 교체 (교환 이벤트용)
+    // 카드 교체 (제작/교환 이벤트용)
     public void ReplaceHeldCard(Card newCard)
     {
         HeldCard = newCard;
-        UIManager.Instance.UpdateInteractionSlot(HeldCard);
+        // 교체 후에도 버튼 상태는 유지 (이미 제작했으니 비활성화)
+        UIManager.Instance.UpdateInteractionSlot(HeldCard, !_isActionUsed);
         Debug.Log($"[Event] 슬롯의 카드가 {newCard.CardNameKey}(으)로 교체되었습니다.");
     }
 
@@ -72,16 +78,15 @@ public class EventInteractionManager : MonoBehaviour
     {
         if (HeldCard == null)
         {
-            Debug.LogWarning("[EventInteractionManager] 꺼낼 카드가 없습니다 (HeldCard is null).");
             return null;
         }
 
         Card card = HeldCard;
         HeldCard = null;
 
-        Debug.Log($"[Event] {card.CardNameKey} 카드를 이벤트 슬롯에서 꺼냈습니다."); // 로그 추가
+        // [중요] 카드를 꺼내도 _isActionUsed는 초기화하지 않음 (방문당 1회 제한)
 
-        // UI 갱신 (빈 슬롯으로)
+        // UI 갱신 (빈 슬롯)
         UIManager.Instance.UpdateInteractionSlot(null);
 
         return card;
@@ -92,17 +97,16 @@ public class EventInteractionManager : MonoBehaviour
     {
         if (HeldCard == null || _currentEvent == null) return;
 
-        // [중요] 이미 행동했다면 중복 실행 방지
+        // [중요] 중복 실행 방지
         if (_isActionUsed) return;
 
         // 1. 효과 적용
         _currentEvent.ApplyEffect(HeldCard);
 
-        // 2. 사용 완료 플래그 세팅
+        // 2. 사용 완료 플래그 세팅 (이후 카드를 바꿔도 버튼은 계속 비활성화)
         _isActionUsed = true;
 
-        // 3. UI 갱신 (버튼 끄기: false)
-        // 카드는 그대로 슬롯에 남아있어서 툴팁 확인 가능, 하지만 버튼은 비활성화됨
+        // 3. UI 갱신 (버튼 끄기)
         UIManager.Instance.UpdateInteractionSlot(HeldCard, false);
 
         Debug.Log("[Event] 액션 완료. 버튼 비활성화.");
@@ -120,7 +124,6 @@ public class EventInteractionManager : MonoBehaviour
         UIManager.Instance.SwitchToBattlePage();
     }
 
-    // 내부용: 플레이어에게 카드 돌려주기
     private void ReturnHeldCard()
     {
         if (HeldCard == null) return;

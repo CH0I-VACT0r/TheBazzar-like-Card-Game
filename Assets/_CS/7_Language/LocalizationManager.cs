@@ -153,11 +153,11 @@ public static class LocalizationManager
 
         // 8. 쿨타임 (Cooldown)
         { "evt_train_cooldown_title", "가벼운 스트레칭" },
-        { "evt_train_cooldown_desc", "몸을 풀어 유연성을 기릅니다. 스킬 쿨타임을 1% 단축시킵니다." },
+        { "evt_train_cooldown_desc", "몸을 풀어 유연성을 기릅니다. 스킬 쿨타임을 2% 단축시킵니다." },
 
         // 9. 가치 (Price)
         { "evt_train_price_title", "말솜씨 연습" },
-        { "evt_train_price_desc", "자신의 가치를 증명하기 위한 연습을 합니다. 상점 판매 가격(가치)을 2G 높입니다." },
+        { "evt_train_price_desc", "자신의 가치를 증명하기 위한 연습을 합니다. 상점 판매 가격을 1G 높입니다." },
 
     };
 
@@ -303,11 +303,11 @@ public static class LocalizationManager
 
         // 8. Cooldown (가벼운 스트레칭)
         { "evt_train_cooldown_title", "Light Stretching" },
-        { "evt_train_cooldown_desc", "Loosen up the body to increase flexibility. Permanently reduces Skill Cooldown by 1%." },
+        { "evt_train_cooldown_desc", "Loosen up the body to increase flexibility. Permanently reduces Skill Cooldown by 2%." },
 
         // 9. Price (말솜씨 연습)
         { "evt_train_price_title", "Eloquence Practice" },
-        { "evt_train_price_desc", "Practice speech to prove your worth. Permanently increases the Sell Price (Value) by 2G." },
+        { "evt_train_price_desc", "Practice speech to prove your worth. Permanently increases the Sell Price by 1G." },
     };
 
     // "키"를 주면 현재 언어에 맞는 "텍스트"를 반환합니다.
