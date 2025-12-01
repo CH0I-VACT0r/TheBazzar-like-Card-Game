@@ -1026,6 +1026,7 @@ public class PlayerController
         }
     }
 
+    //체력 회복
     public virtual void AddHealth(float amount)
     {
         if (m_BattleManager.IsBattleEnded) return;

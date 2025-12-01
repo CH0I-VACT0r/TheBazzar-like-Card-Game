@@ -71,6 +71,11 @@ public static class LocalizationManager
 
 
         // --- [카드] ---
+        // --- 아이템 ---
+        { "card_potion_heal_name", "회복 포션" },
+        { "card_potion_heal_desc", "플레이어의 체력을 30 회복합니다." },
+        { "card_potion_heal_flavor", "딸기 향이 나는 기분 좋은 물약입니다." },
+
         // --- 재료 ---
         { "card_torn_book_name", "찢어진 책" },
         { "card_torn_book_desc", "너무 낡아서 더 이상 읽을 수 없습니다." },
@@ -228,6 +233,11 @@ public static class LocalizationManager
         { "tag_potion", "Potion" },
 
         // --- [카드] ---
+        // --- 아이템 ---
+        { "card_potion_heal_name", "Healing Potion" },
+        { "card_potion_heal_desc", "Recover the player's HP by 30." },
+        { "card_potion_heal_flavor", "It's a pleasant potion with a strawberry scent." },
+
         // --- 재료 ---
         { "card_torn_book_name", "Torn Book" },
         { "card_torn_book_desc", "It is too worn out to read." },
