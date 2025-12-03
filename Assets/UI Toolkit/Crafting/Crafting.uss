@@ -1,0 +1,173 @@
+.crafting-root {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    align-items: center;
+    justify-content: center;
+}
+
+.crafting-window {
+    flex-direction: row;
+    width: 90%;
+    height: 85%;
+    flex-direction: row;
+    background-color: black;
+    border-radius: 20px;
+    border-width: 4px;
+    border-color: black;
+    padding: 20px;
+}
+
+.recipe-area {
+    width: 30%;
+    height: 100%;
+    background-color: #eae3c8;
+    margin-right: 20px;
+    padding: 10px;
+    border-width: 3px;
+    border-color: black;
+    border-radius: 12px;
+}
+
+.area-title {
+    font-size: 28px;
+    color: black;
+    -unity-font-style: bold;
+    margin-bottom: 15px;
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(141, 110, 99);
+}
+
+.recipe-item {
+    flex-direction: row;
+    height: 60px;
+    background-color: rgb(78, 52, 46);
+    margin-bottom: 8px;
+    align-items: center;
+    padding-left: 15px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgb(93, 64, 55);
+}
+
+.recipe-item:hover {
+    background-color: rgb(109, 76, 65);
+}
+
+.recipe-item.selected {
+    background-color: rgb(255, 152, 0);
+    border-color: white;
+    border-width: 2px;
+}
+
+.recipe-label {
+    font-size: 20px;
+    color: rgb(239, 235, 233);
+}
+
+.work-area {
+    flex-grow: 1;
+    height: 100%;
+    align-items: center;
+    background-color: #eae3c8;
+    border-radius: 12px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-width: 3px;
+    border-color: black;
+}
+
+.result-preview {
+    align-items: center;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.result-icon {
+    width: 140px;
+    height: 210px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    margin-bottom: 15px;
+    border-width: 3px;
+    border-color: black;
+}
+
+.result-name {
+    font-size: 32px;
+    color: rgb(255, 236, 179);
+    -unity-font-style: bold;
+}
+
+.ingredient-container {
+    flex-direction: row;
+    margin-bottom: 60px;
+}
+
+.craft-slot {
+    width: 140px;
+    height: 210px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-width: 3px;
+    border-color: rgb(0, 0, 0);
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+}
+
+.btn-craft {
+    width: 240px;
+    height: 70px;
+    font-size: 30px;
+    background-color: white;
+    color: black;
+    -unity-font-style: bold;
+    border-radius: 12px;
+    border-width: 3px;
+    border-color: black;
+    transition-duration: 0.2s;
+}
+
+.btn-craft:hover {
+    background-color: rgb(46, 125, 50);
+    scale: 1.05;
+}
+
+.btn-craft:active {
+    background-color: rgb(27, 94, 32);
+    scale: 0.95;
+}
+
+.btn-craft.disabled {
+    background-color: rgb(97, 97, 97);
+    opacity: 0.5;
+}
+
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    background-color: rgb(198, 40, 40);
+    color: white;
+    -unity-font-style: bold;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color : black;
+}
+
+.btn-close:hover {
+    background-color: rgb(183, 28, 28);
+}
