@@ -1161,4 +1161,28 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    public VisualElement OpenCraftingPage(VisualTreeAsset pageAsset)
+    {
+        if (pageAsset == null || _topContainer == null) return null;
+
+        _topContainer.Clear();
+
+        // 제작 UI 생성 및 배치
+        VisualElement screen = pageAsset.Instantiate();
+        screen.style.flexGrow = 1;
+
+        // 배경 클릭 시 드래그 미스 등이 발생하지 않도록 Ignore 설정 (필요시 조정)
+        screen.pickingMode = PickingMode.Ignore;
+
+        _topContainer.Add(screen);
+        return screen;
+    }
+
+    // 제작 UI 닫기
+    public void CloseCraftingPage()
+    {
+        // 맵이나 전투 화면으로 복귀
+        SwitchToBattlePage();
+    }
 }
+

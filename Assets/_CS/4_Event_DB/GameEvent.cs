@@ -3,11 +3,12 @@ using UnityEngine;
 // 이벤트 종류
 public enum EventType
 {
-    Shop,           // 상점
-    Blacksmith,     // 대장간 (수리/강화)
-    Training,       // 훈련소 (스탯 상승)
-    Battle,         // 전투
-    RandomEncounter // 랜덤 만남
+    Shop,            // 상점
+    Blacksmith,      // 대장간 (수리/강화)
+    Training,        // 훈련소 (스탯 상승)
+    Battle,          // 전투
+    RandomEncounter, // 랜덤 만남
+    Crafting         // 제작
 }
 
 public abstract class GameEvent : ScriptableObject

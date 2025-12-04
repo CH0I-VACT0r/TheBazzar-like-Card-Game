@@ -1,17 +1,18 @@
-// 파일명: CardFactory.cs
 using UnityEngine;
 using System.Collections.Generic;
 
 // '카드 ID' 문자열을 기반 실제 Card 객체 생성 데이터베이스
 public static class CardFactory
 {
+    // [중요] 여기에 등록된 ID들만 상점이나 랜덤 보상에서 등장합니다.
+    // 제작 전용 아이템(재료, 결과물)은 여기에 적지 않음으로써 상점 등장을 막습니다.
     private static string[] allCardIDs =
     {
         "barbarian_warrior",
         "barbarian_shieldbearer",
         "manual_beginner",
         "potion_heal"
-        // "potion_hp", ...
+        // "item_wolf_fang", "item_branch", "item_wolf_dagger"는 여기에 넣지 않습니다!
     };
 
     private static Dictionary<string, Card> _prototypeCache;
@@ -63,7 +64,6 @@ public static class CardFactory
             if ((int)targetRarity != 0 && proto.Rarity != targetRarity) continue;
 
             // B. 타입 체크 (CardType.None이 0이라고 가정하거나, None 체크)
-            // (None이 없다면 이 조건문은 상황에 맞게 조정)
             if ((int)targetType != 0 && proto.ItemType != targetType) continue;
 
             // C. 태그 체크
@@ -80,11 +80,12 @@ public static class CardFactory
             return CreateCard(pickedID, owner, -1);
         }
 
-        Debug.LogWarning($"[CardFactory] 조건에 맞는 카드가 없습니다! (Rarity: {targetRarity}, Type: {targetType}, Tag: {requiredTag})");
+        // Debug.LogWarning($"[CardFactory] 조건에 맞는 카드가 없습니다! (Rarity: {targetRarity}, Type: {targetType}, Tag: {requiredTag})");
         return null;
     }
 
     //카드 ID, 주인, 슬롯을 받아 카드 생성
+    // [중요] 여기에 케이스를 추가해야 제작 시스템이나 전리품 시스템에서 해당 카드를 만들 수 있습니다.
     public static Card CreateCard(string cardID, object owner, int index)
     {
         PlayerController playerOwner = owner as PlayerController;
@@ -92,11 +93,22 @@ public static class CardFactory
 
         switch (cardID)
         {
+            // --- 제작 및 재료 아이템 (상점 미등장) ---
+            case "card_wolffang":
+                return new Card_WolfFang(owner, index);
+
+            case "card_branch":
+                return new Card_Branch(owner, index);
+
+            case "card_wolf_dagger":
+                return new Card_WolfDagger(owner, index);
+
+
             // --- '아이템' 카드들 --- 
             case "potion_heal":
                 return new Card_Potion_Heal(owner, index);
 
-            // --- '재료' 카드들 --- (상점에 등장 X)
+            // --- '재료' 카드들 ---
             case "card_torn_book":
                 return new Card_Torn_Book(owner, index);
 
@@ -104,7 +116,7 @@ public static class CardFactory
             case "manual_beginner":
                 return new Card_Manual_Beginner(owner, index);
 
-            
+
             // --- '혹한의 성주' 카드들 ---
             case "barbarian_warrior":
                 return new Card_BarbarianWarrior(owner, index);
@@ -112,34 +124,20 @@ public static class CardFactory
             case "barbarian_shieldbearer":
                 return new Card_BarbarianShieldbearer(owner, index);
 
-            // (나중에 추가...)
-            // case "":
-            //    if (playerOwner != null) return new ~~~ (playerOwner, index);
-            //    break;
-
-
-            // --- '제국의 성주' 카드들 ---
-
-
-            // --- '진보의 성주' 카드들
-
-
-            // --- '자연의 성주' 카드들 ---
-
-
+            // ---다른 성주 카드들 ---
 
             // --- '몬스터' 카드들 ---
             // 양
             case "card_sheep":
                 return new Card_Sheep(owner, index);
             //고블린
-            case "goblin": 
+            case "goblin":
                 // 몬스터 전용 카드이므로, 주인이 몬스터일 때만 생성
                 if (monsterOwner != null)
                     return new Card_Goblin(monsterOwner, index);
                 break;
             // 마녀
-            case "witch": // [신규!]
+            case "witch":
                 if (monsterOwner != null)
                     return new Card_Witch(monsterOwner, index);
                 break;

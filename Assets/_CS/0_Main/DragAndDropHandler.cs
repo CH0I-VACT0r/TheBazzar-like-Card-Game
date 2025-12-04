@@ -11,8 +11,15 @@ public class DragAndDropHandler : PointerManipulator
     public bool IsFromInventory { get; private set; } = false;
     private bool m_IsFromInteractionSlot = false;
 
-    private object m_OwnerController;
+    // [신규] 제작 슬롯 여부 확인용 변수
+    private bool m_IsCraftingInput = false;
+    private bool m_IsCraftingResult = false;
+
+    private object m_OwnerController; // PlayerController 등
     private Vector2 m_PointerOffset;
+
+    // 드래그 중인 카드를 임시 저장
+    private Card m_HeldCard = null;
 
     public DragAndDropHandler(VisualElement target, VisualElement root, object controller, bool isInteractionSlot = false)
     {
@@ -20,6 +27,13 @@ public class DragAndDropHandler : PointerManipulator
         this.m_Root = root;
         this.m_OwnerController = controller;
         this.m_IsFromInteractionSlot = isInteractionSlot;
+
+        // [신규] 제작 슬롯 여부 판별
+        if (target.name != null)
+        {
+            m_IsCraftingInput = target.name.StartsWith("CraftInput");
+            m_IsCraftingResult = target.name == "ResultIcon";
+        }
 
         activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
     }
@@ -40,61 +54,52 @@ public class DragAndDropHandler : PointerManipulator
 
     private void PointerDownHandler(PointerDownEvent evt)
     {
-        // [디버그] 함수 진입 확인 (PickingMode 문제인지 확인용)
-        // 이 로그조차 안 뜨면 UI 요소(TargetSlot의 자식들)가 가리고 있는 것임
-        // Debug.Log($"[Drag] PointerDown 시도! Target: {target.name}, IsInteraction: {m_IsFromInteractionSlot}");
+        if (m_IsDragging || m_Root == null) return;
 
-        if (m_OwnerController == null)
+        Vector2 pointerPos = evt.position;
+        Card card = null;
+
+        // 제작 결과물 슬롯 (완성품 수령)
+        if (m_IsCraftingResult)
         {
-            Debug.LogError($"[Drag] m_OwnerController가 null입니다! Target: {target.name}");
-            return;
+            if (CraftingManager.Instance != null)
+            {
+                card = CraftingManager.Instance.ClaimResultCard();
+            }
         }
-
-        if (m_OwnerController is PlayerController playerOwner)
+        // 제작 재료 슬롯 (재료 빼기)
+        else if (m_IsCraftingInput)
         {
-            // 덱 편집 권한 확인
-            if (!playerOwner.GetBattleManager().IsDeckEditingAllowed)
+            int slotIndex = ParseSlotIndex(target.name);
+            if (CraftingManager.Instance != null)
             {
-                Debug.Log($"[Drag] 덱 편집 잠금 상태입니다. (IsDeckEditingAllowed: false)");
-                return;
+                card = CraftingManager.Instance.TryRemoveCardFromSlot(slotIndex);
             }
-
-            if (m_IsDragging || m_Root == null) return;
-
-            Debug.Log($"[Drag] 조건 통과. 드래그 시작 로직 진입. Target: {target.name}");
-
-            Vector2 pointerPos = evt.position;
-
-            if (m_IsFromInteractionSlot)
+        }
+        // 이벤트 상호작용 슬롯 (대장간 등에서 카드 빼기)
+        else if (m_IsFromInteractionSlot)
+        {
+            if (EventInteractionManager.Instance != null)
             {
-                // 대장간 슬롯에서 시작
-                if (EventInteractionManager.Instance == null)
-                {
-                    Debug.LogWarning("[Drag] EventInteractionManager Instance가 null입니다.");
-                    return;
-                }
+                // 기존엔 TakeCardOut() 같은 걸 썼지만, 여기선 HeldCard를 참조
+                card = EventInteractionManager.Instance.HeldCard;
 
-                if (EventInteractionManager.Instance.HeldCard == null)
-                {
-                    Debug.LogWarning("[Drag] HeldCard가 없습니다 (빈 슬롯 클릭함).");
-                    return;
-                }
-
-                CreateGhostIcon(EventInteractionManager.Instance.HeldCard, pointerPos);
+                // 드래그 시작 시 슬롯에서 빼는 처리 (화면 갱신 포함)
+                if (card != null)
+                    EventInteractionManager.Instance.TakeCardOut();
             }
-            else
+        }
+        // 일반 인벤토리/장착 슬롯
+        else
+        {
+            if (m_OwnerController is PlayerController playerOwner)
             {
-                // 일반 슬롯에서 시작
+                if (!playerOwner.GetBattleManager().IsDeckEditingAllowed) return;
+
                 string slotName = target.name;
                 IsFromInventory = slotName.StartsWith("InvSlot");
                 StartSlotIndex = ParseSlotIndex(slotName);
-                if (StartSlotIndex == -1)
-                {
-                    Debug.LogWarning($"[Drag] 슬롯 인덱스 파싱 실패: {slotName}");
-                    return;
-                }
 
-                Card card = null;
                 if (IsFromInventory)
                 {
                     VisualElement img = target.Q<VisualElement>("CardImage");
@@ -105,25 +110,20 @@ public class DragAndDropHandler : PointerManipulator
                     card = playerOwner.GetCardAtIndex(StartSlotIndex);
                 }
 
-                if (card == null)
-                {
-                    // 빈 슬롯 클릭 시 무시
-                    return;
-                }
-
-                playerOwner.ClearTooltipScheduler();
-                CreateGhostIcon(card, pointerPos);
+                if (card != null) playerOwner.ClearTooltipScheduler();
             }
+        }
 
-            m_IsDragging = true;
-            target.CapturePointer(evt.pointerId);
-            target.style.opacity = 0.3f;
-            evt.StopPropagation();
-        }
-        else
-        {
-            Debug.LogError($"[Drag] OwnerController 타입 불일치! 예상: PlayerController, 실제: {m_OwnerController.GetType()}");
-        }
+        // 카드가 없으면 드래그 시작 안 함
+        if (card == null) return;
+
+        // 고스트 아이콘 생성
+        CreateGhostIcon(card, pointerPos);
+
+        m_IsDragging = true;
+        target.CapturePointer(evt.pointerId);
+        target.style.opacity = 0.3f;
+        evt.StopPropagation();
     }
 
     private void PointerMoveHandler(PointerMoveEvent evt)
@@ -132,9 +132,7 @@ public class DragAndDropHandler : PointerManipulator
 
         if (m_GhostIcon != null)
         {
-            // [수정] 월드 좌표(evt.position)를 Root 기준 로컬 좌표로 변환하여 배치
             Vector2 localPos = m_Root.WorldToLocal(evt.position);
-
             m_GhostIcon.style.left = localPos.x - m_PointerOffset.x;
             m_GhostIcon.style.top = localPos.y - m_PointerOffset.y;
         }
@@ -144,168 +142,260 @@ public class DragAndDropHandler : PointerManipulator
     {
         if (!m_IsDragging || !target.HasPointerCapture(evt.pointerId)) return;
 
-        Debug.Log("[Drag] PointerUp (드롭 시도)");
-
         m_IsDragging = false;
         target.ReleasePointer(evt.pointerId);
         target.style.opacity = 1f;
 
+        // 고스트 제거
         if (m_GhostIcon != null)
         {
             if (m_Root.Contains(m_GhostIcon)) m_Root.Remove(m_GhostIcon);
             m_GhostIcon = null;
         }
 
+        // 드롭 위치 판별
+        VisualElement dropTarget = m_Root.panel.Pick(evt.position);
+
+        // -------------------------------------------------------------
+        // 1. 제작 슬롯에 드롭했는지 확인
+        // -------------------------------------------------------------
+        VisualElement craftingSlot = FindCraftingInputSlot(dropTarget);
+        if (craftingSlot != null)
+        {
+            HandleDropOnCrafting(craftingSlot);
+            evt.StopPropagation();
+            return;
+        }
+
+        // -------------------------------------------------------------
+        // 2. 이벤트 상호작용 슬롯(TargetSlot)에 드롭했는지 확인
+        // -------------------------------------------------------------
+        VisualElement interactionSlot = FindInteractionSlot(dropTarget);
+        if (interactionSlot != null)
+        {
+            // 상호작용 슬롯에서 나온 카드를 다시 상호작용 슬롯에 놓는 건 무의미하므로 패스하거나 원복
+            if (m_IsFromInteractionSlot)
+            {
+                // 다시 제자리로 (취소)
+                if (m_HeldCard != null && EventInteractionManager.Instance != null)
+                    EventInteractionManager.Instance.PlaceCard(m_HeldCard);
+            }
+            else
+            {
+                // 인벤/장비창 -> 상호작용 슬롯
+                if (m_HeldCard != null && EventInteractionManager.Instance != null)
+                {
+                    // 인벤토리/장비창에서 실제 데이터 제거 (소유권 이전)
+                    RemoveCardFromSource();
+                    // 이벤트 매니저에 카드 등록
+                    EventInteractionManager.Instance.PlaceCard(m_HeldCard);
+                    m_HeldCard = null; // 처리 완료
+                }
+            }
+            UIManager.Instance.RefreshPlayerUI();
+            UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
+            evt.StopPropagation();
+            return;
+        }
+
+        // -------------------------------------------------------------
+        // 3. 판매존, 인벤토리, 장착 슬롯 처리
+        // -------------------------------------------------------------
         if (m_OwnerController is PlayerController playerOwner)
         {
-            VisualElement dropTarget = m_Root.panel.Pick(evt.position);
+            // 드래그 중인 카드 확인
+            if (m_HeldCard == null) return;
 
-            if (dropTarget != null) Debug.Log($"[Drag] Dropped on: {dropTarget.name}");
-            else Debug.Log("[Drag] Dropped on null");
-
-            VisualElement interactionSlot = FindInteractionSlot(dropTarget);
-
-            if (interactionSlot != null)
-            {
-                Debug.Log("[Drop] -> TargetSlot 감지됨.");
-
-                if (m_IsFromInteractionSlot)
-                {
-                    evt.StopPropagation();
-                    return;
-                }
-
-                Card cardToPlace = null;
-
-                if (IsFromInventory)
-                {
-                    if (InventoryManager.Instance != null)
-                    {
-                        CardType type = UIManager.Instance.CurrentTab;
-                        cardToPlace = InventoryManager.Instance.GetCardAtIndex(type, StartSlotIndex);
-                        if (cardToPlace != null) InventoryManager.Instance.RemoveCard(cardToPlace);
-                    }
-                }
-                else
-                {
-                    cardToPlace = playerOwner.ExtractCard(StartSlotIndex);
-                }
-
-                if (cardToPlace != null && EventInteractionManager.Instance != null)
-                {
-                    EventInteractionManager.Instance.PlaceCard(cardToPlace);
-                }
-
-                UIManager.Instance.RefreshPlayerUI();
-                if (UIManager.Instance.IsInventoryOpen) UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
-
-                evt.StopPropagation();
-                return;
-            }
-
+            // 3-1. 판매존
             if (IsSellZone(dropTarget))
             {
-                if (m_IsFromInteractionSlot)
-                {
-                    Debug.Log("[Drop] 이벤트 슬롯에서 바로 판매는 불가능합니다.");
-                }
-                else
+                // 제작/이벤트 슬롯에서 바로 판매는 일단 금지 (실수 방지)
+                if (!m_IsCraftingInput && !m_IsCraftingResult && !m_IsFromInteractionSlot)
                 {
                     playerOwner.SellCard(StartSlotIndex, IsFromInventory);
                 }
+                else
+                {
+                    // 복구 로직 (원래 자리로)
+                    ReturnCardToSource();
+                }
+                m_HeldCard = null;
                 evt.StopPropagation();
                 return;
             }
 
+            // 3-2. 인벤토리/장착 슬롯 드롭
             VisualElement droppedSlot = FindParentSlot(dropTarget);
-
             if (droppedSlot != null)
             {
-                bool isToInventory = droppedSlot.name.StartsWith("InvSlot");
-                int dropIndex = ParseSlotIndex(droppedSlot.name);
+                // 인벤/장비 -> 인벤/장비 이동의 경우 (기존 로직 사용을 위해 m_HeldCard 반환 대신 로직 수행)
 
-                if (dropIndex != -1)
+                // 특수 슬롯(제작, 이벤트)에서 온 경우 -> 무조건 '새로 획득' 처리
+                if (m_IsCraftingInput || m_IsCraftingResult || m_IsFromInteractionSlot)
                 {
-                    if (m_IsFromInteractionSlot)
+                    bool isToInventory = droppedSlot.name.StartsWith("InvSlot");
+                    int dropIndex = ParseSlotIndex(droppedSlot.name);
+
+                    if (isToInventory)
                     {
-                        if (EventInteractionManager.Instance != null)
-                        {
-                            Card cardRetrieved = EventInteractionManager.Instance.TakeCardOut();
-                            if (cardRetrieved != null)
-                            {
-                                if (isToInventory)
-                                {
-                                    if (InventoryManager.Instance != null)
-                                    {
-                                        InventoryManager.Instance.AddCardObject(cardRetrieved);
-                                        UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
-                                    }
-                                }
-                                else
-                                {
-                                    Card existing = playerOwner.GetCardAtIndex(dropIndex);
-                                    if (existing != null && InventoryManager.Instance != null)
-                                    {
-                                        InventoryManager.Instance.AddCardObject(existing);
-                                    }
-                                    playerOwner.EquipCardDirectly(cardRetrieved, dropIndex);
-                                }
-                            }
-                        }
+                        InventoryManager.Instance.AddCardObject(m_HeldCard);
                     }
-                    else
+                    else if (dropIndex != -1)
                     {
-                        if (IsFromInventory && !isToInventory)
-                            playerOwner.EquipCard(StartSlotIndex, dropIndex);
-                        else if (!IsFromInventory && isToInventory)
-                            playerOwner.UnequipCard(StartSlotIndex);
-                        else if (!IsFromInventory && !isToInventory && StartSlotIndex != dropIndex)
-                            playerOwner.MoveCard(StartSlotIndex, dropIndex);
+                        // 장착 슬롯에 바로 드롭
+                        playerOwner.EquipCardDirectly(m_HeldCard, dropIndex);
                     }
+                    m_HeldCard = null; // 처리 완료
                 }
+                else
+                {
+                    // 인벤 <-> 장비 이동 (기존 로직 유지)
+                    HandleStandardSwap(droppedSlot, playerOwner);
+                }
+            }
+            // 3-3. 허공에 드롭 (인벤토리로 복귀 or 원래 자리로 복귀)
+            else
+            {
+                ReturnCardToSource();
             }
         }
 
+        // UI 갱신
         UIManager.Instance.RefreshPlayerUI();
-        if (UIManager.Instance.IsInventoryOpen) UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
+        UIManager.Instance.RefreshInventoryGrid(UIManager.Instance.CurrentTab);
 
         evt.StopPropagation();
     }
 
-    // --- 도우미 함수들 ---
+    // --- 헬퍼 함수 ---
+
+    // 드래그 시작 시점의 위치에서 카드를 제거하는 함수 (이동 확정 시 호출)
+    private void RemoveCardFromSource()
+    {
+        if (m_IsCraftingInput || m_IsCraftingResult || m_IsFromInteractionSlot)
+        {
+            // 이미 PointerDown에서 제거되었으므로 추가 동작 불필요
+            return;
+        }
+
+        // 인벤토리/장비창에서 제거
+        if (m_OwnerController is PlayerController player)
+        {
+            if (IsFromInventory)
+            {
+                if (InventoryManager.Instance != null)
+                    InventoryManager.Instance.RemoveCard(m_HeldCard);
+            }
+            else
+            {
+                // 장비 해제 (빈 카드로 교체)
+                player.ExtractCard(StartSlotIndex);
+            }
+        }
+    }
+
+    // 드래그 취소 시 원래 자리로 되돌리는 함수
+    private void ReturnCardToSource()
+    {
+        if (m_HeldCard == null) return;
+
+        // 1. 제작 슬롯
+        if (m_IsCraftingInput)
+        {
+            int slotIndex = ParseSlotIndex(target.name);
+            CraftingManager.Instance?.TryDropCardOnSlot(slotIndex, m_HeldCard);
+        }
+        // 2. 제작 결과물 (취소하면 인벤토리로 들어감)
+        else if (m_IsCraftingResult)
+        {
+            InventoryManager.Instance?.AddCardObject(m_HeldCard);
+        }
+        // 3. 이벤트 슬롯
+        else if (m_IsFromInteractionSlot)
+        {
+            EventInteractionManager.Instance?.PlaceCard(m_HeldCard);
+        }
+        // 4. 인벤토리/장비창
+        else
+        {
+            // 허공에 드롭 시 인벤토리로 돌아가는 기능
+            if (InventoryManager.Instance != null) InventoryManager.Instance.AddCardObject(m_HeldCard);
+        }
+    }
+
+    private void HandleDropOnCrafting(VisualElement slot)
+    {
+        if (m_HeldCard == null) return;
+
+        // 소스에서 제거
+        RemoveCardFromSource();
+
+        // 제작 슬롯에 투입
+        int slotIndex = ParseSlotIndex(slot.name);
+        if (CraftingManager.Instance != null)
+        {
+            if (CraftingManager.Instance.TryDropCardOnSlot(slotIndex, m_HeldCard))
+            {
+                m_HeldCard = null; // 성공적으로 들어감
+            }
+            else
+            {
+                // 실패 시 (이미 꽉 찼거나 등) -> 인벤토리로
+                InventoryManager.Instance?.AddCardObject(m_HeldCard);
+            }
+        }
+    }
+
+    private void HandleStandardSwap(VisualElement dropSlot, PlayerController player)
+    {
+        // 인벤 <-> 장비, 장비 <-> 장비 교환 로직
+        bool isToInventory = dropSlot.name.StartsWith("InvSlot");
+        int dropIndex = ParseSlotIndex(dropSlot.name);
+
+        if (dropIndex == -1) return;
+
+        if (IsFromInventory && !isToInventory)
+            player.EquipCard(StartSlotIndex, dropIndex);
+        else if (!IsFromInventory && isToInventory)
+            player.UnequipCard(StartSlotIndex);
+        else if (!IsFromInventory && !isToInventory && StartSlotIndex != dropIndex)
+            player.MoveCard(StartSlotIndex, dropIndex);
+        else if (IsFromInventory && isToInventory)
+        {
+            // 인벤 -> 인벤 (순서 변경은 추후 구현)
+        }
+    }
 
     private void CreateGhostIcon(Card card, Vector2 mousePosition)
     {
-        m_GhostIcon = new VisualElement();
+        m_HeldCard = card; // [중요] 카드 저장
 
+        m_GhostIcon = new VisualElement();
         if (card != null && card.CardImage != null)
         {
             m_GhostIcon.style.backgroundImage = new StyleBackground(card.CardImage);
         }
-
         m_GhostIcon.style.width = target.resolvedStyle.width;
         m_GhostIcon.style.height = target.resolvedStyle.height;
         m_GhostIcon.style.position = Position.Absolute;
 
         m_PointerOffset = new Vector2(target.resolvedStyle.width / 2, target.resolvedStyle.height / 2);
-
-        // [중요] 마우스 위치(월드)를 Root의 로컬 위치로 변환해야 정확히 배치됨
         Vector2 localPos = m_Root.WorldToLocal(mousePosition);
-
         m_GhostIcon.style.left = localPos.x - m_PointerOffset.x;
         m_GhostIcon.style.top = localPos.y - m_PointerOffset.y;
-
         m_GhostIcon.style.opacity = 0.7f;
         m_GhostIcon.pickingMode = PickingMode.Ignore;
 
         m_Root.Add(m_GhostIcon);
     }
 
+    // --- 유틸리티 ---
+
     private int ParseSlotIndex(string name)
     {
         if (string.IsNullOrEmpty(name)) return -1;
-        string numberPart = System.Text.RegularExpressions.Regex.Match(name, @"\d+").Value;
-        if (int.TryParse(numberPart, out int index)) return index;
+        var match = System.Text.RegularExpressions.Regex.Match(name, @"\d+");
+        if (match.Success && int.TryParse(match.Value, out int index)) return index;
         return -1;
     }
 
@@ -314,9 +404,29 @@ public class DragAndDropHandler : PointerManipulator
         while (element != null)
         {
             if (element.name != null && (element.name.StartsWith("InvSlot") || element.name.StartsWith("CardSlot")))
-            {
                 return element;
-            }
+            element = element.parent;
+        }
+        return null;
+    }
+
+    private VisualElement FindCraftingInputSlot(VisualElement element)
+    {
+        while (element != null)
+        {
+            if (element.name != null && element.name.StartsWith("CraftInput")) return element;
+            element = element.parent;
+        }
+        return null;
+    }
+
+    // [복구] 상호작용 슬롯 찾기
+    private VisualElement FindInteractionSlot(VisualElement element)
+    {
+        while (element != null)
+        {
+            // UIManager에서 "TargetSlot"이라고 이름 지었음
+            if (element.name == "TargetSlot") return element;
             element = element.parent;
         }
         return null;
@@ -330,15 +440,5 @@ public class DragAndDropHandler : PointerManipulator
             element = element.parent;
         }
         return false;
-    }
-
-    private VisualElement FindInteractionSlot(VisualElement element)
-    {
-        while (element != null)
-        {
-            if (element.name == "TargetSlot") return element;
-            element = element.parent;
-        }
-        return null;
     }
 }

@@ -68,6 +68,8 @@ public static class LocalizationManager
         { "tag_armor", "방어구" },
         { "tag_weapon", "무기" },
         { "tag_potion", "포션" },
+        { "tag_material", "재료" },
+        { "tag_wood", "나무" },
 
 
         // --- [카드] ---
@@ -81,15 +83,34 @@ public static class LocalizationManager
         { "card_torn_book_desc", "너무 낡아서 더 이상 읽을 수 없습니다." },
         { "card_torn_book_flavor", "누군가 치열하게 공부한 흔적이 남아있습니다." },
 
+        { "card_branch_name", "나뭇가지" },
+        { "card_branch_desc", "길에서 흔히 보이는 나뭇가지입니다." },
+        { "card_branch_flavor", "우드득 우드득" },
+
+        { "card_wolffang_name", "흉포한 늑대 이빨" },
+        { "card_wolffang_desc", "흉포한 늑대의 날카로운 송곳니입니다." },
+        { "card_wolffang_flavor", "주머니에 바로 넣으면 찢어질 수 있으니 조심하세요" },
+
+
+
+
         // --- 중립 ---
+        // [책]
         { "card_manual_beginner_name", "하급 무술 교본" },
         { "card_manual_beginner_desc", "왼쪽에 있는 [딜러] 카드의 공격력을 영구적으로 10 증가시킵니다." },
         { "card_manual_beginner_flavor", "기초적인 검술 동작이 그려져 있습니다." },
 
+        // [무기]
+        { "card_wolf_dagger_name", "늑대 이빨 단검" },
+        { "card_wolfdagger_skill_desc", "적에게 출혈 5를 부여합니다." },
+        { "card_wolfdagger_flavor", "날카로운 늑대의 이빨을 세공하여 만든 단검입니다." },
+
+
         // 양
         { "card_sheep_name", "양"},
         { "card_sheep_desc", "양입니다." },
-
+        
+        // --- [ 용병 ] ---
         // 야만전사 전투병
         { "card_barbarian_warrior_name", "야만전사 전투병" },
         { "card_barbarian_warrior_skill_desc", "도끼로 상대를 공격합니다." },
@@ -130,6 +151,7 @@ public static class LocalizationManager
         { "evt_repair_consumable_title", "떠돌이 보급 마차" },
         { "evt_repair_consumable_desc", "모닥불 위에 큰 스튜 냄비가 끓고 있습니다. 지친 모험가들을 위해 식량과 상비약을 보충해 주는 곳입니다." },
 
+        // --- 스탯 버프 이벤트 ---
         // 1. 공격 (Damage)
         { "evt_train_damage_title", "허수아비 치기" },
         { "evt_train_damage_desc", "가장 기초적인 훈련입니다. [딜러]의 기본 공격력을 10만큼 강화합니다." },
@@ -169,6 +191,11 @@ public static class LocalizationManager
         // 9. 가치 (Price)
         { "evt_train_price_title", "말솜씨 연습" },
         { "evt_train_price_desc", "자신의 가치를 증명하기 위한 연습을 합니다. 상점 판매 가격을 1G 높입니다." },
+        // ---------------------------------------------//
+
+        // --- 크래프팅 제작 이벤트 ---
+        { "evt_crafting_bronze_title", "장비 공방" },
+        { "evt_crafting_bronze_desc", "여러 가지 재료를 조합하여 장비를 제작할 수 있는 곳입니다." },
 
     };
 
