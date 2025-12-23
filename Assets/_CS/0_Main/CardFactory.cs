@@ -123,7 +123,11 @@ public static class CardFactory
 
             case "barbarian_shieldbearer":
                 return new Card_BarbarianShieldbearer(owner, index);
-
+            case "ice_wolf":
+                return new Card_IceWolf(owner, index);
+            case "frozen_knight":
+                return new Card_FrozenKnight(owner, index);
+       
             // ---다른 성주 카드들 ---
 
             // --- '몬스터' 카드들 ---

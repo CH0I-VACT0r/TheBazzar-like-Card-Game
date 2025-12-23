@@ -92,8 +92,6 @@ public static class LocalizationManager
         { "card_wolffang_flavor", "주머니에 바로 넣으면 찢어질 수 있으니 조심하세요" },
 
 
-
-
         // --- 중립 ---
         // [책]
         { "card_manual_beginner_name", "하급 무술 교본" },
@@ -122,6 +120,16 @@ public static class LocalizationManager
         { "card_barbarianshield_name", "야만전사 방패병" },
         { "card_barbarianshield_skill_desc", "방패를 들어 쉴드를 얻습니다." },
         { "card_barbarianshield_flavor", "\"넌 못 지나간다!\"" },
+
+        //얼음 늑대
+        { "card_icewolf_name", "얼음 늑대" },
+        { "card_icewolf_skill_desc", "데미지를 입힙니다. 빙결인 적에게는 출혈을 입힙니다." },
+        { "card_icewolf_flavor", "\"얼어붙은 발톱으로 공격하는 늑대입니다.\"" },
+
+        //얼어붙은 기사
+        { "card_frozenknight_name", "얼어붙은 기사" },
+        { "card_frozenknight_desc", "공격한 대상에게 빙결을 부여합니다." },
+        { "card_frozenknight_flavor", "\"나의 검 끝에서, 영원한 침묵을 맞이하라.\"" },
 
         // 고블린
         { "card_goblin_name", "고블린" },
@@ -290,6 +298,16 @@ public static class LocalizationManager
         { "card_barbarianshield_name", "Barbarian Shieldbearer" },
         { "card_barbarianshield_skill_desc", "Lift the shield" },
         { "card_barbarianshield_flavor", "\"You shall not pass!\"" },
+
+        //얼음 늑대
+        { "card_icewolf_name", "Ice Wolf" },
+        { "card_icewolf_skill_desc", "Deals damage. Inflicts bleeding on frozen enemies." },
+        { "card_icewolf_flavor", "A wolf that attacks with frozen claws." },
+
+        //얼어붙은 기사
+        { "card_frozenknight_name", "Frozen Knight" },
+        { "card_frozenknight_desc", "Inflicts frozen on enemies." },
+        { "card_frozenknight_flavor", "\"Meet eternal silence at the edge of my blade.\"" },
 
         // 고블린
         { "card_goblin_name", "Goblin" },

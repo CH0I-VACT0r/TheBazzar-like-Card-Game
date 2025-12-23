@@ -93,8 +93,8 @@ public class Lord_SevereCold_Controller : PlayerController
         {
             "barbarian_warrior",                  // 1¹ø ½½·Ô (ÀÎµ¦½º 0)
             "barbarian_shieldbearer",             // 2¹ø ½½·Ô 
-            "manual_beginner",                    // 3¹ø ½½·Ô
-            "potion_heal",             // 4¹ø ½½·Ô
+            "frozen_knight",                    // 3¹ø ½½·Ô
+            "ice_wolf",             // 4¹ø ½½·Ô
             "card_wolffang",             // 5¹ø ½½·Ô
             "card_branch",             // 6¹ø ½½·Ô
             null              // 7¹ø ½½·Ô
