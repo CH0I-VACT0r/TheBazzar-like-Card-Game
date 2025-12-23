@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_Potion_Heal : Card
 {
-    public Card_Potion_Heal(object owner, int index) : base(owner, index, 7.0f)
+    public Card_Potion_Heal(object owner, int index) : base(owner, index, 7.0f, "card_potion_heal")
     {
         // 1. 기본 정보
         this.CardNameKey = "card_potion_heal_name";

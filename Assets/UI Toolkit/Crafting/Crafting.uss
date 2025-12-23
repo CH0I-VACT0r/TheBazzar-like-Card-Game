@@ -171,3 +171,11 @@
 .btn-close:hover {
     background-color: rgb(183, 28, 28);
 }
+
+.action-area {
+    width: 250px; /* 버튼 너비에 맞춤 */
+    height: 100%;
+    justify-content: center; /* 상하 중앙 정렬 */
+    align-items: center;
+    margin-left: 120px;
+}

@@ -7,7 +7,7 @@ public class Card_BarbarianShieldbearer : Card
 {
     // --- 생성자 ---
     public Card_BarbarianShieldbearer(object owner, int index)
-        : base(owner, index, 7.0f) // 부모(Card) 생성자 호출 (쿨타임 7.0초)
+        : base(owner, index, 7.0f, "card_barbarian_shieldbearer") // 부모(Card) 생성자 호출 (쿨타임 7.0초)
     {
         // --- 1. 기본 정보 설정 (키 할당) ---
         this.CardNameKey = "card_barbarianshield_name";

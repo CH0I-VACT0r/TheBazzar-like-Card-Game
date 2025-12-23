@@ -7,7 +7,7 @@ public class Card_IceWolf : Card
 {
     // --- 생성자 ---
     public Card_IceWolf(object owner, int index)
-        : base(owner, index, 7.0f) // 부모(Card) 생성자 호출 (쿨타임 7.0초)
+        : base(owner, index, 7.0f,"card_icewolf") // 부모(Card) 생성자 호출 (쿨타임 7.0초)
     {
         // --- 1. 기본 정보 설정 (키 할당) ---
         this.CardNameKey = "card_ice_wolf_name";

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_Torn_Book : Card
 {
-    public Card_Torn_Book(object owner, int index) : base(owner, index, 0f)
+    public Card_Torn_Book(object owner, int index) : base(owner, index, 0f, "card_torn_book")
     {
         // 1. 기본 정보
         this.CardNameKey = "card_torn_book_name";

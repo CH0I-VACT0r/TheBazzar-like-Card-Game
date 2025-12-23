@@ -61,6 +61,7 @@ public static class LocalizationManager
         { "tag_summon", "소환" },
         { "tag_deathrattle", "유언" },
         { "tag_barbarian", "야만전사" },
+        { "tag_knight", "기사" },
         { "tag_beast", "야수" },
         { "tag_monster", "몬스터" },
         { "tag_goblin", "고블린" },

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_Sheep : Card
 {
-    public Card_Sheep(object owner, int index) : base(owner, index, 99f) // 쿨타임 길게 (스킬 못 쓰게)
+    public Card_Sheep(object owner, int index) : base(owner, index, 99f, "card_sheep") // 쿨타임 길게 (스킬 못 쓰게)
     {
         this.CardNameKey = "card_sheep_name";
         this.CardImage = Resources.Load<Sprite>("CardImages/Monster/Sheep"); // (이미지 필요)

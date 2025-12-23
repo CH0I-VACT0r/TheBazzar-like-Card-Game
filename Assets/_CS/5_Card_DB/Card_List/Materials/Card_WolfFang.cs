@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_WolfFang : Card
 {
-    public Card_WolfFang(object owner, int index) : base(owner, index, 0f) // ÄğÅ¸ÀÓ 0 (»ç¿ë ¾ÈÇÔ)
+    public Card_WolfFang(object owner, int index) : base(owner, index, 0f, "card_wolffang") // ÄğÅ¸ÀÓ 0 (»ç¿ë ¾ÈÇÔ)
     {
         this.CardNameKey = "card_wolffang_name"; // ÈäÆ÷ÇÑ ´Á´ë ÀÌ»¡
         this.ItemType = CardType.Material;

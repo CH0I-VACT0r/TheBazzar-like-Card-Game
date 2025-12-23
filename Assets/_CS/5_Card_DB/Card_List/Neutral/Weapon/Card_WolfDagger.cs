@@ -3,7 +3,7 @@ using UnityEngine;
 public class Card_WolfDagger : Card
 {
     // 생성자: 쿨타임 5초 설정
-    public Card_WolfDagger(object owner, int index) : base(owner, index, 5.0f)
+    public Card_WolfDagger(object owner, int index) : base(owner, index, 5.0f, "card_wolf_dagger")
     {
         this.CardNameKey = "card_wolf_dagger_name"; // 늑대 이빨 단검
         this.ItemType = CardType.Consumable;   // 소비 아이템으로 분류 (장비처럼 쓰지만 소모성)

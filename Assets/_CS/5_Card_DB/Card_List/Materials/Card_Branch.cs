@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_Branch : Card
 {
-    public Card_Branch(object owner, int index) : base(owner, index, 0f)
+    public Card_Branch(object owner, int index) : base(owner, index, 0f, "card_branch")
     {
         this.CardNameKey = "card_branch_name"; // ³ª¹µ°¡Áö
         this.ItemType = CardType.Material;

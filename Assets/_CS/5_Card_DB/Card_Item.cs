@@ -4,7 +4,7 @@ using UnityEngine;
 public class Card_Item : Card
 {
     public Card_Item(object owner, int index, string nameKey, string descKey, string iconPath, int price)
-        : base(owner, index, 0f) // 
+        : base(owner, index, 0f, "card_item") // 
     {
         this.CardNameKey = nameKey;
         this.CardSkillDescriptionKey = descKey;

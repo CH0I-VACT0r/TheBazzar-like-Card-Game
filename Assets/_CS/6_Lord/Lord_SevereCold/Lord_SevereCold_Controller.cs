@@ -91,10 +91,10 @@ public class Lord_SevereCold_Controller : PlayerController
         // (³ªÁß¿¡´Â ÀÌ 'testDeck' ¹è¿­ÀÌ 'Àü·« ¾À'¿¡¼­ ³Ñ¾î¿É´Ï´Ù)
         string[] testDeck = new string[]
         {
-            "barbarian_warrior",                  // 1¹ø ½½·Ô (ÀÎµ¦½º 0)
-            "barbarian_shieldbearer",             // 2¹ø ½½·Ô 
-            "frozen_knight",                    // 3¹ø ½½·Ô
-            "ice_wolf",             // 4¹ø ½½·Ô
+            "card_barbarian_warrior",                  // 1¹ø ½½·Ô (ÀÎµ¦½º 0)
+            "card_barbarian_shieldbearer",             // 2¹ø ½½·Ô 
+            "card_frozenknight",                    // 3¹ø ½½·Ô
+            "card_icewolf",             // 4¹ø ½½·Ô
             "card_wolffang",             // 5¹ø ½½·Ô
             "card_branch",             // 6¹ø ½½·Ô
             null              // 7¹ø ½½·Ô

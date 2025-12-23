@@ -8,10 +8,10 @@ public static class CardFactory
     // 제작 전용 아이템(재료, 결과물)은 여기에 적지 않음으로써 상점 등장을 막습니다.
     private static string[] allCardIDs =
     {
-        "barbarian_warrior",
-        "barbarian_shieldbearer",
-        "manual_beginner",
-        "potion_heal"
+        "card_barbarian_warrior",
+        "card_barbarian_shieldbearer",
+        "card_manual_beginner",
+        "card_potion_heal"
         // "item_wolf_fang", "item_branch", "item_wolf_dagger"는 여기에 넣지 않습니다!
     };
 
@@ -105,7 +105,7 @@ public static class CardFactory
 
 
             // --- '아이템' 카드들 --- 
-            case "potion_heal":
+            case "card_potion_heal":
                 return new Card_Potion_Heal(owner, index);
 
             // --- '재료' 카드들 ---
@@ -113,19 +113,19 @@ public static class CardFactory
                 return new Card_Torn_Book(owner, index);
 
             // --- '중립' 카드들 ---
-            case "manual_beginner":
+            case "card_manual_beginner":
                 return new Card_Manual_Beginner(owner, index);
 
 
             // --- '혹한의 성주' 카드들 ---
-            case "barbarian_warrior":
+            case "card_barbarian_warrior":
                 return new Card_BarbarianWarrior(owner, index);
 
-            case "barbarian_shieldbearer":
+            case "card_barbarian_shieldbearer":
                 return new Card_BarbarianShieldbearer(owner, index);
-            case "ice_wolf":
+            case "card_icewolf":
                 return new Card_IceWolf(owner, index);
-            case "frozen_knight":
+            case "card_frozenknight":
                 return new Card_FrozenKnight(owner, index);
        
             // ---다른 성주 카드들 ---
@@ -135,13 +135,13 @@ public static class CardFactory
             case "card_sheep":
                 return new Card_Sheep(owner, index);
             //고블린
-            case "goblin":
+            case "card_goblin":
                 // 몬스터 전용 카드이므로, 주인이 몬스터일 때만 생성
                 if (monsterOwner != null)
                     return new Card_Goblin(monsterOwner, index);
                 break;
             // 마녀
-            case "witch":
+            case "card_witch":
                 if (monsterOwner != null)
                     return new Card_Witch(monsterOwner, index);
                 break;

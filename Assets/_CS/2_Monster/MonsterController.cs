@@ -1440,9 +1440,9 @@ public class MonsterController
     public virtual void SetupDeck(string[] cardNames)
     {
         // (프로토타입용 하드코딩)
-        m_Cards[3] = CardFactory.CreateCard("witch", this, 3);
-        m_Cards[1] = CardFactory.CreateCard("goblin", this, 1);
-        m_Cards[2] = CardFactory.CreateCard("goblin", this, 2);
+        m_Cards[3] = CardFactory.CreateCard("card_witch", this, 3);
+        m_Cards[1] = CardFactory.CreateCard("card_goblin", this, 1);
+        m_Cards[2] = CardFactory.CreateCard("card_goblin", this, 2);
 
 
         // [신규!] 3번 슬롯 UI 업데이트 (이미지, 가격, 툴팁 등)

@@ -7,10 +7,10 @@ public class Card_FrozenKnight : Card
 {
     // --- 생성자 ---
     public Card_FrozenKnight(object owner, int index)
-        : base(owner, index, 7.0f) // 부모(Card) 생성자 호출 (쿨타임 7.0초)
+        : base(owner, index, 7.0f, "card_frozenknight") // 부모(Card) 생성자 호출 (쿨타임 7.0초)
     {
         // --- 1. 기본 정보 설정 (키 할당) ---
-        this.CardNameKey = "card_frozen_knight_name";
+        this.CardNameKey = "card_frozenknight_name";
         // (TODO: "CardImages/BarbarianWarrior" 경로에 실제 이미지 파일이 있어야 합니다)
         this.CardImage = Resources.Load<Sprite>("CardImages/Lord_SevereCold/FrozenKnight");
         SetInitPrice(2);
@@ -19,12 +19,12 @@ public class Card_FrozenKnight : Card
 
         // --- 2. 태그 키 할당 ---
         this.TagKeys.Add("tag_mercenary");
-        this.TagKeys.Add("tag_knight");
         this.TagKeys.Add("tag_dealer");
+        this.TagKeys.Add("tag_freeze");
 
         // --- 3. 툴팁 정보 설정 (키 할당) ---
-        this.CardSkillDescriptionKey = "card_frozen_knight_skill_desc";
-        this.FlavorTextKey = "card_frozen_knight_flavor";
+        this.CardSkillDescriptionKey = "card_frozenknight_desc";
+        this.FlavorTextKey = "card_frozenknight_flavor";
 
         // --- 5. 내구도 ---
         this.Durability = -1; // 무한 내구도

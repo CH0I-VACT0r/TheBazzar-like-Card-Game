@@ -3,7 +3,7 @@ using UnityEngine;
 public class Card_Manual_Beginner : Card
 {
     // 생성자: (주인, 슬롯인덱스) -> 쿨타임 10초 설정
-    public Card_Manual_Beginner(object owner, int index) : base(owner, index, 10.0f)
+    public Card_Manual_Beginner(object owner, int index) : base(owner, index, 10.0f, "card_manual_beginner")
     {
         // 1. 기본 정보
         this.CardNameKey = "card_manual_beginner_name";

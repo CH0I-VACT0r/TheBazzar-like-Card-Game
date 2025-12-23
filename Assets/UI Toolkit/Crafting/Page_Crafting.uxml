@@ -21,8 +21,10 @@
                         <ui:VisualElement name="CardImage" picking-mode="Ignore" class="card-image" style="flex-grow: 1;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Button text="Craft" name="Btn_Craft" class="btn-craft" />
                 <ui:Button text="X" name="Btn_Close" class="btn-close" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ActionArea" class="action-area" style="flex-grow: 1;">
+                <ui:Button text="Craft" name="Btn_Craft" class="btn-craft" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -14,6 +14,7 @@ public abstract class Card
 {
     // 1. 공통 데이터 
     // 모든 카드가 공통적으로 가지는 속성
+    public string CardID { get; protected set; }                              // 카드 ID
     public string CardNameKey { get; protected set; }                         // 카드 이름
     public Sprite CardImage { get; protected set; }                           // 카드 이미지
     public List<string> TagKeys { get; protected set; } = new List<string>(); // 카드 태그 키
@@ -222,10 +223,11 @@ public abstract class Card
 
     // --- 2. 생성자 (카드 처음 생성 시) ---
     /// 새 카드를 생성할 때 호출됩니다.
-    public Card(object owner, int index, float cooldown)
+    public Card(object owner, int index, float cooldown, string cardID)
     {
         this.Owner = owner;
         this.SlotIndex = index;
+        this.CardID = cardID;
         this.BaseCooldownTime = cooldown;
         this.CurrentCooldown = GetCurrentCooldownTime(); 
         this.CardNameKey = "Default Card Name";

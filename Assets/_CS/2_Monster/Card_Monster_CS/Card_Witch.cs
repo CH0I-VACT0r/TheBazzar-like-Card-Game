@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Card_Witch : Card
 {
-    public Card_Witch(object owner, int index) : base(owner, index, 10f)
+    public Card_Witch(object owner, int index) : base(owner, index, 10f, "card_witch")
     {
         // ... (기본 설정) ...
         this.CardNameKey = "card_witch_name";

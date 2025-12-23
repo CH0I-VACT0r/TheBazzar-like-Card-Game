@@ -75,7 +75,6 @@ public class CraftingManager : MonoBehaviour
         _inputSlots[0] = _root.Q<VisualElement>("CraftInput_0");
         _inputSlots[1] = _root.Q<VisualElement>("CraftInput_1");
         _resultSlot = _root.Q<VisualElement>("ResultIcon");
-        _resultNameLabel = _root.Q<Label>("ResultName");
         _recipeListContainer = _root.Q<ScrollView>("RecipeList");
 
         _craftButton = _root.Q<Button>("Btn_Craft");
@@ -298,7 +297,7 @@ public class CraftingManager : MonoBehaviour
         List<string> currentInputIds = new List<string>();
         foreach (var card in _inputCards)
         {
-            if (card != null) currentInputIds.Add(card.CardNameKey);
+            if (card != null) currentInputIds.Add(card.CardID);
         }
 
         // 재료가 부족하면 검사 중단
@@ -376,36 +375,45 @@ public class CraftingManager : MonoBehaviour
 
     private void OnCraftButtonClicked()
     {
-        if (_hasCraftedThisSession) return;
+        Debug.Log("[Crafting Debug] 제작 버튼 클릭됨");
+
         if (_currentValidRecipe == null)
         {
-            Debug.LogWarning("[Crafting] 유효한 레시피가 없는데 제작 버튼이 눌렸습니다.");
+            Debug.LogError("에러: _currentValidRecipe가 null입니다!");
             return;
         }
 
-        // 1. 재료 소모
-        _inputCards[0] = null;
-        _inputCards[1] = null;
+        // 2. 결과물 생성 시도 및 확인
+        string targetID = _currentValidRecipe.resultCardID;
+        Debug.Log($"[Crafting Debug] 생성 시도 ID: {targetID}");
 
-        // 2. 결과물 생성
-        _craftedResultCard = CardFactory.CreateCard(_currentValidRecipe.resultCardID, null, -1);
+        _craftedResultCard = CardFactory.CreateCard(targetID, null, -1);
 
         if (_craftedResultCard == null)
         {
-            Debug.LogError($"[Crafting] 결과물 생성 실패! ID '{_currentValidRecipe.resultCardID}'를 확인하세요.");
+            Debug.LogError($"에러: CardFactory가 ID '{targetID}'에 해당하는 카드를 생성하지 못했습니다. Factory를 확인하세요!");
             return;
         }
 
-        // 3. 완료 처리
+        // 3. 나머지 로직 실행
+        _inputCards[0] = null;
+        _inputCards[1] = null;
         _hasCraftedThisSession = true;
 
         UpdateSlotVisuals();
 
-        _craftButton.SetEnabled(false);
-        _craftButton.AddToClassList("disabled");
-        _resultNameLabel.text = "Success!";
+        if (_craftButton != null)
+        {
+            _craftButton.SetEnabled(false);
+            _craftButton.AddToClassList("disabled");
+        }
 
-        Debug.Log($"[Crafting] 제작 완료: {_craftedResultCard.CardNameKey}");
+        if (_resultNameLabel != null)
+        {
+            _resultNameLabel.text = "Success!";
+        }
+
+        Debug.Log($"[Crafting] 제작 완료: {_craftedResultCard.CardID}");
     }
 
     private void OnCloseButtonClicked()
