@@ -154,18 +154,17 @@
 }
 
 .btn-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    background-color: rgb(198, 40, 40);
-    color: white;
+    width: 240px;
+    height: 70px;
+    font-size: 30px;
+    background-color: white;
+    color: black;
     -unity-font-style: bold;
-    border-radius: 8px;
-    border-width: 2px;
-    border-color : black;
+    border-radius: 12px;
+    border-width: 3px;
+    border-color: black;
+    transition-duration: 0.2s;
+    margin-top: 20px;
 }
 
 .btn-close:hover {

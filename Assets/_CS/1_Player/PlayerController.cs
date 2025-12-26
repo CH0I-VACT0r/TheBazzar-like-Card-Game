@@ -17,6 +17,8 @@ public class PlayerController
     protected VisualElement m_StatusPanel; // 상태 패널 UI
     public List<VisualElement> Slots { get; protected set; } = new List<VisualElement>(7); // 7개의 카드 슬롯 UI 요소 리스트
     public int Gold { get; private set; } = 15;
+    public int CurrentLife { get; private set; } = 3; // 현재 라이프
+    public int MaxLife { get; private set; } = 3;    // 최대 라이프
 
     // 툴팁 UI 요소
     protected VisualElement m_Root;
@@ -50,7 +52,7 @@ public class PlayerController
     private Label m_ShieldLabel;
     private Label m_LevelLabel;
     private List<VisualElement> m_XPTicks = new List<VisualElement>(10); // 10칸 네모 XP 바를 위한 리스트
-
+    private VisualElement m_LifeContainer;
     // DoT 도트 대미지 아이콘 UI 라벨
     private Label m_BleedStatusLabel;
     private Label m_PoisonStatusLabel;
@@ -135,6 +137,7 @@ public class PlayerController
             m_ShieldBarFill = m_StatusPanel.Q<VisualElement>("Shield-Bar_Fill");
             m_ShieldLabel = m_StatusPanel.Q<Label>("Shield-label");
             m_LevelLabel = m_StatusPanel.Q<Label>("LV-label");
+            m_LifeContainer = m_StatusPanel.Q<VisualElement>("LifeContainer");
 
             // XP Ticks
             m_XPTicks.Clear();
@@ -238,7 +241,13 @@ public class PlayerController
         UpdateHealthUI();
         UpdateXPUI();
         UpdateDoTUI();
-        
+        UpdateLifeUI();
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHUDLife(CurrentLife, MaxLife);
+        }
+
         for (int i = 0; i < 7; i++)
         {
             UpdateCardSlotUI(i);
@@ -252,6 +261,41 @@ public class PlayerController
         Debug.Log("PlayerController UI 초기화 및 연결 완료");
     }
 
+    public virtual void LoseLife()
+    {
+        CurrentLife--;
+        Debug.LogWarning($"[라이프 감소] 남은 라이프: {CurrentLife}");
+
+        // 자신의 UI 갱신 함수 호출
+        UpdateLifeUI();
+
+        if (CurrentLife <= 0)
+        {
+            Debug.LogError("게임 오버!");
+        }
+    }
+
+    public void UpdateLifeUI()
+    {
+        if (m_LifeContainer == null) return;
+
+        m_LifeContainer.Clear();
+
+        // MaxLife만큼 하트를 생성 (보통 3개)
+        for (int i = 0; i < MaxLife; i++)
+        {
+            VisualElement heart = new VisualElement();
+            heart.AddToClassList("heart-icon");
+
+            // 현재 남은 라이프 수치와 비교하여 클래스 결정
+            if (i < CurrentLife)
+                heart.AddToClassList("heart-full");
+            else
+                heart.AddToClassList("heart-empty");
+
+            m_LifeContainer.Add(heart);
+        }
+    }
     public void UpdatePartyUI()
     {
         for (int i = 0; i < 7; i++)

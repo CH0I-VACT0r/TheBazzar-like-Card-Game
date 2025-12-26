@@ -646,3 +646,42 @@ VisualElement {
     align-self: flex-end; /* 오른쪽 구석으로 보냄 */
     -unity-font-style: italic;
 }
+
+.portrait-group {
+    flex-direction: column;
+    align-items: center;
+    width: 200px; /* 초상화 너비와 일치 */
+    margin-right: 25px; /* 기존 Portrait에 있던 마진을 이쪽으로 이동 */
+}
+
+/* 라이프 컨테이너 (하트 바구니) */
+.life-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px; /* 하트가 들어갈 높이 */
+    margin-bottom: 30px; /* 초상화와의 간격 */
+    padding-right : 20px;
+}
+
+/* 하트 아이콘 공통 */
+.heart-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    background-size: contain;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* 꽉 찬 하트 */
+.heart-full {
+    background-image: resource('Icons/heart_full');
+    -unity-background-image-tint-color: white;
+}
+
+/* 빈 하트 */
+.heart-empty {
+    background-image: resource('Icons/heart_empty');
+    -unity-background-image-tint-color: white;
+}

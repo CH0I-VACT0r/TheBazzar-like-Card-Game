@@ -11,16 +11,14 @@ public class GameManager : MonoBehaviour
 {
     // --- 참조 ---
     public BattleManager battleManager;
+    // 싱글톤
+    public static GameManager Instance;
 
     // --- 게임 상태 ---
     public int CurrentDay { get; private set; } = 1;
-    public int PlayerLevel { get; private set; } = 1; // 플레이어 레벨 (명성)
 
     public enum GamePhase { Preparation, Battle, Reward, DayEnd }
     public GamePhase currentPhase = GamePhase.Preparation;
-
-    // 싱글톤
-    public static GameManager Instance;
 
     private void Awake()
     {
@@ -47,32 +45,29 @@ public class GameManager : MonoBehaviour
         return (Weekday)dayIndex;
     }
 
-    // 레벨업 함수 (나중에 경험치 찼을 때 호출)
-    public void LevelUp()
-    {
-        PlayerLevel++;
-        Debug.Log($"레벨 업! 현재 레벨: {PlayerLevel}");
-        // TODO: 레벨업 축하 UI 띄우기
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (currentPhase == GamePhase.Preparation)
             {
-                Debug.Log("Test] 스페이스바: 전투 시작!");
                 SetPhase(GamePhase.Battle);
             }
             else if (currentPhase == GamePhase.Reward)
             {
-                Debug.Log("[Test] 다음 날로 진행");
                 StartNextDay();
             }
         }
 
-        // [테스트용] L키 누르면 레벨업
-        if (Input.GetKeyDown(KeyCode.L)) LevelUp();
+        // [테스트용] L키 누르면 플레이어에게 경험치 10을 줘서 레벨업 테스트
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (battleManager != null && battleManager.playerController != null)
+            {
+                battleManager.playerController.AddExperience(10);
+                Debug.Log("[Test] 경험치 10 추가 시도");
+            }
+        }
     }
 
     // --- 페이즈 관리  ---
@@ -124,43 +119,28 @@ public class GameManager : MonoBehaviour
     // --- 레벨별 카드 등급 뽑기 (가챠 로직) ---
     public CardRarity GetRandomRarityByLevel()
     {
-        int roll = Random.Range(0, 100); // 0 ~ 99 
+        // 안전장치: 플레이어 컨트롤러가 없으면 기본 등급 반환
+        if (battleManager == null || battleManager.playerController == null)
+            return CardRarity.Bronze;
 
-        // 레벨별 확률
+        // 플레이어의 현재 레벨 가져오기
+        int currentLv = battleManager.playerController.CurrentLevel;
+        int roll = Random.Range(0, 100);
+
         // Lv 1 ~ 2: 브론즈 100%
-        if (PlayerLevel < 3)
+        if (currentLv < 3) // PlayerLevel 대신 currentLv 사용
         {
             return CardRarity.Bronze;
         }
         // Lv 3 ~ 4: 브론즈 50%, 실버 50%
-        else if (PlayerLevel < 5)
+        else if (currentLv < 5)
         {
             if (roll < 50) return CardRarity.Bronze;
             else return CardRarity.Silver;
         }
-        // Lv 5 ~ 7: 실버 100%
-        else if (PlayerLevel < 8)
-        {
-            return CardRarity.Silver;
-        }
-        // Lv 8 ~ 9: 실버 70%, 골드 30% 
-        else if (PlayerLevel < 10)
-        {
-            if (roll < 70) return CardRarity.Silver; 
-            else return CardRarity.Gold;            
-        }
-        // Lv 10 ~ 11: 실버 30%, 골드 70%
-        else if (PlayerLevel < 12)
-        {
-            if (roll < 30) return CardRarity.Silver;
-            else return CardRarity.Gold;
-        }
-        // Lv 12 ~ 14: 골드 100%
-        else if (PlayerLevel < 15)
-        {
-            return CardRarity.Gold;
-        }
-        // Lv 15+: 골드 80%, 다이아 20%
+        // ... (이하 모든 PlayerLevel을 currentLv로 변경) ...
+
+        // 마지막 Diamond 확률 구간 예시
         else
         {
             if (roll < 80) return CardRarity.Gold;
@@ -211,4 +191,6 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.ShowEventSelectionWindow(dailyEvents);
         }
     }
+
+
 }

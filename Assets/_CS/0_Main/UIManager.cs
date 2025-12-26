@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public VisualTreeAsset eventSelectionPageAsset; // 이벤트
     public VisualTreeAsset shopPageAsset;           // Shop
     public VisualTreeAsset eventInteractionPageAsset; // 인터랙션
+    public VisualTreeAsset rewardPageAsset; // 보상 페이지 추가
 
     [Header("Controllers")]
     private PlayerController playerController;
@@ -55,6 +56,8 @@ public class UIManager : MonoBehaviour
     private Label m_TooltipFlavorText;
     private VisualElement m_TooltipDivider1;
     private VisualElement m_TooltipDivider2;
+
+    private VisualElement m_LifeContainer;
 
     public bool IsInventoryOpen
     {
@@ -207,6 +210,8 @@ public class UIManager : MonoBehaviour
         hudUI.pickingMode = PickingMode.Ignore; // 빈 공간 클릭 통과
         _hudContainer.Add(hudUI);
 
+        m_LifeContainer = hudUI.Q<VisualElement>("LifeContainer");
+
         // [인벤토리 버튼] 기능 연결
         Button btnBag = hudUI.Q<Button>("Btn_OpenInventory");
         if (btnBag != null)
@@ -214,6 +219,29 @@ public class UIManager : MonoBehaviour
             btnBag.clicked -= OpenInventory;
             btnBag.clicked -= ToggleInventory;
             btnBag.clicked += ToggleInventory;
+        }
+    }
+    public void UpdateHUDLife(int currentLife, int maxLife)
+    {
+        if (m_LifeContainer == null) return;
+
+        m_LifeContainer.Clear(); // 기존 하트 다 지우고 다시 생성
+
+        for (int i = 0; i < maxLife; i++)
+        {
+            VisualElement heart = new VisualElement();
+            heart.AddToClassList("heart-icon");
+
+            if (i < currentLife)
+            {
+                heart.AddToClassList("heart-full");
+            }
+            else
+            {
+                heart.AddToClassList("heart-empty");
+            }
+
+            m_LifeContainer.Add(heart);
         }
     }
 

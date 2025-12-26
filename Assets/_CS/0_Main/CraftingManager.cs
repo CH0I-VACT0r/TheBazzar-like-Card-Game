@@ -115,27 +115,28 @@ public class CraftingManager : MonoBehaviour
         if (_recipeListContainer == null) return;
         _recipeListContainer.Clear();
 
-        if (allRecipes == null || allRecipes.Count == 0)
-        {
-            _recipeListContainer.Add(new Label("No Recipes (Check Inspector)"));
-            return;
-        }
-
         foreach (var recipe in allRecipes)
         {
-            if (recipe == null) continue; // 빈 슬롯 방지
+            if (recipe == null) continue;
 
             VisualElement row = new VisualElement();
             row.AddToClassList("recipe-item");
 
-            string displayName = string.IsNullOrEmpty(recipe.recipeNameKey) ? recipe.name : recipe.recipeNameKey;
-            Label nameLabel = new Label(displayName);
-            nameLabel.AddToClassList("recipe-label");
-            row.Add(nameLabel);
+            List<string> ingredientNames = new List<string>();
+            foreach (string id in recipe.ingredientIDs)
+            {
+                string name = LocalizationManager.GetText(id + "_name");
+                ingredientNames.Add(name);
+            }
+
+            // "재료1 + 재료2" 형태
+            string formula = string.Join(" + ", ingredientNames);
+            Label formulaLabel = new Label(formula);
+            formulaLabel.AddToClassList("recipe-label");
+            row.Add(formulaLabel);
 
             _recipeListContainer.Add(row);
         }
-        // Debug.Log("[Crafting] 레시피 목록 UI 갱신 완료");
     }
 
     // --- 2. 외부 호출 함수 ---
@@ -214,74 +215,92 @@ public class CraftingManager : MonoBehaviour
 
     private void UpdateSlotVisuals()
     {
-        // 입력 슬롯
+        // --- 1. 입력 슬롯 시각화 ---
         for (int i = 0; i < 2; i++)
         {
             if (_inputSlots[i] == null) continue;
             var slotImage = _inputSlots[i].Q<VisualElement>("CardImage");
             if (slotImage == null) continue;
 
-            if (_hasCraftedThisSession) _inputSlots[i].AddToClassList("disabled-slot");
-            else _inputSlots[i].RemoveFromClassList("disabled-slot");
-
             if (_inputCards[i] != null)
             {
                 slotImage.style.backgroundImage = new StyleBackground(_inputCards[i].CardImage);
                 slotImage.style.opacity = 1;
-                _inputSlots[i].userData = _inputCards[i];
                 _inputSlots[i].pickingMode = PickingMode.Position;
             }
             else
             {
                 slotImage.style.backgroundImage = null;
                 slotImage.style.opacity = 0;
-                _inputSlots[i].userData = null;
+                _inputSlots[i].pickingMode = PickingMode.Position;
             }
         }
 
-        // 결과 슬롯
+        // --- 2. 결과 슬롯 시각화 (미리보기 및 툴팁 포함) ---
         if (_resultSlot != null)
         {
-            var resultImage = _resultSlot.Q<VisualElement>("CardImage");
+            VisualElement resultImage = _resultSlot.Q<VisualElement>("ResultCardImage");
+
             if (resultImage == null)
             {
-                // Result 이미지 요소가 없으면 강제 생성
+                Debug.LogWarning("[Crafting] ResultIcon 내부에 CardImage가 없어 동적으로 생성합니다.");
                 resultImage = new VisualElement();
-                resultImage.name = "CardImage";
-                resultImage.AddToClassList("card-image");
+                resultImage.name = "ResultCardImage";
                 resultImage.style.width = Length.Percent(100);
                 resultImage.style.height = Length.Percent(100);
-                resultImage.style.position = Position.Absolute;
                 _resultSlot.Add(resultImage);
             }
 
+            resultImage.style.display = DisplayStyle.Flex;
+            resultImage.style.visibility = Visibility.Visible;
+
+            // 기존 이벤트 해제
+            _resultSlot.UnregisterCallback<PointerEnterEvent>(OnResultSlotPointerEnter);
+            _resultSlot.UnregisterCallback<PointerLeaveEvent>(OnResultSlotPointerLeave);
+
             if (_craftedResultCard != null)
             {
-                // [실물]
+                // [제작 완료]
                 resultImage.style.backgroundImage = new StyleBackground(_craftedResultCard.CardImage);
-                resultImage.style.opacity = 1;
+                resultImage.style.opacity = 1f;
+                resultImage.style.backgroundColor = Color.clear; // 배경 흰색이면 투명
+
                 _resultSlot.userData = _craftedResultCard;
                 _resultSlot.pickingMode = PickingMode.Position;
+                _resultSlot.RegisterCallback<PointerEnterEvent>(OnResultSlotPointerEnter);
+                _resultSlot.RegisterCallback<PointerLeaveEvent>(OnResultSlotPointerLeave);
             }
             else if (_currentValidRecipe != null && !_hasCraftedThisSession)
             {
-                // [미리보기]
+                // [미리보기 상태]
                 Card previewCard = CardFactory.CreateCard(_currentValidRecipe.resultCardID, null, -1);
-                if (previewCard != null)
+
+                if (previewCard != null && previewCard.CardImage != null)
                 {
+                    // 이미지 입히기
                     resultImage.style.backgroundImage = new StyleBackground(previewCard.CardImage);
-                    resultImage.style.opacity = 0.5f;
+                    resultImage.style.opacity = 0.5f; // 반투명
+
+                    resultImage.style.backgroundColor = new StyleColor(new Color(1, 0, 0, 0.5f));
+
+                    _resultSlot.userData = previewCard;
+                    _resultSlot.pickingMode = PickingMode.Position;
+
+                    _resultSlot.RegisterCallback<PointerEnterEvent>(OnResultSlotPointerEnter);
+                    _resultSlot.RegisterCallback<PointerLeaveEvent>(OnResultSlotPointerLeave);
                 }
                 else
                 {
-                    Debug.LogError($"[Crafting] 미리보기 생성 실패! ID '{_currentValidRecipe.resultCardID}'가 CardFactory에 등록되어 있나요?");
+                    // 생성은 됐는데 Sprite가 없는 경우
+                    if (previewCard != null && previewCard.CardImage == null)
+                        Debug.LogError($"[Crafting] 카드 {previewCard.CardID}에 Sprite가 할당되지 않았습니다!");
+
+                    resultImage.style.backgroundImage = null;
+                    resultImage.style.opacity = 0;
                 }
-                _resultSlot.userData = null;
-                _resultSlot.pickingMode = PickingMode.Ignore;
             }
             else
             {
-                // [비어있음]
                 resultImage.style.backgroundImage = null;
                 resultImage.style.opacity = 0;
                 _resultSlot.userData = null;
@@ -308,7 +327,6 @@ public class CraftingManager : MonoBehaviour
         }
 
         // [디버깅] 현재 투입된 재료 확인
-        // Debug.Log($" [Crafting] 레시피 검색 중... 투입된 재료: [{string.Join(", ", currentInputIds)}]");
 
         CraftingRecipe matchedRecipe = null;
         if (allRecipes != null)
@@ -449,5 +467,18 @@ public class CraftingManager : MonoBehaviour
                 InventoryManager.Instance.AddCardObject(_craftedResultCard);
             _craftedResultCard = null;
         }
+    }
+
+    private void OnResultSlotPointerEnter(PointerEnterEvent evt)
+    {
+        if (_resultSlot.userData is Card card)
+        {
+            UIManager.Instance.ShowCardTooltip(card, _resultSlot);
+        }
+    }
+
+    private void OnResultSlotPointerLeave(PointerLeaveEvent evt)
+    {
+        UIManager.Instance.HideTooltip();
     }
 }

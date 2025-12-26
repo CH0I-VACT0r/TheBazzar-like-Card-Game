@@ -60,7 +60,10 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="PlayerStatus" class="PlayerStatusPanel StatusPanel" style="flex-grow: 1;">
-            <ui:VisualElement name="Portrait" class="Portrait" style="flex-grow: 1;" />
+            <ui:VisualElement name="PortraitGroup" class="portrait-group" style="flex-grow: 1;">
+                <ui:VisualElement name="LifeContainer" class="life-container" style="flex-grow: 1;" />
+                <ui:VisualElement name="Portrait" class="Portrait" style="flex-grow: 1;" />
+            </ui:VisualElement>
             <ui:VisualElement name="StatusBar" class="LordInfoBar" style="flex-grow: 1;">
                 <ui:VisualElement name="XP-Bar" class="statusbar xp-bar" style="flex-grow: 1;">
                     <ui:Label text="Label" name="LV-label" class="bar-label xp-label" />
