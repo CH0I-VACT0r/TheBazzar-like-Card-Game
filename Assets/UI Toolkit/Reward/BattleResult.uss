@@ -1,0 +1,129 @@
+/* 전체 루트: 중앙 정렬 */
+.result-root {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경 살짝 어둡게 */
+}
+
+/* 결과창 본체 */
+.result-window {
+    width: 500px;
+    background-color: rgb(30, 30, 30);
+    border-width: 4px;
+    border-color: rgb(200, 200, 200);
+    border-radius: 20px;
+    padding: 30px;
+    align-items: center;
+}
+
+/* 제목 스타일 */
+.title-label {
+    font-size: 60px;
+    -unity-font-style: bold;
+    margin-bottom: 20px;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: black;
+}
+
+/* 컨텐츠 그룹 공통 */
+.content-group {
+    width: 100%;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 보상 수치 레이아웃 */
+.reward-stats-container {
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.icon-gold {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    background-image: resource('Icons/Gold');
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* 경험치 아이콘 */
+.icon-exp {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    background-image: resource('Icons/XP');
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.reward-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px;
+}
+
+.reward-text {
+    font-size: 32px;
+    color: white;
+    -unity-font-style: bold;
+}
+
+/* 보상 카드 슬롯 (기존 카드 크기와 동일하게) */
+.reward-card-slot {
+    width: 140px;
+    height: 210px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-width: 2px;
+    border-color: white;
+    border-radius: 10px;
+}
+
+/* 패배 관련 스타일 */
+.defeat-desc {
+    font-size: 28px;
+    color: #FF4136;
+    margin-top: 10px;
+}
+
+.defeat-sub-desc {
+    font-size: 18px;
+    color: #AAAAAA;
+}
+
+/* 버튼 영역 */
+.button-area {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-result {
+    width: 180px;
+    height: 60px;
+    font-size: 24px;
+    -unity-font-style: bold;
+    border-radius: 10px;
+    margin: 0 10px;
+    transition-duration: 0.1s;
+}
+
+.btn-claim {
+    background-color: #FFD700;
+    color: black;
+}
+
+.btn-claim:hover {
+    background-color: #FFEA00;
+    scale: 1.05;
+}
+
+.btn-next {
+    background-color: #444444;
+    color: white;
+}
+
+.btn-next:hover {
+    background-color: #666666;
+    scale: 1.05;
+}

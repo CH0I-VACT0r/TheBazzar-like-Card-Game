@@ -1,0 +1,30 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Reward/BattleResult.uss?fileID=7433441132597879392&amp;guid=147b930040ae1194fa8f06165b3cc10f&amp;type=3#BattleResult" />
+    <ui:VisualElement name="ResultRoot" class="result-root" style="flex-grow: 1;">
+        <ui:VisualElement name="ResultWindow" class="result-window" style="flex-grow: 1;">
+            <ui:Label text="Victory!" name="TitleLabel" class="title-label" />
+            <ui:VisualElement name="VictoryContent" class="content-group" style="flex-grow: 1;">
+                <ui:VisualElement name="RewardStatsContainer" class="reward-stats-container" style="flex-grow: 1;">
+                    <ui:VisualElement name="RewardItem" class="reward-item" style="flex-grow: 1;">
+                        <ui:VisualElement name="IconGold" class="icon-gold" style="flex-grow: 1;" />
+                        <ui:Label text="+ 4" name="GoldValue" class="reward-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="RewardItem" class="reward-item" style="flex-grow: 1;">
+                        <ui:VisualElement name="IconExp" class="icon-exp" style="flex-grow: 1;" />
+                        <ui:Label text="+ 3" name="ExpValue" class="reward-text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="RewardCardSlot" class="reward-card-slot" style="flex-grow: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="DefeatContent" class="content-group" style="flex-grow: 1;">
+                <ui:VisualElement name="DefeatIcon" class="defeat-icon" style="flex-grow: 1;" />
+                <ui:Label text="You lost 1 Life." name="DefeatDesc" class="defeat-desc" />
+                <ui:Label text="Retreat and prepare for the next day." name="DefeatSubDesc" class="defeat-sub-desc" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ButtonArea" style="flex-grow: 1;">
+                <ui:Button text="Claim" name="Btn_Claim" class="btn-result btn-claim" />
+                <ui:Button text="Continue" name="Btn_Next" class="btn-result btn-next" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
