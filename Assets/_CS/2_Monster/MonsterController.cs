@@ -228,9 +228,10 @@ public class MonsterController
 
         if (m_NameLabel != null && !string.IsNullOrEmpty(MonsterID))
         {
-            // 나중에 LocalizationManager가 있다면 키값으로 이름을 가져옴.
-            m_NameLabel.text = MonsterID;
+            // MonsterID(예: "monster_wolf_01")를 키로 사용하여 번역된 이름을 가져옴
+            m_NameLabel.text = LocalizationManager.GetText(MonsterID);
         }
+
         Debug.Log("MonsterController UI 초기화 완료");
     }
 

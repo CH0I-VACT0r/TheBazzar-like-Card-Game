@@ -79,33 +79,43 @@ VisualElement {}
 
 .progression-container {
     position: absolute;
-    left: 20px;
-    top: 35%; /* 화면 위에서 35% 지점 (인벤토리 위쪽) */
+    left: 30px;
+    top: 50%; /* 화면 위에서 35% 지점 (인벤토리 위쪽) */
     flex-direction: column;
     align-items: flex-start;
-    background-color: rgba(0, 0, 0, 0.4); /* 살짝 어두운 배경 */
+    background-color: white;
     padding: 15px;
     border-radius: 10px;
     border-left-width: 4px;
     border-left-color: #FFD700; /* 금색 왼쪽 테두리로 포인트 */
+    min-width: 200px;
 }
 
 /* 스테이지 텍스트 (크고 강조) */
 .stage-text {
-    font-size: 28px;
+    font-size: 24px;
     color: #FFD700;
     -unity-font-style: bold;
     -unity-text-outline-width: 1px;
     -unity-text-outline-color: black;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 /* 주차 및 요일 텍스트 (약간 작게) */
-.weekday-text {
-    font-size: 18px;
+.week-text {
+    font-size: 24px; 
     color: #FFFFFF;
     -unity-font-style: bold;
-    margin-top: 2px;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: black;
+    margin-top: 3px; 
+}
+
+.weekday-text {
+    font-size: 20px; 
+    color: black;
+    -unity-font-style: bold;
+    margin-top: 3px; 
 }
 
 /* --- 스테이지 진입 배너 (화면 정중앙 알림) --- */

@@ -13,6 +13,11 @@ public static class LocalizationManager
     private static Dictionary<string, string> m_KoreanDict = new Dictionary<string, string>()
     {
         // TODO: 여기에 모든 카드 텍스트 키 추가
+        // --- 스테이지 이름 ---
+        { "stage_name_01", "시작의 마을" },
+        { "stage_name_02", "울창한 숲" },
+        { "msg_new_region_unlock", "더 높은 등급의 용병과 장비를 사용할 수 있습니다."},
+
         // --- 인벤토리 ---
         { "ui_inventory_title", "인벤토리" },
         { "ui_tab_mercenary", "용병" },
@@ -212,6 +217,11 @@ public static class LocalizationManager
     private static Dictionary<string, string> m_EnglishDict = new Dictionary<string, string>()
     {
         // TODO: 여기에 모든 카드 텍스트 키 추가
+         // --- 스테이지 이름 ---
+        { "stage_name_01", "Starting Village" },
+        { "stage_name_02", "Dense Forest" },
+        { "msg_new_region_unlock", "Higher tier mercenaries and gear are now available."},
+
         // --- 인벤토리 ---
         { "ui_inventory_title", "INVENTORY" },
         { "ui_tab_mercenary", "Mercenary" },

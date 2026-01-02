@@ -1306,32 +1306,36 @@ public class UIManager : MonoBehaviour
             };
         }
     }
-    public void UpdateStageInfo(int stage, int week, Weekday day)
+    public void UpdateStageInfo(int stage, string stageName, int week, Weekday day)
     {
-        if (m_StageLabel != null) m_StageLabel.text = $"STAGE {stage}";
+        if (m_StageLabel != null)
+        {
+            // "STAGE 1 : 시작의 마을" 형태로 출력
+            m_StageLabel.text = $"STAGE {stage} : {stageName}";
+        }
+
         if (m_WeekLabel != null) m_WeekLabel.text = $"WEEK {week}";
+
         if (m_DayLabel != null)
         {
-            // 요일 텍스트 설정
             m_DayLabel.text = day.ToString().ToUpper();
         }
     }
 
     // --- 스테이지 진입 배너 표시 (주차 종료 시 호출) ---
-    public void ShowStageBanner(int stage, string message)
+    public void ShowStageBanner(int stage, string messageKey)
     {
         if (m_StageBanner == null) return;
 
+        // "STAGE 1" 같은 타이틀은 고정 포맷이므로 그대로 두고, 설명만 로컬라이징
         if (m_BannerTitle != null) m_BannerTitle.text = $"STAGE {stage}";
-        if (m_BannerDesc != null) m_BannerDesc.text = message;
+        if (m_BannerDesc != null) m_BannerDesc.text = LocalizationManager.GetText(messageKey);
 
-        // 배너 켜기
         m_StageBanner.style.display = DisplayStyle.Flex;
 
-        // 3초 후 자동으로 숨기기
         m_StageBanner.schedule.Execute(() => {
             m_StageBanner.style.display = DisplayStyle.None;
-        }).StartingIn(3000);
+        }).StartingIn(2000);
     }
 }
 

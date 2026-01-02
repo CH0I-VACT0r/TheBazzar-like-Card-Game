@@ -58,50 +58,41 @@ public class ShopManager : MonoBehaviour
 
         _currentStock.Clear();
         List<string> pickedCardNames = new List<string>(); // 중복 방지용
+        LordType currentLord = GameManager.Instance != null ? GameManager.Instance.currentLord : LordType.Common;
 
         for (int i = 0; i < 3; i++)
         {
             Card newCard = null;
 
-            // [중복 방지 루프]
             for (int attempt = 0; attempt < 10; attempt++)
             {
-                // 1. 등급 결정
+                // 1. 등급 결정 (기존 로직 동일)
                 CardRarity rarity;
-
-                // 이벤트 파일에 특정 등급이 지정되어 있다면 강제 적용 (None/0이 아니면)
-                // (주의: CardRarity Enum에 None이 없다면 (CardRarity)0 으로 비교)
                 if ((int)_currentShopData.targetRarity != 0)
-                {
                     rarity = _currentShopData.targetRarity;
-                }
                 else
-                {
-                    // 아니면 레벨 비례 랜덤
                     rarity = GameManager.Instance != null ?
                              GameManager.Instance.GetRandomRarityByProgression() : CardRarity.Bronze;
-                }
 
-                // 2. [핵심 수정] 필터링된 카드 생성 요청
-                // Event_Shop에 있는 targetType, requiredTag 정보를 넘겨줍니다.
+                // 2. [핵심 수정] 필터링된 카드 생성 요청 시 'currentLord'를 인자로 추가
+                // CardFactory의 CreateCardByFilter 함수가 이 인자를 받도록 설계되어 있어야 합니다.
                 Card candidate = CardFactory.CreateCardByFilter(
                     rarity,
                     _currentShopData.targetType,
                     _currentShopData.requiredTag,
-                    null // 상점 진열품은 아직 주인이 없음
+                    currentLord, // <-- 현재 영주 정보 전달!
+                    null
                 );
 
                 if (candidate != null)
                 {
-                    // 일단 후보로 등록 (실패 시 마지막 후보라도 쓰기 위함)
                     if (newCard == null) newCard = candidate;
 
-                    // 중복 체크
                     if (!pickedCardNames.Contains(candidate.CardNameKey))
                     {
                         newCard = candidate;
                         pickedCardNames.Add(newCard.CardNameKey);
-                        break; // 성공!
+                        break;
                     }
                 }
             }

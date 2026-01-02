@@ -438,11 +438,6 @@ public class CraftingManager : MonoBehaviour
     {
         ReturnIngredientsToInventory();
 
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.CloseCraftingPage();
-        }
-
         if (_currentEvent != null) _currentEvent = null;
 
         if (EventInteractionManager.Instance != null)

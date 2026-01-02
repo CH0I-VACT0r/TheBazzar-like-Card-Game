@@ -16,6 +16,7 @@ public class BattleManager : MonoBehaviour
     private bool m_IsBattleEnded = false;
     public bool IsBattleEnded { get { return m_IsBattleEnded; } }
     public bool IsDeckEditingAllowed { get; set; } = false; // 덱 편집(D&D) 허용 상태
+    public bool IsQuestBattle = false;
 
     //  [밤 시스템]
     public const float NIGHT_START_TIME = 60.0f; // 60초 후 밤 시작
@@ -211,17 +212,13 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
 
-        GameManager.Instance.SetPhase(GameManager.GamePhase.Reward);
-
         if (isVictory)
         {
-            // 승리 시 RewardManager의 보상 계산 후 UI 호출
-            RewardManager.Instance.PrepareReward(monsterController.MonsterID, monsterController.IsBoss);
+            // RewardManager에 IsQuestBattle 정보 전달
+            RewardManager.Instance.PrepareReward(monsterController.MonsterID, monsterController.IsBoss, IsQuestBattle);
         }
-        else
-        {
-            // 패배 시 보상 없이 결과창 호출
-            UIManager.Instance.ShowBattleResult(false);
-        }
+
+        // 전투 종료 후 플래그 초기화
+        IsQuestBattle = false;
     }
 }

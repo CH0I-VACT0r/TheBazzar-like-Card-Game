@@ -13,44 +13,67 @@ public class RewardManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    // 1. 보상 생성 (지급 X)
-    public void PrepareReward(string monsterID, bool isBoss)
+    // 보상 생성
+    public void PrepareReward(string monsterID, bool isBoss, bool isQuest)
     {
-        m_PendingGold = isBoss ? 8 : 4;
-        m_PendingExp = isBoss ? 5 : 3;
+        // 보상 수치 결정 (의뢰: 약함 / 일반: 중간 / 보스: 강력)
+        if (isQuest)
+        {
+            m_PendingGold = 2;  // 기존(4)의 절반
+            m_PendingExp = 1;   // 기존(3)의 절반 이하
+        }
+        else if (isBoss)
+        {
+            m_PendingGold = 8;
+            m_PendingExp = 5;
+        }
+        else // 일반 일요일 정예 전투
+        {
+            m_PendingGold = 4;
+            m_PendingExp = 3;
+        }
+
+        // 재료 카드 결정 (의뢰 포함 모든 전투에서 몬스터 ID 기반으로 획득)
         m_PendingCardID = GetMaterialByMonster(monsterID);
 
-        // 통합 결과창 호출 (승리 상태로)
-        UIManager.Instance.ShowBattleResult(true, m_PendingGold, m_PendingExp, m_PendingCardID);
+        // 통합 결과창 호출
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowBattleResult(true, m_PendingGold, m_PendingExp, m_PendingCardID);
+        }
     }
 
-    // 2. 실제 보상 지급 (UI에서 버튼 누를 때 호출)
     public void ClaimRewards()
     {
         if (BattleManager.Instance == null || BattleManager.Instance.playerController == null) return;
 
         var player = BattleManager.Instance.playerController;
 
-        // 골드 지급
+        // 골드 및 경험치 지급
         InventoryManager.Instance.ModifyGold(m_PendingGold);
-
-        // 경험치 지급
         player.AddExperience(m_PendingExp);
 
-        Card rewardCard = CardFactory.CreateCard(m_PendingCardID, null, -1);
-        InventoryManager.Instance.AddCardObject(rewardCard);
+        // 카드 보상 지급 (재료 카드가 있을 때만)
+        if (!string.IsNullOrEmpty(m_PendingCardID))
+        {
+            Card rewardCard = CardFactory.CreateCard(m_PendingCardID, null, -1);
+            InventoryManager.Instance.AddCardObject(rewardCard);
+        }
 
         Debug.Log($"보상 수령 완료: {m_PendingGold}G, {m_PendingExp}XP, {m_PendingCardID}");
 
-        // 보상 초기화
+        // 데이터 초기화 및 다음 날로 진행
         m_PendingGold = 0;
         m_PendingExp = 0;
         m_PendingCardID = null;
 
-        // 다음 날로 진행
-        GameManager.Instance.StartNextDay();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartNextDay();
+        }
     }
 
     private string GetMaterialByMonster(string monsterID)

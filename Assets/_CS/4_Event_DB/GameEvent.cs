@@ -8,7 +8,8 @@ public enum EventType
     Training,        // 훈련소 (스탯 상승)
     Battle,          // 전투
     RandomEncounter, // 랜덤 만남
-    Crafting         // 제작
+    Crafting,        // 제작
+    Quest            // 의뢰  
 }
 
 public abstract class GameEvent : ScriptableObject
@@ -26,6 +27,9 @@ public abstract class GameEvent : ScriptableObject
     [Header("등급 및 타입")]
     public CardRarity rarity;       // 이벤트 등급 (브론즈, 실버, 골드, 다이아몬드)
     public EventType eventType;     // 이벤트 종류
+
+    [Header("Lord Settings")]
+    public LordType targetLord = LordType.Common;
 
     public abstract void Execute(PlayerController player);
 
