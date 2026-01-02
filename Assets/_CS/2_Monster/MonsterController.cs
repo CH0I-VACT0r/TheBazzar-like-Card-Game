@@ -226,16 +226,11 @@ public class MonsterController
         UpdateHealthUI();
         UpdateDoTUI();
 
-        if (m_NameLabel != null)
+        if (m_NameLabel != null && !string.IsNullOrEmpty(MonsterID))
         {
-            m_NameLabel.text = "Tutorial (Lv.1)"; // (임시)
+            // 나중에 LocalizationManager가 있다면 키값으로 이름을 가져옴.
+            m_NameLabel.text = MonsterID;
         }
-
-        for (int i = 0; i < 7; i++)
-        {
-            UpdateCardSlotUI(i);
-        }
-
         Debug.Log("MonsterController UI 초기화 완료");
     }
 
@@ -1443,16 +1438,31 @@ public class MonsterController
 
     public virtual void SetupDeck(string[] cardNames)
     {
-        // (프로토타입용 하드코딩)
-        m_Cards[3] = CardFactory.CreateCard("card_witch", this, 3);
-        m_Cards[1] = CardFactory.CreateCard("card_goblin", this, 1);
-        m_Cards[2] = CardFactory.CreateCard("card_goblin", this, 2);
+        // 기존에 있던 카드 초기화
+        for (int i = 0; i < 7; i++)
+        {
+            m_Cards[i] = null;
+        }
 
+        // 인스펙터(Event_Battle)에서 받아온 카드 이름들로 카드 생성
+        if (cardNames != null)
+        {
+            for (int i = 0; i < cardNames.Length && i < 7; i++)
+            {
+                if (!string.IsNullOrEmpty(cardNames[i]))
+                {
+                    // 받은 이름(ID)으로 카드 생성 후 해당 슬롯에 배치
+                    m_Cards[i] = CardFactory.CreateCard(cardNames[i], this, i);
+                }
+            }
+        }
 
-        // [신규!] 3번 슬롯 UI 업데이트 (이미지, 가격, 툴팁 등)
-        UpdateCardSlotUI(3);
-        UpdateCardSlotUI(1);
-        UpdateCardSlotUI(2);
-        Debug.Log("[MonsterController] 테스트용 몬스터 덱 설정 완료.");
+        // UI 갱신
+        for (int i = 0; i < 7; i++)
+        {
+            UpdateCardSlotUI(i);
+        }
+
+        Debug.Log($"[MonsterController] {MonsterID}의 덱 설정 완료 (카드 {cardNames?.Length ?? 0}장)");
     }
 }

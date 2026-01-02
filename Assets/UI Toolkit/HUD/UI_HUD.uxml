@@ -1,6 +1,11 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/HUD/HUD.uss?fileID=7433441132597879392&amp;guid=44a8d242bf75e854693cd48f9a4a8d96&amp;type=3#HUD" />
     <ui:VisualElement name="HUDRoot" picking-mode="Ignore" class="hud-root" style="flex-grow: 1;">
+        <ui:VisualElement name="ProgressionContainer" class="progression-container" style="flex-grow: 1;">
+            <ui:Label text="STAGE 1" name="StageLabel" />
+            <ui:Label text="WEEK 1" name="WeekLabel" />
+            <ui:Label text="MONDAY" name="DayLabel" />
+        </ui:VisualElement>
         <ui:VisualElement name="LeftHUD" class="hud-left" style="flex-grow: 0; flex-shrink: 0;">
             <ui:Label text="0 G" name="GoldDisplay" class="text-gold" />
             <ui:Button text="INVENTORY" name="Btn_OpenInventory" class="btn-square" />
@@ -9,6 +14,10 @@
             <ui:VisualElement name="SellZone" class="sell-zone" style="flex-grow: 1;">
                 <ui:Label text="SELL" name="SELL" class="sell-text" />
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="StageBanner" style="flex-grow: 1; display: none;">
+            <ui:Label text="Label" name="BannerTitle" class="banner-title" />
+            <ui:Label text="Label" name="BannerDesc" class="banner-desc" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

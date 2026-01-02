@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// (기존 Weekday 유지)
+// 요일 열거형
 public enum Weekday
 {
     Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
@@ -9,13 +9,16 @@ public enum Weekday
 
 public class GameManager : MonoBehaviour
 {
-    // --- 참조 ---
-    public BattleManager battleManager;
-    // 싱글톤
     public static GameManager Instance;
 
-    // --- 게임 상태 ---
-    public int CurrentDay { get; private set; } = 1;
+    // --- 참조 ---
+    public BattleManager battleManager;
+
+    // --- 게임 진행 상태 ---
+    [Header("Game Progression")]
+    public int currentStage = 1;       // 현재 스테이지 (예: 1지역, 2지역...)
+    public int currentWeek = 1;        // 현재 주차 (1~4주)
+    public int currentDayInWeek = 1;   // 현재 요일 수치 (1:월 ~ 7:일)
 
     public enum GamePhase { Preparation, Battle, Reward, DayEnd }
     public GamePhase currentPhase = GamePhase.Preparation;
@@ -32,45 +35,49 @@ public class GameManager : MonoBehaviour
             battleManager = FindFirstObjectByType<BattleManager>();
         }
 
+        // 초기 페이즈 설정
         SetPhase(GamePhase.Preparation);
 
-        // 첫날 이벤트 트리거 (랜덤 선택창)
+        // 게임 시작 시 HUD 정보 첫 업데이트
+        UpdateStageUI();
+
+        // 첫날 이벤트 트리거
         TriggerDailyEventSelection();
     }
 
-    // --- 헬퍼 함수 ---
-    private Weekday GetCurrentWeekday()
+    // --- 헬퍼 함수: 현재 요일 반환 ---
+    public Weekday GetCurrentWeekday()
     {
-        int dayIndex = (CurrentDay - 1) % 7;
-        return (Weekday)dayIndex;
+        // 1(월) -> index 0, ..., 7(일) -> index 6
+        return (Weekday)(currentDayInWeek - 1);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (currentPhase == GamePhase.Preparation)
-            {
-                SetPhase(GamePhase.Battle);
-            }
-            else if (currentPhase == GamePhase.Reward)
-            {
-                StartNextDay();
-            }
-        }
+        // [테스트용] 스페이스바 페이즈 전환
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if (currentPhase == GamePhase.Preparation)
+        //    {
+        //        SetPhase(GamePhase.Battle);
+        //    }
+        //    else if (currentPhase == GamePhase.Reward)
+        //    {
+        //        StartNextDay();
+        //    }
+        //}
 
-        // [테스트용] L키 누르면 플레이어에게 경험치 10을 줘서 레벨업 테스트
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            if (battleManager != null && battleManager.playerController != null)
-            {
-                battleManager.playerController.AddExperience(10);
-                Debug.Log("[Test] 경험치 10 추가 시도");
-            }
-        }
+        // [테스트용] L키 레벨업 테스트 (PlayerController의 경험치 시스템 이용)
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    if (battleManager != null && battleManager.playerController != null)
+        //    {
+        //        battleManager.playerController.AddExperience(10);
+        //    }
+        //}
     }
 
-    // --- 페이즈 관리  ---
+    // --- 페이즈 관리 ---
     public void SetPhase(GamePhase newPhase)
     {
         currentPhase = newPhase;
@@ -81,14 +88,14 @@ public class GameManager : MonoBehaviour
             {
                 case GamePhase.Preparation:
                     battleManager.IsDeckEditingAllowed = true;
-                    UIManager.Instance.SetBattleState(false); // 인벤토리 열림
-                    Debug.Log($"--- Day {CurrentDay} ({GetCurrentWeekday()}) 정비 단계 ---");
+                    UIManager.Instance.SetBattleState(false);
+                    Debug.Log($"--- Day {currentDayInWeek} ({GetCurrentWeekday()}) 정비 단계 ---");
                     break;
 
                 case GamePhase.Battle:
                     battleManager.IsDeckEditingAllowed = false;
                     if (UIManager.Instance.IsInventoryOpen) UIManager.Instance.CloseInventory();
-                    UIManager.Instance.SetBattleState(true); // 인벤토리 잠김
+                    UIManager.Instance.SetBattleState(true);
                     Debug.Log("--- 전투 시작! ---");
                     break;
 
@@ -104,93 +111,149 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // --- 하루를 마치고 다음 날로 진행 ---
     public void StartNextDay()
     {
-        CurrentDay++;
-        Weekday today = GetCurrentWeekday();
-        Debug.Log($"--- Day {CurrentDay} ({today}) 시작 ---");
+        currentDayInWeek++;
 
+        // 7일(일요일)이 지나면 다음 주로 이동
+        if (currentDayInWeek > 7)
+        {
+            currentDayInWeek = 1;
+            currentWeek++;
+        }
+
+        // 4주차가 종료되면 다음 스테이지로 이동
+        if (currentWeek > 4)
+        {
+            currentWeek = 1;
+            currentStage++;
+            Debug.LogWarning($"스테이지 클리어! 다음 스테이지: {currentStage}");
+            TriggerStageTransition();
+        }
+
+        // UI에 변경된 날짜/스테이지 정보 반영
+        UpdateStageUI();
+
+        // 정비 단계로 전환
         SetPhase(GamePhase.Preparation);
 
-        // 3가지 랜덤 이벤트 선택지
+        // 새 날의 이벤트 생성
         TriggerDailyEventSelection();
     }
 
-    // --- 레벨별 카드 등급 뽑기 (가챠 로직) ---
-    public CardRarity GetRandomRarityByLevel()
+    private void TriggerStageTransition()
     {
-        // 안전장치: 플레이어 컨트롤러가 없으면 기본 등급 반환
-        if (battleManager == null || battleManager.playerController == null)
-            return CardRarity.Bronze;
+        string msg = $"STAGE {currentStage} 진입\n새로운 등급의 카드들이 해금되었습니다!";
+        Debug.LogWarning(msg);
 
-        // 플레이어의 현재 레벨 가져오기
-        int currentLv = battleManager.playerController.CurrentLevel;
-        int roll = Random.Range(0, 100);
-
-        // Lv 1 ~ 2: 브론즈 100%
-        if (currentLv < 3) // PlayerLevel 대신 currentLv 사용
+        // UI 로직: 큰 자막으로 화면 중앙에 띄우기
+        if (UIManager.Instance != null)
         {
-            return CardRarity.Bronze;
-        }
-        // Lv 3 ~ 4: 브론즈 50%, 실버 50%
-        else if (currentLv < 5)
-        {
-            if (roll < 50) return CardRarity.Bronze;
-            else return CardRarity.Silver;
-        }
-        // ... (이하 모든 PlayerLevel을 currentLv로 변경) ...
-
-        // 마지막 Diamond 확률 구간 예시
-        else
-        {
-            if (roll < 80) return CardRarity.Gold;
-            else return CardRarity.Diamond;
+            UIManager.Instance.ShowStageBanner(currentStage, "더 높은 등급의 용병과 장비를 사용할 수 있습니다.");
         }
     }
 
-    // 이벤트 선택
+    // HUD 정보 업데이트 중계
+    private void UpdateStageUI()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateStageInfo(currentStage, currentWeek, GetCurrentWeekday());
+        }
+    }
+
+    // --- 스테이지 기반 등급 결정 로직 (가챠 로직) ---
+    public CardRarity GetRandomRarityByProgression()
+    {
+        int roll = Random.Range(0, 100);
+
+        // 스테이지가 올라갈수록 하위 등급은 퇴출되고 상위 등급이 기본이 됨
+        switch (currentStage)
+        {
+            case 1: // 1스테이지: 브론즈 위주, 실버 희귀
+                if (roll < 85) return CardRarity.Bronze;
+                else return CardRarity.Silver;
+
+            case 2: // 2스테이지: 브론즈와 실버 반반
+                if (roll < 50) return CardRarity.Bronze;
+                else return CardRarity.Silver;
+
+            case 3: // 3스테이지: 실버 확정 해금 (언급하신 부분)
+                    // 여기서부터 "실버 용병이 대거 합류합니다!" 알림 가능
+                if (roll < 70) return CardRarity.Silver;
+                else return CardRarity.Gold;
+
+            case 4: // 4스테이지 (보스 스테이지 지역): 골드 위주
+                if (roll < 40) return CardRarity.Silver;
+                else if (roll < 90) return CardRarity.Gold;
+                else return CardRarity.Diamond;
+
+            default: // 그 이상의 지옥 난이도
+                return CardRarity.Gold;
+        }
+    }
+
+    // --- 일일 이벤트 선택 생성 ---
     private void TriggerDailyEventSelection()
     {
         List<GameEvent> dailyEvents = new List<GameEvent>();
 
-        for (int i = 0; i < 3; i++)
+        // [추가] 일요일(7일차)은 무조건 고정 전투 이벤트 발생
+        if (currentDayInWeek == 7)
         {
-            // 레벨에 따른 등급 결정
-            CardRarity rarity = GetRandomRarityByLevel();
+            GameEvent specialEvent;
 
-            if (EventManager.Instance != null)
+            // 4주차 일요일은 보스전, 그 외 일요일은 정예/일반 전투
+            if (currentWeek == 4)
             {
-                // 해당 등급의 '모든' 후보군 가져오기
-                List<GameEvent> candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
-
-                // 중복 방지
-                candidates.RemoveAll(evt => dailyEvents.Contains(evt));
-
-                // 이벤트 개수 부족 시 중복 허용
-                if (candidates.Count == 0)
-                {
-                    candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
-                }
-
-                if (candidates.Count > 0)
-                {
-                    int randomIndex = Random.Range(0, candidates.Count);
-                    GameEvent selectedEvent = candidates[randomIndex];
-
-                    dailyEvents.Add(selectedEvent);
-                }
+                specialEvent = EventManager.Instance.GetBossEvent(currentStage);
+                Debug.Log("!!! 이번 주는 스테이지 보스전입니다 !!!");
             }
             else
             {
-                Debug.LogError("[GameManager] EventManager가 씬에 없습니다");
+                specialEvent = EventManager.Instance.GetSundayMonsterEvent(currentStage);
+            }
+
+            if (specialEvent != null)
+            {
+                dailyEvents.Add(specialEvent);
+            }
+        }
+        else // --- 월~토요일 (1~6일차) ---
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                CardRarity rarity = GetRandomRarityByProgression();
+                if (EventManager.Instance != null)
+                {
+                    // 해당 등급 모든 후보군 가져오기
+                    List<GameEvent> candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
+
+                    // 월~토요일에는 '전투(Battle)' 타입을 후보에서 제거
+                    candidates.RemoveAll(evt => evt.eventType == EventType.Battle);
+
+                    // 이미 선택된 이벤트 중복 방지
+                    candidates.RemoveAll(evt => dailyEvents.Contains(evt));
+
+                    // 만약 해당 등급에 비전투 이벤트가 하나도 없다면 예외 처리
+                    if (candidates.Count == 0)
+                    {
+                        Debug.LogWarning($"{rarity} 등급에 비전투 이벤트가 없습니다!");
+                    }
+
+                    if (candidates.Count > 0)
+                    {
+                        dailyEvents.Add(candidates[Random.Range(0, candidates.Count)]);
+                    }
+                }
             }
         }
 
-        if (UIManager.Instance != null)
+            // UI에 이벤트 목록 전달 (일요일은 리스트에 1개만 담김)
+            if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowEventSelectionWindow(dailyEvents);
         }
     }
-
-
 }

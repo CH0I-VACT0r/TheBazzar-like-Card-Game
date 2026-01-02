@@ -33,10 +33,9 @@ public class ShopManager : MonoBehaviour
     {
         _currentStock.Clear();
         _currentShopData = null;
-
-        if (UIManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            UIManager.Instance.SwitchToBattlePage(); // 원래 화면으로 복귀
+            GameManager.Instance.StartNextDay();
         }
     }
 
@@ -80,7 +79,7 @@ public class ShopManager : MonoBehaviour
                 {
                     // 아니면 레벨 비례 랜덤
                     rarity = GameManager.Instance != null ?
-                             GameManager.Instance.GetRandomRarityByLevel() : CardRarity.Bronze;
+                             GameManager.Instance.GetRandomRarityByProgression() : CardRarity.Bronze;
                 }
 
                 // 2. [핵심 수정] 필터링된 카드 생성 요청

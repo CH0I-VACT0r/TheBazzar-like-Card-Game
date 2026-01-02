@@ -24,6 +24,16 @@ public class UIManager : MonoBehaviour
     [Header("Document")]
     public UIDocument document;
 
+    [Header("HUD Elements")]
+    private Label m_StageLabel;
+    private Label m_WeekLabel;
+    private Label m_DayLabel;
+
+    [Header("Stage Banner")]
+    private VisualElement m_StageBanner;
+    private Label m_BannerTitle;
+    private Label m_BannerDesc;
+
     // 내부 변수
     private VisualElement _root;             // 전체 화면 루트 (MainLayout)
     private bool _isBattleActive = false;    // 전투 중인지 체크
@@ -121,7 +131,6 @@ public class UIManager : MonoBehaviour
         // UI 배치 시작
         InitializeHUD();       // 버튼(위)
         InitializeGameLayer(); // 플레이어(아래)     
-        SwitchToBattlePage();  // 몬스터(제일 위) -> 시작 화면
         InitializeTooltipUI();
         SetBattleState(false);
     }
@@ -211,6 +220,17 @@ public class UIManager : MonoBehaviour
         _hudContainer.Add(hudUI);
 
         m_LifeContainer = hudUI.Q<VisualElement>("LifeContainer");
+
+        // --- 스테이지 정보 요소 캐싱 ---
+        m_StageLabel = hudUI.Q<Label>("StageLabel");
+        m_WeekLabel = hudUI.Q<Label>("WeekLabel");
+        m_DayLabel = hudUI.Q<Label>("DayLabel");
+
+        // --- 스테이지 배너 요소 캐싱 ---
+        m_StageBanner = hudUI.Q<VisualElement>("StageBanner");
+        m_BannerTitle = hudUI.Q<Label>("BannerTitle");
+        m_BannerDesc = hudUI.Q<Label>("BannerDesc");
+        if (m_StageBanner != null) m_StageBanner.style.display = DisplayStyle.None;
 
         // [인벤토리 버튼] 기능 연결
         Button btnBag = hudUI.Q<Button>("Btn_OpenInventory");
@@ -1210,7 +1230,10 @@ public class UIManager : MonoBehaviour
     public void CloseCraftingPage()
     {
         // 맵이나 전투 화면으로 복귀
-        SwitchToBattlePage();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartNextDay();
+        }
     }
 
     // 보상 페이지
@@ -1282,6 +1305,33 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.StartNextDay();
             };
         }
+    }
+    public void UpdateStageInfo(int stage, int week, Weekday day)
+    {
+        if (m_StageLabel != null) m_StageLabel.text = $"STAGE {stage}";
+        if (m_WeekLabel != null) m_WeekLabel.text = $"WEEK {week}";
+        if (m_DayLabel != null)
+        {
+            // 요일 텍스트 설정
+            m_DayLabel.text = day.ToString().ToUpper();
+        }
+    }
+
+    // --- 스테이지 진입 배너 표시 (주차 종료 시 호출) ---
+    public void ShowStageBanner(int stage, string message)
+    {
+        if (m_StageBanner == null) return;
+
+        if (m_BannerTitle != null) m_BannerTitle.text = $"STAGE {stage}";
+        if (m_BannerDesc != null) m_BannerDesc.text = message;
+
+        // 배너 켜기
+        m_StageBanner.style.display = DisplayStyle.Flex;
+
+        // 3초 후 자동으로 숨기기
+        m_StageBanner.schedule.Execute(() => {
+            m_StageBanner.style.display = DisplayStyle.None;
+        }).StartingIn(3000);
     }
 }
 

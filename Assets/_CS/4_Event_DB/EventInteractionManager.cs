@@ -121,7 +121,11 @@ public class EventInteractionManager : MonoBehaviour
         }
 
         _currentEvent = null;
-        UIManager.Instance.SwitchToBattlePage();
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartNextDay();
+        }
     }
 
     private void ReturnHeldCard()
