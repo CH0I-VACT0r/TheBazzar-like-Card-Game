@@ -7,6 +7,10 @@ using System.Collections.Generic; // List 사용
 /// 몬스터의 체력, 슬롯, 카드 덱 등 공통 기능만 관리
 public class MonsterController
 {
+    [Header("Monster Info")]
+    public string MonsterID;   // 몬스터 구분용 ID 
+    public bool IsBoss; // // 보스 여부 체크
+
     // --- 1. 참조 변수 ---
     protected BattleManager m_BattleManager; // 전투 규칙 관리
     protected PlayerController m_Target; // 내가 공격해야 할 타겟 : 플레이어

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.UIElements;
 
 // 전투 씬 메인 컨트롤러
@@ -194,25 +195,33 @@ public class BattleManager : MonoBehaviour
         if (playerController != null) playerController.CleanupBattleUI();
         if (monsterController != null) monsterController.CleanupBattleUI();
 
-        if (winner == "Player")
+        bool isPlayerWinner = (winner == "Player");
+
+        // 패배 시 즉시 라이프 차감 (UI 하트는 즉시 꺼짐)
+        if (!isPlayerWinner)
         {
-            Debug.Log("--- 전투 종료! 승자: 플레이어 ---");
-            // (여기에 승리 보상 로직 호출)
+            playerController.LoseLife();
+        }
+
+        // 결과창 표시
+        StartCoroutine(WaitAndShowResult(isPlayerWinner));
+    }
+
+    private IEnumerator WaitAndShowResult(bool isVictory)
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        GameManager.Instance.SetPhase(GameManager.GamePhase.Reward);
+
+        if (isVictory)
+        {
+            // 승리 시 RewardManager의 보상 계산 후 UI 호출
+            RewardManager.Instance.PrepareReward(monsterController.MonsterID, monsterController.IsBoss);
         }
         else
         {
-            Debug.LogError("--- 전투 종료! 승자: 몬스터 ---");
-            // (여기에 패배 처리 로직 호출)
-        }
-        GameManager gameManager = FindFirstObjectByType<GameManager>();
-        if (gameManager != null)
-        {
-            gameManager.SetPhase(GameManager.GamePhase.Reward); // GameManager의 Reward 단계로 진입
-        }
-
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.SetBattleState(false);
+            // 패배 시 보상 없이 결과창 호출
+            UIManager.Instance.ShowBattleResult(false);
         }
     }
 }

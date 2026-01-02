@@ -157,6 +157,7 @@ MonoBehaviour:
   eventSelectionPageAsset: {fileID: 9197481963319205126, guid: 8b354a00a15ce7845ac6799ccfff4381, type: 3}
   shopPageAsset: {fileID: 9197481963319205126, guid: d2e6425c187753b42ab1a2d0762833c0, type: 3}
   eventInteractionPageAsset: {fileID: 9197481963319205126, guid: 57e33ec2e95c20d4f8d9133dc4379435, type: 3}
+  rewardPageAsset: {fileID: 9197481963319205126, guid: 0f7ef5803709a1a4ba9ec9ee40bbb8a4, type: 3}
   document: {fileID: 782401218}
 --- !u!4 &782401217
 Transform:

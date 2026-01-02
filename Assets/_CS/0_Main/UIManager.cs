@@ -1212,5 +1212,76 @@ public class UIManager : MonoBehaviour
         // 맵이나 전투 화면으로 복귀
         SwitchToBattlePage();
     }
+
+    // 보상 페이지
+    public void ShowBattleResult(bool isVictory, int gold = 0, int exp = 0, string cardID = null)
+    {
+        if (rewardPageAsset == null || _topContainer == null) return;
+
+        _topContainer.Clear();
+        VisualElement resultUI = rewardPageAsset.Instantiate();
+        resultUI.style.flexGrow = 1;
+        _topContainer.Add(resultUI);
+
+        // 1. 공통 요소 찾기
+        Label titleLabel = resultUI.Q<Label>("TitleLabel");
+        VisualElement victoryContent = resultUI.Q<VisualElement>("VictoryContent");
+        VisualElement defeatContent = resultUI.Q<VisualElement>("DefeatContent");
+        Button btnClaim = resultUI.Q<Button>("Btn_Claim");
+        Button btnNext = resultUI.Q<Button>("Btn_Next");
+
+        // 2. 승리/패배 상태에 따른 가시성 조절
+        if (isVictory)
+        {
+            titleLabel.text = "Victory!";
+            titleLabel.style.color = new StyleColor(Color.yellow);
+            victoryContent.style.display = DisplayStyle.Flex;
+            defeatContent.style.display = DisplayStyle.None;
+            if (btnClaim != null) btnClaim.style.display = DisplayStyle.Flex;
+
+            // 보상 데이터 채우기 로직 (기존과 동일)
+            resultUI.Q<Label>("GoldValue").text = $"+ {gold}";
+            resultUI.Q<Label>("ExpValue").text = $"+ {exp}";
+
+            // 카드 아이콘 생성
+            VisualElement cardSlot = resultUI.Q<VisualElement>("RewardCardSlot");
+            if (cardSlot != null && !string.IsNullOrEmpty(cardID))
+            {
+                Card rewardData = CardFactory.CreateCard(cardID, null, -1);
+                if (rewardData != null)
+                {
+                    VisualElement cardImg = new VisualElement();
+                    cardImg.AddToClassList("card-image");
+                    cardImg.style.backgroundImage = new StyleBackground(rewardData.CardImage);
+                    cardSlot.Add(cardImg);
+                }
+            }
+        }
+        else
+        {
+            titleLabel.text = "Defeated...";
+            titleLabel.style.color = new StyleColor(Color.red);
+            victoryContent.style.display = DisplayStyle.None;
+            defeatContent.style.display = DisplayStyle.Flex;
+            if (btnClaim != null) btnClaim.style.display = DisplayStyle.None; // 패배 시 수령 버튼 숨김
+        }
+
+        // 3. 버튼 이벤트 연결
+        if (btnClaim != null && isVictory)
+        {
+            btnClaim.clicked += () => {
+                RewardManager.Instance.ClaimRewards();
+                btnClaim.SetEnabled(false);
+                btnClaim.text = "수령 완료";
+            };
+        }
+
+        if (btnNext != null)
+        {
+            btnNext.clicked += () => {
+                GameManager.Instance.StartNextDay();
+            };
+        }
+    }
 }
 
