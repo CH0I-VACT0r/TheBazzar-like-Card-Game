@@ -74,13 +74,13 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // °ñµå º¯°æ (È¹µæ/¼Ò¸ð)
-    public bool ModifyGold(int amount)
-    {
-        if (Gold + amount < 0) return false;
-        Gold += amount;
-        return true;
-    }
+    //// °ñµå º¯°æ (È¹µæ/¼Ò¸ð)
+    //public bool ModifyGold(int amount)
+    //{
+    //    if (Gold + amount < 0) return false;
+    //    Gold += amount;
+    //    return true;
+    //}
 
     // Ä«µå °´Ã¼ ÀÚÃ¼¸¦ ´Ù½Ã ÀÎº¥Åä¸®¿¡ ³Ö´Â ÇÔ¼ö
     public void AddCardObject(Card card)

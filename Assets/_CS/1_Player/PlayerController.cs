@@ -1694,6 +1694,24 @@ public class PlayerController
             }
         }
     }
+    public void ModifyGold(int amount)
+    {
+        // 돈이 음수가 되지 않게 방지
+        if (Gold + amount < 0)
+        {
+            Debug.LogWarning("골드가 부족합니다!");
+            return;
+        }
+
+        Gold += amount;
+        Debug.Log($"[Player] 골드 변동: {amount}G (현재: {Gold}G)");
+
+        // UI 즉시 갱신
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateGoldUI(Gold);
+        }
+    }
 
     // 빈 파티 슬롯 찾기 (없으면 -1 반환)
     public int GetFirstEmptyPartySlot()

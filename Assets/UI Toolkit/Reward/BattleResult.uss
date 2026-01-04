@@ -77,6 +77,7 @@
     border-width: 2px;
     border-color: white;
     border-radius: 10px;
+    margin-left: 30px;
 }
 
 /* 패배 관련 스타일 */
@@ -111,6 +112,7 @@
 .btn-claim {
     background-color: #FFD700;
     color: black;
+    margin-bottom : 10px;
 }
 
 .btn-claim:hover {

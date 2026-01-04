@@ -219,38 +219,53 @@ public class GameManager : MonoBehaviour
     private void TriggerDailyEventSelection()
     {
         List<GameEvent> dailyEvents = new List<GameEvent>();
-
         List<GameEvent> GetFilteredCandidates(CardRarity rarity)
         {
             List<GameEvent> candidates = EventManager.Instance.GetAllEventsByRarity(rarity);
 
-            // [핵심 필터 1] 현재 영주와 맞지 않는 이벤트 제거 (Common은 통과)
+            // 영주 필터
             candidates.RemoveAll(evt => evt.targetLord != LordType.Common && evt.targetLord != currentLord);
+
+            // 스테이지 범위 필터
+            candidates.RemoveAll(evt => currentStage < evt.minStage || currentStage > evt.maxStage);
 
             return candidates;
         }
 
-        // 1. [일요일] 고정 전투 (정예/보스)
+        // --- [일요일] 주차별 배틀 및 보스 배틀 ---
         if (currentDayInWeek == 7)
         {
-            GameEvent specialEvent = null;
-            if (currentWeek == 4)
-                specialEvent = EventManager.Instance.GetBossEvent(currentStage);
-            else
-                specialEvent = EventManager.Instance.GetSundayMonsterEvent(currentStage, usedSundayEventIDs);
+            // 모든 이벤트
+            List<GameEvent> sundayBattlePool = EventManager.Instance.allEvents.FindAll(e =>
+                e.eventType == EventType.Battle &&
+                e.targetStage == currentStage &&
+                e.targetWeek == currentWeek &&
+                (e.targetLord == LordType.Common || e.targetLord == currentLord));
 
-            if (specialEvent != null)
+            // 4주차라면 보스만 필터링, 그 외 주차라면 보스가 아닌 일반 전투만 필터링
+            if (currentWeek == 4)
+                sundayBattlePool.RemoveAll(e => !e.isBoss);
+            else
+                sundayBattlePool.RemoveAll(e => e.isBoss);
+
+            if (sundayBattlePool.Count > 0)
             {
-                dailyEvents.Add(specialEvent);
-                if (currentWeek != 4) usedSundayEventIDs.Add(specialEvent.eventID);
+                // 하나 랜덤 선택
+                GameEvent selectedBattle = sundayBattlePool[Random.Range(0, sundayBattlePool.Count)];
+                dailyEvents.Add(selectedBattle);
+
+                // 보스가 아닐 때만 사용한 이벤트 ID 목록에 추가 (중복 방지용)
+                if (!selectedBattle.isBoss) usedSundayEventIDs.Add(selectedBattle.eventID);
+
+                Debug.Log($"[Game] {currentWeek}주차 일요일 배틀 선정: {selectedBattle.eventID}");
             }
         }
-        // 매 스테이지 1주차 월요일: 무조건 상점 이벤트만 등장
+        // --- [1주차 월요일] 상점 고정 (스테이지 범위 필터 추가) ---
         else if (currentWeek == 1 && currentDayInWeek == 1)
         {
-            // 상점 중에서도 영주 전용 상점 또는 공용 상점만 필터링
             List<GameEvent> shopCandidates = EventManager.Instance.allEvents.FindAll(e =>
                 e.eventType == EventType.Shop &&
+                currentStage >= e.minStage && currentStage <= e.maxStage && // 범위 체크
                 (e.targetLord == LordType.Common || e.targetLord == currentLord));
 
             for (int i = 0; i < 3; i++)
@@ -259,32 +274,28 @@ public class GameManager : MonoBehaviour
                 {
                     int randomIndex = Random.Range(0, shopCandidates.Count);
                     dailyEvents.Add(shopCandidates[randomIndex]);
+                    shopCandidates.RemoveAt(randomIndex); // 같은 날 중복 상점 방지
                 }
             }
         }
-        // [월~토] 일반적인 랜덤 이벤트 (전투 제외, 의뢰 포함)
+        // --- [월~토] 일반 랜덤 이벤트 (스테이지 범위 필터 적용) ---
         else
         {
             for (int i = 0; i < 3; i++)
             {
                 CardRarity rarity = GetRandomRarityByProgression();
-                List<GameEvent> candidates = GetFilteredCandidates(rarity); // 필터 적용된 후보 가져오기
+                List<GameEvent> candidates = GetFilteredCandidates(rarity);
 
-                candidates.RemoveAll(evt => evt.eventType == EventType.Battle);
-                candidates.RemoveAll(evt => dailyEvents.Contains(evt));
+                candidates.RemoveAll(evt => evt.eventType == EventType.Battle); // 평일 랜덤에선 배틀 제외
+                candidates.RemoveAll(evt => dailyEvents.Contains(evt)); // 중복 제외
 
                 if (candidates.Count > 0)
                     dailyEvents.Add(candidates[Random.Range(0, candidates.Count)]);
             }
         }
 
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.ShowEventSelectionWindow(dailyEvents);
-        }
-
-            // UI에 이벤트 목록 전달 (일요일은 리스트에 1개만 담김)
-        if (UIManager.Instance != null)
+        // 최종 결과 UI 출력 (중복 호출 코드 제거)
+        if (UIManager.Instance != null && dailyEvents.Count > 0)
         {
             UIManager.Instance.ShowEventSelectionWindow(dailyEvents);
         }

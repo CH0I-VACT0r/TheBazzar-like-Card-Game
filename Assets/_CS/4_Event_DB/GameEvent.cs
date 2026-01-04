@@ -20,9 +20,15 @@ public abstract class GameEvent : ScriptableObject
     public string descKey;          // 설명 (Localization Key)
     public Sprite eventImage;       // 썸네일 이미지
 
-    [Header("Progression Info")]
+    [Header("일요일 전투 이벤트 설정")]
     public int targetStage = 1; // 어느 스테이지에서 등장하는가?
+    public int targetWeek = 1;  // 배틀 이벤트가 등장할 주차 (1~4)
     public bool isBoss = false;  // 보스전인가?
+
+    [Header("월 - 토 이벤트 스테이지 범위 설정")]
+    [Tooltip("일반 이벤트용: 등장 가능한 스테이지 범위")]
+    public int minStage = 1;
+    public int maxStage = 99;
 
     [Header("등급 및 타입")]
     public CardRarity rarity;       // 이벤트 등급 (브론즈, 실버, 골드, 다이아몬드)

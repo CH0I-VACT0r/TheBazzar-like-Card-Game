@@ -53,7 +53,7 @@ public class RewardManager : MonoBehaviour
         var player = BattleManager.Instance.playerController;
 
         // 골드 및 경험치 지급
-        InventoryManager.Instance.ModifyGold(m_PendingGold);
+        player.ModifyGold(m_PendingGold);
         player.AddExperience(m_PendingExp);
 
         // 카드 보상 지급 (재료 카드가 있을 때만)
