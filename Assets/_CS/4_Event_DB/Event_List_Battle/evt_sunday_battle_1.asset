@@ -17,9 +17,16 @@ MonoBehaviour:
   descKey: "\uACE0\uBE14\uB9B0 \uBD80\uB300"
   eventImage: {fileID: 0}
   targetStage: 1
+  targetWeek: 1
   isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 3
+  targetLord: 0
+  rewardGold: 3
+  rewardExp: 3
+  rewardCardID: card_branch
   monsterID: goblin
   monsterDeck:
   - card_goblin
