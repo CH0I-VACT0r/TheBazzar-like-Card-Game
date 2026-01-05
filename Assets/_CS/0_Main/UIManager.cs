@@ -294,8 +294,8 @@ public class UIManager : MonoBehaviour
 
         _overlayContainer.Add(invUI);
 
-        VisualElement windowBox = invUI.Q<VisualElement>("InventoryRoot"); // 움직일 몸체
-        VisualElement header = invUI.Q<VisualElement>("HeaderRow"); // 잡고 흔들 손잡이 (이름이 HeaderRow인지 확인!)
+        VisualElement windowBox = invUI.Q<VisualElement>("InventoryRoot");
+        VisualElement header = invUI.Q<VisualElement>("HeaderRow");
 
         // 창 이동 핸들러 부착
         if (header != null && windowBox != null)
@@ -321,17 +321,31 @@ public class UIManager : MonoBehaviour
             VisualElement slot = invUI.Q<VisualElement>($"InvSlot_{i}");
             if (slot != null)
             {
-                // DragAndDropHandler를 슬롯에 붙여줍니다.
-                // (생성자 인자: 타겟슬롯, 전체루트, 컨트롤러)
                 DragAndDropHandler handler = new DragAndDropHandler(slot, _root, playerController);
                 slot.AddManipulator(handler);
+
+                VisualElement currentSlot = slot;
+                slot.RegisterCallback<PointerEnterEvent>(evt => OnPointerEnterInventorySlot(currentSlot));
+                slot.RegisterCallback<PointerLeaveEvent>(evt => HideTooltip());
             }
         }
+
         UpdateTabState();
         // 3. 열리자마자 현재 탭(기본: Mercenary) 내용 보여주기
         RefreshInventoryGrid(CurrentTab);
 
         Debug.Log("인벤토리 열림 (탭 연결 완료)");
+    }
+
+    private void OnPointerEnterInventorySlot(VisualElement slot)
+    {
+        VisualElement cardImage = slot.Q<VisualElement>("CardImage");
+
+        if (cardImage != null && cardImage.userData is Card cardData)
+        {
+            // 이미 구현되어 있는 ShowCardTooltip 호출
+            ShowCardTooltip(cardData, slot);
+        }
     }
 
     public void CloseInventory()
