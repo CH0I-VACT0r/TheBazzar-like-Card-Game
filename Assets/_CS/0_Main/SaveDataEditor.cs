@@ -22,7 +22,21 @@ public class SaveDataEditor
         }
     }
 
-    // --- [2] 테스트 카드 세트 지급 ---
+    // --- [2] 경험치 레벨 업 치트 ---
+    [MenuItem("Tools/Cheats/Level Up Player")]
+    public static void LevelUpCheat()
+    {
+        int lv = PlayerPrefs.GetInt("PlayerLevel", 1);
+        float hp = PlayerPrefs.GetFloat("PlayerMaxHP", 300f);
+
+        PlayerPrefs.SetInt("PlayerLevel", lv + 1);
+        PlayerPrefs.SetFloat("PlayerMaxHP", hp + 300f);
+        PlayerPrefs.Save();
+
+        Debug.Log($"[Cheat] 플레이어 레벨업: {lv + 1}, 최대 체력: {hp + 300f}");
+    }
+
+    // --- [3] 테스트 카드 세트 지급 ---
     [MenuItem("Tools/Cheats/Give Test Card Set")]
     public static void GiveTestCards()
     {
@@ -58,7 +72,8 @@ public class SaveDataEditor
         }
     }
 
-    // --- [3] 세이브 데이터 전체 초기화 ---
+
+    // --- [4] 세이브 데이터 전체 초기화 ---
     [MenuItem("Tools/Clear All Save Data")]
     public static void ClearSaveData()
     {

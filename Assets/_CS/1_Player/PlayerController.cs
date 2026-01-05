@@ -1389,40 +1389,40 @@ public class PlayerController
 
     public virtual void CleanupBattleUI()
     {
-        // 영주 본체 상태 초기화
-        CurrentHP = MaxHP;       // 체력을 최대치로 복구
-        CurrentShield = 0;       // 남아있는 쉴드 제거
+        Debug.Log($"[{this.GetType().Name}] 전투 데이터 정리 시작...");
 
-        // 상태 이상(DoT) 스택 초기화
+        // 상태 이상 및 타이머 즉시 초기화 (데미지 틱 방지)
         BleedStacks = 0;
         PoisonStacks = 0;
         BurnStacks = 0;
         HealStacks = 0;
-
-        // 버프/디버프 타이머 및 플래그 초기화
         m_IsShocked = false;
         m_IsSturdy = false;
         m_ShockTimer = 0f;
         m_SturdyTimer = 0f;
 
-        // 영주 UI 즉시 갱신 (체력바, 쉴드바, 상태 이상 아이콘)
+        // 체력 및 쉴드 풀 복구
+        CurrentHP = MaxHP;
+        CurrentShield = 0;
+
+        // UI 즉시 갱신 (본체)
         UpdateHealthUI();
         UpdateDoTUI();
 
-        // 카드 슬롯들 초기화
+        // 모든 카드 슬롯 순회 (0~6)
         for (int i = 0; i < 7; i++)
         {
             if (m_Cards[i] != null)
             {
-                m_Cards[i].ClearBattleStatBuffs();
-                m_Cards[i].ClearBattleFrozen();
-                m_Cards[i].CurrentCooldown = 0f;
+                m_Cards[i].ClearBattleStatBuffs(); // 전투 버프 삭제
+                m_Cards[i].ClearBattleFrozen();    // 빙결 해제
+                m_Cards[i].CurrentCooldown = 0f;   // 쿨타임 초기화
                 m_Cards[i].SetSlotIndex(i);
-                UpdateCardSlotUI(i);
             }
+            UpdateCardSlotUI(i);
         }
 
-        Debug.Log($"[{this.GetType().Name}] 영주 및 카드 데이터 초기화 완료.");
+        Debug.Log($"[{this.GetType().Name}] 영주 HP({CurrentHP}/{MaxHP}) 및 모든 슬롯 초기화 완료.");
     }
 
     // --- 11. 카드 파괴 함수 ---
