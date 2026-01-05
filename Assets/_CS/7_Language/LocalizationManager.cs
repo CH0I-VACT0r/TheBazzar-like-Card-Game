@@ -69,6 +69,7 @@ public static class LocalizationManager
         { "tag_knight", "기사" },
         { "tag_beast", "야수" },
         { "tag_monster", "몬스터" },
+        { "tag_slime", "슬라임" },
         { "tag_goblin", "고블린" },
         { "tag_book",  "책" },
         { "tag_armor", "방어구" },
@@ -88,6 +89,10 @@ public static class LocalizationManager
         { "card_torn_book_name", "찢어진 책" },
         { "card_torn_book_desc", "너무 낡아서 더 이상 읽을 수 없습니다." },
         { "card_torn_book_flavor", "누군가 치열하게 공부한 흔적이 남아있습니다." },
+
+        { "card_slime_jelly_name", "슬라임 젤리" },
+        { "card_slime_jelly_desc", "끈적거리고 말랑말랑한 젤리입니다." },
+        { "card_slime_jelly_flavor", "만지면 기분이 묘하게 좋아지지만, 금방 손이 끈적해집니다." },
 
         { "card_branch_name", "나뭇가지" },
         { "card_branch_desc", "길에서 흔히 보이는 나뭇가지입니다." },
@@ -136,6 +141,24 @@ public static class LocalizationManager
         { "card_frozenknight_name", "얼어붙은 기사" },
         { "card_frozenknight_desc", "공격한 대상에게 빙결을 부여합니다." },
         { "card_frozenknight_flavor", "\"나의 검 끝에서, 영원한 침묵을 맞이하라.\"" },
+
+        // --- [ 몬스터 ] ---
+        // 슬라임
+        { "card_slime_green_name", "초록 슬라임" },
+        { "card_slime_green_skill_desc", "폴짝 뛰어올라 체력을 회복합니다." },
+        { "card_slime_green_flavor", "마을 근처에서 쉽게 볼 수 있는 초록색 슬라임입니다." },
+
+        { "card_slime_yellow_name", "노랑 슬라임" },
+        { "card_slime_yellow_skill_desc", "폴짝 뛰어올라 방어도를 획득합니다." },
+        { "card_slime_yellow_flavor", "마을 근처에서 쉽게 볼 수 있는 노랑색 슬라임입니다." },
+
+        { "card_slime_red_name", "빨강 슬라임" },
+        { "card_slime_red_skill_desc", "폴짝 뛰어올라 상대를 공격합니다." },
+        { "card_slime_red_flavor", "마을 근처에서 쉽게 볼 수 있는 빨강색 슬라임입니다." },
+
+        { "card_slime_purple_name", "빨강 슬라임" },
+        { "card_slime_purple_skill_desc", "폴짝 뛰어올라 상대에게 독 중첩을 부여합니다." },
+        { "card_slime_purple_flavor", "마을 근처에서 쉽게 볼 수 있는 보라색 슬라임입니다." },
 
         // 고블린
         { "card_goblin_name", "고블린" },
@@ -210,6 +233,10 @@ public static class LocalizationManager
         // --- 크래프팅 제작 이벤트 ---
         { "evt_crafting_bronze_title", "장비 공방" },
         { "evt_crafting_bronze_desc", "여러 가지 재료를 조합하여 장비를 제작할 수 있는 곳입니다." },
+
+        // --- 전투 이벤트 ---
+        { "title_evt_bt_s1_w1_1" , "슬라임 군락지" },
+        { "desc_evt_bt_s1_w1_1", "여러 슬라임들이 모여 있는 곳입니다." },
 
     };
 

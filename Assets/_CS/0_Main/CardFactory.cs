@@ -86,6 +86,7 @@ public static class CardFactory
         switch (cardID)
         {
             // --- 제작 및 재료 아이템 (상점 미등장) ---
+            case "card_slime_jelly": return new Card_SlimeJelly(owner, index);
             case "card_wolffang": return new Card_WolfFang(owner, index);
             case "card_branch": return new Card_Branch(owner, index);
             case "card_wolf_dagger": return new Card_WolfDagger(owner, index);
@@ -105,12 +106,27 @@ public static class CardFactory
 
             // --- '몬스터' 카드들 ---
             case "card_sheep": return new Card_Sheep(owner, index);
+
+            case "card_slime_green":
+                if (monsterOwner != null) return new Card_Slime_Green(monsterOwner, index);
+                break;
+            case "card_slime_yellow":
+                if (monsterOwner != null) return new Card_Slime_Yellow(monsterOwner, index);
+                break;
+            case "card_slime_red":
+                if (monsterOwner != null) return new Card_Slime_Red(monsterOwner, index);
+                break;
+            case "card_slime_purple":
+                if (monsterOwner != null) return new Card_Slime_Purple(monsterOwner, index);
+                break;
+
             case "card_goblin":
                 if (monsterOwner != null) return new Card_Goblin(monsterOwner, index);
                 break;
             case "card_witch":
                 if (monsterOwner != null) return new Card_Witch(monsterOwner, index);
                 break;
+            
         }
 
         return null;

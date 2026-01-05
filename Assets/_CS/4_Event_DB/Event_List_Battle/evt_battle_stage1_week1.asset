@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7f259cfb9ece944d803e122bf870411, type: 3}
-  m_Name: evt_sunday_battle_1
+  m_Name: evt_battle_stage1_week1
   m_EditorClassIdentifier: Assembly-CSharp::Event_Battle
-  eventID: Event_Sunday_Stage_1_001
-  titleKey: "\uACE0\uBE14\uB9B0"
-  descKey: "\uACE0\uBE14\uB9B0 \uBD80\uB300"
+  eventID: Event_Battle_Stage1_Week1_001
+  titleKey: title_evt_bt_s1_w1_1
+  descKey: desc_evt_bt_s1_w1_1
   eventImage: {fileID: 0}
   targetStage: 1
   targetWeek: 1
@@ -24,10 +24,7 @@ MonoBehaviour:
   rarity: 0
   eventType: 3
   targetLord: 0
-  rewardGold: 3
-  rewardExp: 3
-  rewardCardID: card_branch
-  monsterID: goblin
+  monsterID: slime
   monsterDeck:
   - card_goblin
   - 
@@ -36,3 +33,6 @@ MonoBehaviour:
   - card_goblin
   - 
   - card_goblin
+  rewardGold: 3
+  rewardExp: 3
+  rewardMaterialID: card_slime_jelly
