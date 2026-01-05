@@ -179,24 +179,48 @@ public static class CardFactory
 
         switch (cardID)
         {
+            // --- 제작 및 재료 아이템 (상점 미등장) ---
+            case "card_slime_jelly": return new Card_SlimeJelly(owner, index);
             case "card_wolffang": return new Card_WolfFang(owner, index);
             case "card_branch": return new Card_Branch(owner, index);
             case "card_wolf_dagger": return new Card_WolfDagger(owner, index);
+
+            // --- '아이템' 카드들 --- 
             case "card_potion_heal": return new Card_Potion_Heal(owner, index);
             case "card_torn_book": return new Card_Torn_Book(owner, index);
+
+            // --- '중립' 카드들 ---
             case "card_manual_beginner": return new Card_Manual_Beginner(owner, index);
+
+            // --- '혹한의 성주' 카드들 ---
             case "card_barbarian_warrior": return new Card_BarbarianWarrior(owner, index);
             case "card_barbarian_shieldbearer": return new Card_BarbarianShieldbearer(owner, index);
             case "card_icewolf": return new Card_IceWolf(owner, index);
             case "card_frozenknight": return new Card_FrozenKnight(owner, index);
+
+            // --- '몬스터' 카드들 ---
             case "card_sheep": return new Card_Sheep(owner, index);
-            
+
+            case "card_slime_green":
+                if (monsterOwner != null) return new Card_Slime_Green(monsterOwner, index);
+                break;
+            case "card_slime_yellow":
+                if (monsterOwner != null) return new Card_Slime_Yellow(monsterOwner, index);
+                break;
+            case "card_slime_red":
+                if (monsterOwner != null) return new Card_Slime_Red(monsterOwner, index);
+                break;
+            case "card_slime_purple":
+                if (monsterOwner != null) return new Card_Slime_Purple(monsterOwner, index);
+                break;
+
             case "card_goblin":
                 if (monsterOwner != null) return new Card_Goblin(monsterOwner, index);
                 break;
             case "card_witch":
                 if (monsterOwner != null) return new Card_Witch(monsterOwner, index);
                 break;
+            
         }
         return null;
     }

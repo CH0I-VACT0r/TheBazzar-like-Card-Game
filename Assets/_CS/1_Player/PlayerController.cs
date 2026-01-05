@@ -16,7 +16,7 @@ public class PlayerController
     protected VisualElement m_PlayerParty; // 7칸 카드 슬롯 패널
     protected VisualElement m_StatusPanel; // 상태 패널 UI
     public List<VisualElement> Slots { get; protected set; } = new List<VisualElement>(7); // 7개의 카드 슬롯 UI 요소 리스트
-    public int Gold { get; private set; } = 15;
+    public int Gold { get => InventoryManager.Instance.Gold; }
     public int CurrentLife { get; private set; } = 3; // 현재 라이프
     public int MaxLife { get; private set; } = 3;    // 최대 라이프
 
@@ -107,8 +107,11 @@ public class PlayerController
     public PlayerController(BattleManager manager, float maxHP)
     {
         this.m_BattleManager = manager;
-        this.MaxHP = maxHP;
-        this.CurrentHP = maxHP;
+        this.CurrentLevel = PlayerPrefs.GetInt("PlayerLevel", 1);
+        this.CurrentXP = PlayerPrefs.GetInt("PlayerXP", 0);
+        this.MaxHP = PlayerPrefs.GetFloat("PlayerMaxHP", 300f); 
+
+        this.CurrentHP = MaxHP;
         this.CurrentShield = 0;
 
         // 2.리스트 초기화(Null 방지)
@@ -599,6 +602,10 @@ public class PlayerController
 
         // UI 즉시 업데이트
         UpdateHealthUI();
+
+        // 데이터 변경 시 저장
+        if (GameManager.Instance != null) GameManager.Instance.SaveProgression();
+        Debug.Log($"[Event] 최대 체력 영구 증가! 현재: {MaxHP}");
     }
 
     public virtual void DecreaseMaxHP(float amount)
@@ -636,22 +643,24 @@ public class PlayerController
     public virtual void AddExperience(int amount)
     {
         CurrentXP += amount;
-        Debug.Log($"[플레이어] 경험치 {amount} 획득! (총 XP: {CurrentXP}/{MaxXP})");
 
-        //10칸이 다 차면 레벨업 
         while (CurrentXP >= MaxXP)
         {
             CurrentLevel++;
-            CurrentXP -= MaxXP; // 초과분
+            CurrentXP -= MaxXP;
 
-            MaxHP += 10; // 레벨업 시 최대 체력 증가 (추후 조정)
-            CurrentHP = MaxHP; // 레벨업 시 체력 회복)
+            // 레벨업 시 최대 체력 300 증가
+            MaxHP += 300f;
+            CurrentHP = MaxHP; // 레벨업 시 풀피 회복
 
-            Debug.LogWarning($"[플레이어] 레벨 업! {CurrentLevel} 레벨 달성! (남은 XP: {CurrentXP})");
+            Debug.LogWarning($"[Level Up] {CurrentLevel}레벨 달성! 최대 체력이 {MaxHP}로 증가했습니다.");
         }
 
-        UpdateHealthUI(); // 체력 회복 UI 업데이트
         UpdateXPUI();
+        UpdateHealthUI();
+
+        // 데이터 변경 시 즉시 저장
+        if (GameManager.Instance != null) GameManager.Instance.SaveProgression();
     }
 
     // (공통) 나의 '타겟'(몬스터)이 누구인지 알려주는 함수.
@@ -1380,17 +1389,40 @@ public class PlayerController
 
     public virtual void CleanupBattleUI()
     {
+        Debug.Log($"[{this.GetType().Name}] 전투 데이터 정리 시작...");
+
+        // 상태 이상 및 타이머 즉시 초기화 (데미지 틱 방지)
+        BleedStacks = 0;
+        PoisonStacks = 0;
+        BurnStacks = 0;
+        HealStacks = 0;
+        m_IsShocked = false;
+        m_IsSturdy = false;
+        m_ShockTimer = 0f;
+        m_SturdyTimer = 0f;
+
+        // 체력 및 쉴드 풀 복구
+        CurrentHP = MaxHP;
+        CurrentShield = 0;
+
+        // UI 즉시 갱신 (본체)
+        UpdateHealthUI();
+        UpdateDoTUI();
+
+        // 모든 카드 슬롯 순회 (0~6)
         for (int i = 0; i < 7; i++)
         {
-            if (m_Cards[i] != null) // 슬롯에 카드가 있다면
+            if (m_Cards[i] != null)
             {
-                m_Cards[i].ClearBattleStatBuffs(); // 스탯 초기화
-                m_Cards[i].ClearBattleFrozen(); // 빙결 초기화
-                m_Cards[i].CurrentCooldown = 0f; // 쿨타임 초기화
+                m_Cards[i].ClearBattleStatBuffs(); // 전투 버프 삭제
+                m_Cards[i].ClearBattleFrozen();    // 빙결 해제
+                m_Cards[i].CurrentCooldown = 0f;   // 쿨타임 초기화
                 m_Cards[i].SetSlotIndex(i);
-                UpdateCardSlotUI(i); // UI 갱신
             }
+            UpdateCardSlotUI(i);
         }
+
+        Debug.Log($"[{this.GetType().Name}] 영주 HP({CurrentHP}/{MaxHP}) 및 모든 슬롯 초기화 완료.");
     }
 
     // --- 11. 카드 파괴 함수 ---
@@ -1586,11 +1618,15 @@ public class PlayerController
         m_Cards[partySlotIndex] = cardToEquip;
 
         // 카드 정보 업데이트 (주인: 나, 위치: 여기)
+        m_Cards[partySlotIndex] = cardToEquip;
         cardToEquip.Owner = this; // (setter가 없다면 필드 직접 할당 or 메서드 사용)
         cardToEquip.SetSlotIndex(partySlotIndex);
 
         // 인벤토리 리스트에서는 삭제
         InventoryManager.Instance.RemoveCard(cardToEquip);
+
+        if (DeckManager.Instance != null) DeckManager.Instance.SaveDeck(m_Cards);
+        if (InventoryManager.Instance != null) InventoryManager.Instance.SaveInventory();
 
         // UI 갱신 (파티창 & 인벤토리 둘 다)
         UpdateAllUI();
@@ -1611,11 +1647,14 @@ public class PlayerController
         // 파티 슬롯 비우기
         m_Cards[partySlotIndex] = null;
 
+        if (DeckManager.Instance != null) DeckManager.Instance.SaveDeck(m_Cards);
+        if (InventoryManager.Instance != null) InventoryManager.Instance.SaveInventory();
+
         if (UIManager.Instance != null)
         {
             UIManager.Instance.SwitchTab(cardToUnequip.ItemType);
 
-            // 만약 인벤토리가 닫혀있다면, 자동으로 열어주는 센스
+            // 만약 인벤토리가 닫혀있다면, 자동으로 열어줌.
             if (!UIManager.Instance.IsInventoryOpen)
             {
                 UIManager.Instance.OpenInventory();
@@ -1630,7 +1669,7 @@ public class PlayerController
     {
         Card cardToSell = null;
 
-        // 인벤토리에서 판매
+        // 판매할 카드 찾기 및 제거
         if (fromInventory)
         {
             CardType currentTab = UIManager.Instance.CurrentTab;
@@ -1638,27 +1677,31 @@ public class PlayerController
 
             if (cardToSell != null)
             {
-                InventoryManager.Instance.RemoveCard(cardToSell);
+                // 인벤토리 리스트 + 저장용 ID 리스트에서 영구 제거
+                InventoryManager.Instance.RemoveCardPermanently(cardToSell);
             }
         }
-        // 파티 창에서 바로 판매
         else
         {
             cardToSell = m_Cards[slotIndex];
             if (cardToSell != null)
             {
-                m_Cards[slotIndex] = null; // 슬롯 비우기
+                m_Cards[slotIndex] = null; // 파티 슬롯 비우기
+
+                // 파티 슬롯에 있더라도 내 소유이므로 저장용 ID 리스트에서 제거해야 함
+                InventoryManager.Instance.RemoveCardPermanently(cardToSell);
+
+                // 파티 구성이 변했으므로 DeckManager에도 저장
+                if (DeckManager.Instance != null) DeckManager.Instance.SaveDeck(m_Cards);
             }
         }
 
         if (cardToSell == null) return;
 
-        // 골드 획득 로직
-        int price = cardToSell.GetSellPrice(); // Card 클래스에 있는 함수
-        Gold += price;
-        Debug.Log($"[Sell] {cardToSell.CardNameKey} 판매 완료! (+{price} G)");
+        int price = cardToSell.GetSellPrice(); // 골드 획득
+        InventoryManager.Instance.ModifyGold(price); // 인벤토리 매니저의 함수를 통해 수정
 
-        // UI 갱신
+        Debug.Log($"[Sell] {cardToSell.CardNameKey} 판매 완료! (+{price} G)");
         UpdateAllUI();
     }
 
@@ -1683,34 +1726,12 @@ public class PlayerController
 
     public void SpendGold(int amount)
     {
-        if (Gold >= amount)
-        {
-            Gold -= amount;
-
-            // UI 갱신
-            if (UIManager.Instance != null)
-            {
-                UIManager.Instance.UpdateGoldUI(Gold);
-            }
-        }
+        InventoryManager.Instance.ModifyGold(-amount);
     }
+
     public void ModifyGold(int amount)
     {
-        // 돈이 음수가 되지 않게 방지
-        if (Gold + amount < 0)
-        {
-            Debug.LogWarning("골드가 부족합니다!");
-            return;
-        }
-
-        Gold += amount;
-        Debug.Log($"[Player] 골드 변동: {amount}G (현재: {Gold}G)");
-
-        // UI 즉시 갱신
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateGoldUI(Gold);
-        }
+        InventoryManager.Instance.ModifyGold(amount);
     }
 
     // 빈 파티 슬롯 찾기 (없으면 -1 반환)
@@ -1728,12 +1749,28 @@ public class PlayerController
     {
         if (slotIndex < 0 || slotIndex >= m_Cards.Length) return;
 
+        // 1. 데이터 할당
         m_Cards[slotIndex] = card;
         card.Owner = this;
         card.SetSlotIndex(slotIndex);
 
-        // 파티 UI 갱신
+        // 2. 마스터 명단에 등록
+        if (InventoryManager.Instance != null)
+        {
+            if (!InventoryManager.Instance.OwnedCardIDs.Contains(card.CardID))
+            {
+                InventoryManager.Instance.OwnedCardIDs.Add(card.CardID);
+            }
+        }
+
+        // 양쪽 매니저에 저장 명령 하달
+        if (DeckManager.Instance != null) DeckManager.Instance.SaveDeck(m_Cards);
+        if (InventoryManager.Instance != null) InventoryManager.Instance.SaveInventory();
+
+        // UI 갱신
         UpdateCardSlotUI(slotIndex);
+
+        Debug.Log($"[Equip] 상점 구매 카드 '{card.CardID}'가 {slotIndex}번 슬롯에 저장되었습니다.");
     }
 
     // 특정 슬롯의 카드를 제거하고 반환 (데이터는 유지, 슬롯만 비움)
@@ -1781,8 +1818,40 @@ public class PlayerController
 
     public virtual void SetupDeck(string[] cardNames)
     {
-        // 기본 PlayerController는 덱이 비어있습니다.
-        // 자식 클래스에서 이 부분을 채워야 합니다.
-        Debug.Log("기본 PlayerController는 덱을 설정할 수 없습니다.");
+        for (int i = 0; i < 7; i++) m_Cards[i] = null;
+
+        string[] idsToUse = (cardNames != null) ? cardNames : DeckManager.Instance.GetEquippedIDs();
+        if (idsToUse == null) return;
+
+        for (int i = 0; i < 7; i++)
+        {
+            if (i < idsToUse.Length && !string.IsNullOrEmpty(idsToUse[i]))
+            {
+                string targetID = idsToUse[i];
+
+                //인벤토리 매니저에게 이미 만들어진 객체가 있는지 확인
+                Card existingCard = InventoryManager.Instance.PullCardFromInventory(targetID);
+
+                if (existingCard != null)
+                {
+                    // 인벤토리에 있던 객체를 그대로 파티 슬롯으로 가져옴
+                    m_Cards[i] = existingCard;
+                    m_Cards[i].Owner = this;
+                    m_Cards[i].SetSlotIndex(i);
+                }
+                else
+                {
+                    // 혹시라도 인벤토리에 없다면(예외 상황) 그때만 새로 만듭니다.
+                    m_Cards[i] = CardFactory.CreateCard(targetID, this, i);
+                }
+
+                if (m_Cards[i] != null)
+                {
+                    m_Cards[i].CurrentCooldown = m_Cards[i].GetCurrentCooldownTime();
+                }
+            }
+            UpdateCardSlotUI(i);
+        }
+        Debug.Log($"[{this.GetType().Name}] 인벤토리에서 카드를 인계받아 덱 설정을 완료했습니다.");
     }
 }

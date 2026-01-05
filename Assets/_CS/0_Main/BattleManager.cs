@@ -17,6 +17,7 @@ public class BattleManager : MonoBehaviour
     public bool IsBattleEnded { get { return m_IsBattleEnded; } }
     public bool IsDeckEditingAllowed { get; set; } = false; // 덱 편집(D&D) 허용 상태
     public bool IsQuestBattle = false;
+    private GameEvent m_CurrentEvent; // 현재 진행 중인 이벤트
 
     //  [밤 시스템]
     public const float NIGHT_START_TIME = 60.0f; // 60초 후 밤 시작
@@ -35,6 +36,11 @@ public class BattleManager : MonoBehaviour
 
 
     // --- 3. Unity 수명 주기 함수 ---
+    void Start() 
+    {
+        Debug.Log("[BattleManager] UI 연결 및 저장된 덱 복구 완료.");
+    }
+
     void Awake()
     {
         if (Instance == null)
@@ -56,8 +62,8 @@ public class BattleManager : MonoBehaviour
         monsterController.SetTarget(playerController);
 
         // 덱 설정
-        playerController.SetupDeck(null);
-        monsterController.SetupDeck(null);
+        //playerController.SetupDeck(null);
+        //monsterController.SetupDeck(null);
     }
 
     /// 매 프레임마다 Unity에 의해 호출됩니다.
@@ -88,6 +94,18 @@ public class BattleManager : MonoBehaviour
 
         // 4. (선택사항) UI에 남은 시간 표시용
         // UIManager.Instance.UpdateTimerUI(m_BattleTimer);
+    }
+
+    // 현재 이벤트
+    public void SetCurrentEvent(GameEvent evt)
+    {
+        m_CurrentEvent = evt;
+    }
+
+    // 나중에 보상 줄 때 이 함수를 사용합니다.
+    public GameEvent GetCurrentEvent()
+    {
+        return m_CurrentEvent;
     }
 
     private void StartNightPhase()
@@ -214,11 +232,38 @@ public class BattleManager : MonoBehaviour
 
         if (isVictory)
         {
-            // RewardManager에 IsQuestBattle 정보 전달
-            RewardManager.Instance.PrepareReward(monsterController.MonsterID, monsterController.IsBoss, IsQuestBattle);
+            // 1. 저장해둔 현재 이벤트를 배틀 이벤트로 캐스팅
+            Event_Battle battleEvt = m_CurrentEvent as Event_Battle;
+
+            if (battleEvt != null)
+            {
+                // 2. 인스펙터(에셋)에 우리가 직접 적은 보상 데이터 가져오기
+                int gold = battleEvt.rewardGold;
+                int exp = battleEvt.rewardExp;
+                string materialID = battleEvt.rewardMaterialID;
+
+                RewardManager.Instance.SetPendingRewards(gold, exp, materialID);
+
+                // 4. UI 결과창에도 에셋에 적힌 데이터를 그대로 전달
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.ShowBattleResult(true, gold, exp, materialID);
+                }
+            }
+            else
+            {
+                // 혹시 데이터가 없는 경우를 대비한 방어 코드 (기존 로직 사용)
+                RewardManager.Instance.PrepareReward(monsterController.MonsterID, monsterController.IsBoss, IsQuestBattle);
+            }
+        }
+        else
+        {
+            // 패배 시 처리
+            if (UIManager.Instance != null) UIManager.Instance.ShowBattleResult(false);
         }
 
-        // 전투 종료 후 플래그 초기화
+        // 전투 종료 후 데이터 및 플래그 초기화
+        m_CurrentEvent = null;
         IsQuestBattle = false;
     }
 }

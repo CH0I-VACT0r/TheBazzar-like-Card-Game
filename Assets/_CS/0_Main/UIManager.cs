@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance; // 싱글톤 접근용
-
+    public VisualElement GetPlayerUIRoot() => _bottomContainer?.Q<VisualElement>("PlayerPartyContainer"); // 실제 슬롯들이 있는 부모
+    public VisualElement GetMainRoot() => _root;
     [Header("UXML Files")]
     public VisualTreeAsset mainLayoutAsset;         // "MainLayout"
     public VisualTreeAsset fixedPlayerAsset;        // "Fixed_Player"
@@ -148,6 +149,8 @@ public class UIManager : MonoBehaviour
         if (playerController != null)
         {
             playerController.InitializeUI(playerUI, _root);
+            Debug.Log("[UIManager] UI 준비 완료, 저장된 덱 복구를 시작합니다.");
+            playerController.SetupDeck(null);
         }
     }
 
@@ -1268,15 +1271,29 @@ public class UIManager : MonoBehaviour
 
             // 카드 아이콘 생성
             VisualElement cardSlot = resultUI.Q<VisualElement>("RewardCardSlot");
-            if (cardSlot != null && !string.IsNullOrEmpty(cardID))
+            if (cardSlot != null)
             {
-                Card rewardData = CardFactory.CreateCard(cardID, null, -1);
-                if (rewardData != null)
+                // 1. UXML에 미리 만들어둔 자식 요소 'CardImage'를 찾습니다.
+                VisualElement imgElement = cardSlot.Q<VisualElement>("CardImage");
+
+                if (imgElement != null)
                 {
-                    VisualElement cardImg = new VisualElement();
-                    cardImg.AddToClassList("card-image");
-                    cardImg.style.backgroundImage = new StyleBackground(rewardData.CardImage);
-                    cardSlot.Add(cardImg);
+                    if (!string.IsNullOrEmpty(cardID))
+                    {
+                        // 2. 카드 데이터 생성 및 이미지 적용
+                        Card rewardData = CardFactory.CreateCard(cardID, null, -1);
+                        if (rewardData != null && rewardData.CardImage != null)
+                        {
+                            imgElement.style.backgroundImage = new StyleBackground(rewardData.CardImage);
+                            imgElement.style.display = DisplayStyle.Flex; // 보이게 설정
+                            Debug.Log($"[UI] 보상 이미지 적용 완료: {cardID}");
+                        }
+                    }
+                    else
+                    {
+                        // 보상 카드가 없는 경우 숨김
+                        imgElement.style.display = DisplayStyle.None;
+                    }
                 }
             }
         }
