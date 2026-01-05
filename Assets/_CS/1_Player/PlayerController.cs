@@ -107,8 +107,11 @@ public class PlayerController
     public PlayerController(BattleManager manager, float maxHP)
     {
         this.m_BattleManager = manager;
-        this.MaxHP = maxHP;
-        this.CurrentHP = maxHP;
+        this.CurrentLevel = PlayerPrefs.GetInt("PlayerLevel", 1);
+        this.CurrentXP = PlayerPrefs.GetInt("PlayerXP", 0);
+        this.MaxHP = PlayerPrefs.GetFloat("PlayerMaxHP", 300f); 
+
+        this.CurrentHP = MaxHP;
         this.CurrentShield = 0;
 
         // 2.리스트 초기화(Null 방지)
@@ -599,6 +602,10 @@ public class PlayerController
 
         // UI 즉시 업데이트
         UpdateHealthUI();
+
+        // 데이터 변경 시 저장
+        if (GameManager.Instance != null) GameManager.Instance.SaveProgression();
+        Debug.Log($"[Event] 최대 체력 영구 증가! 현재: {MaxHP}");
     }
 
     public virtual void DecreaseMaxHP(float amount)
@@ -636,22 +643,24 @@ public class PlayerController
     public virtual void AddExperience(int amount)
     {
         CurrentXP += amount;
-        Debug.Log($"[플레이어] 경험치 {amount} 획득! (총 XP: {CurrentXP}/{MaxXP})");
 
-        //10칸이 다 차면 레벨업 
         while (CurrentXP >= MaxXP)
         {
             CurrentLevel++;
-            CurrentXP -= MaxXP; // 초과분
+            CurrentXP -= MaxXP;
 
-            MaxHP += 10; // 레벨업 시 최대 체력 증가 (추후 조정)
-            CurrentHP = MaxHP; // 레벨업 시 체력 회복)
+            // 레벨업 시 최대 체력 300 증가
+            MaxHP += 300f;
+            CurrentHP = MaxHP; // 레벨업 시 풀피 회복
 
-            Debug.LogWarning($"[플레이어] 레벨 업! {CurrentLevel} 레벨 달성! (남은 XP: {CurrentXP})");
+            Debug.LogWarning($"[Level Up] {CurrentLevel}레벨 달성! 최대 체력이 {MaxHP}로 증가했습니다.");
         }
 
-        UpdateHealthUI(); // 체력 회복 UI 업데이트
         UpdateXPUI();
+        UpdateHealthUI();
+
+        // 데이터 변경 시 즉시 저장
+        if (GameManager.Instance != null) GameManager.Instance.SaveProgression();
     }
 
     // (공통) 나의 '타겟'(몬스터)이 누구인지 알려주는 함수.

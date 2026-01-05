@@ -37,12 +37,20 @@ public class GameManager : MonoBehaviour
     // --- [기능 1] 저장 로직 ---
     public void SaveProgression()
     {
+        // 스테이지 진행
         PlayerPrefs.SetInt("SavedStage", currentStage);
         PlayerPrefs.SetInt("SavedWeek", currentWeek);
         PlayerPrefs.SetInt("SavedDay", currentDayInWeek);
-
-        // (선택 사항) 현재 선택한 영주 타입도 저장할 수 있습니다.
         PlayerPrefs.SetInt("SavedLord", (int)currentLord);
+
+        // 플레이어 성장 데이터
+        if (battleManager != null && battleManager.playerController != null)
+        {
+            var pc = battleManager.playerController;
+            PlayerPrefs.SetInt("PlayerLevel", pc.CurrentLevel);
+            PlayerPrefs.SetInt("PlayerXP", pc.CurrentXP);
+            PlayerPrefs.SetFloat("PlayerMaxHP", pc.MaxHP);
+        }
 
         PlayerPrefs.Save();
         Debug.Log($"[Save] 진행 상황 저장됨: {currentStage}스테이지 {currentWeek}주차 {currentDayInWeek}일");
