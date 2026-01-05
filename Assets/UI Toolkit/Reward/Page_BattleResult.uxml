@@ -13,7 +13,7 @@
                         <ui:VisualElement name="IconExp" class="icon-exp" style="flex-grow: 1;" />
                         <ui:Label text="+ 3" name="ExpValue" class="reward-text" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="RewardCardSlot" class="reward-card-slot" style="flex-grow: 1;">
+                    <ui:VisualElement name="RewardCardSlot" class="reward-card-slot" style="flex-grow: 0; flex-shrink: 0;">
                         <ui:VisualElement name="CardImage" class="card-image" style="flex-grow: 1;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
