@@ -1273,25 +1273,35 @@ public class UIManager : MonoBehaviour
             VisualElement cardSlot = resultUI.Q<VisualElement>("RewardCardSlot");
             if (cardSlot != null)
             {
-                // 1. UXML에 미리 만들어둔 자식 요소 'CardImage'를 찾습니다.
                 VisualElement imgElement = cardSlot.Q<VisualElement>("CardImage");
-
                 if (imgElement != null)
                 {
                     if (!string.IsNullOrEmpty(cardID))
                     {
-                        // 2. 카드 데이터 생성 및 이미지 적용
+                        // 1. 보상 카드 데이터 생성
                         Card rewardData = CardFactory.CreateCard(cardID, null, -1);
-                        if (rewardData != null && rewardData.CardImage != null)
+                        if (rewardData != null)
                         {
+                            // 2. 이미지 적용 및 표시
                             imgElement.style.backgroundImage = new StyleBackground(rewardData.CardImage);
-                            imgElement.style.display = DisplayStyle.Flex; // 보이게 설정
-                            Debug.Log($"[UI] 보상 이미지 적용 완료: {cardID}");
+                            imgElement.style.display = DisplayStyle.Flex;
+
+                            // 3. [추가] 마우스 이벤트 등록 (툴팁)
+                            // 이전에 등록된 이벤트가 있을 수 있으므로 초기화(Unregister)는 Toolkit 특성상 
+                            // 새로 Instantiate된 UI라면 생략해도 되지만, 안전하게 새로 등록합니다.
+                            imgElement.pickingMode = PickingMode.Position; // 마우스 감지 활성화
+
+                            imgElement.RegisterCallback<PointerEnterEvent>(evt => {
+                                ShowCardTooltip(rewardData, imgElement);
+                            });
+
+                            imgElement.RegisterCallback<PointerLeaveEvent>(evt => {
+                                HideTooltip();
+                            });
                         }
                     }
                     else
                     {
-                        // 보상 카드가 없는 경우 숨김
                         imgElement.style.display = DisplayStyle.None;
                     }
                 }

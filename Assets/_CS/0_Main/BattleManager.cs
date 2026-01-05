@@ -211,9 +211,6 @@ public class BattleManager : MonoBehaviour
         if (m_IsBattleEnded) return;
         m_IsBattleEnded = true;
 
-        if (playerController != null) playerController.CleanupBattleUI();
-        if (monsterController != null) monsterController.CleanupBattleUI();
-
         bool isPlayerWinner = (winner == "Player");
 
         // 패배 시 즉시 라이프 차감 (UI 하트는 즉시 꺼짐)

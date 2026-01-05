@@ -162,6 +162,18 @@ public class GameManager : MonoBehaviour
         if (m_IsTransitioning) return;
         m_IsTransitioning = true;
 
+        if (battleManager != null)
+        {
+            if (battleManager.playerController != null)
+                battleManager.playerController.CleanupBattleUI();
+
+            if (battleManager.monsterController != null)
+                battleManager.monsterController.CleanupBattleUI();
+
+            // 전투 타이머 등 매니저 상태도 리셋
+            battleManager.ResetBattleState();
+        }
+
         currentDayInWeek++;
 
         // 7일(일요일)이 지나면 다음 주로 이동
