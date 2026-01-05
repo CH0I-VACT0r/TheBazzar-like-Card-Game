@@ -34,25 +34,51 @@ public class GameManager : MonoBehaviour
 
     public LordType currentLord = LordType.SevereCold;
 
+    // --- [기능 1] 저장 로직 ---
+    public void SaveProgression()
+    {
+        PlayerPrefs.SetInt("SavedStage", currentStage);
+        PlayerPrefs.SetInt("SavedWeek", currentWeek);
+        PlayerPrefs.SetInt("SavedDay", currentDayInWeek);
+
+        // (선택 사항) 현재 선택한 영주 타입도 저장할 수 있습니다.
+        PlayerPrefs.SetInt("SavedLord", (int)currentLord);
+
+        PlayerPrefs.Save();
+        Debug.Log($"[Save] 진행 상황 저장됨: {currentStage}스테이지 {currentWeek}주차 {currentDayInWeek}일");
+    }
+
+    // --- [기능 2] 불러오기 로직 ---
+    private void LoadProgression()
+    {
+        // 기본값은 각각 1, 1, 1로 설정
+        currentStage = PlayerPrefs.GetInt("SavedStage", 1);
+        currentWeek = PlayerPrefs.GetInt("SavedWeek", 1);
+        currentDayInWeek = PlayerPrefs.GetInt("SavedDay", 1);
+
+        currentLord = (LordType)PlayerPrefs.GetInt("SavedLord", 0);
+
+        Debug.Log($"[Load] 진행 상황 로드 완료: {currentStage}스테이지 {currentWeek}주차");
+    }
+
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            // 씬 이동 시 파괴되지 않게 하려면 추가 (메인 메뉴 - 인게임 이동 시 유용)
+            DontDestroyOnLoad(gameObject); 
+            LoadProgression(); // 게임 시작 시 로드
+        }
     }
 
     void Start()
     {
         if (battleManager == null)
-        {
             battleManager = FindFirstObjectByType<BattleManager>();
-        }
 
-        // 초기 페이즈 설정
-        SetPhase(GamePhase.Preparation);
-
-        // 게임 시작 시 HUD 정보 첫 업데이트
         UpdateStageUI();
-
-        // 첫날 이벤트 트리거
+        SetPhase(GamePhase.Preparation);
         TriggerDailyEventSelection();
     }
 
@@ -145,7 +171,7 @@ public class GameManager : MonoBehaviour
             usedSundayEventIDs.Clear();
             TriggerStageTransition();
         }
-
+        SaveProgression();
         UpdateStageUI();                  // UI에 변경된 날짜/스테이지 정보 반영
         SetPhase(GamePhase.Preparation);  // 정비 단계로 전환
         TriggerDailyEventSelection();     // 새 날의 이벤트 생성

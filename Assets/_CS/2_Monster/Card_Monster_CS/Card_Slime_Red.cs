@@ -18,7 +18,7 @@ public class Card_Slime_Red : Card
         this.HasQuest = false;
         this.Durability = -1;
 
-        this.BaseDamage = 10f;
+        this.BaseDamage = 5f;
         this.BaseCritChance = 0.1f;
     }
 

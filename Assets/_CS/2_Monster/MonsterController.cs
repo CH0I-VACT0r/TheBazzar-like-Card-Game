@@ -1272,15 +1272,35 @@ public class MonsterController
 
     public virtual void CleanupBattleUI()
     {
+        CurrentHP = MaxHP;       // 체력을 최대치로 복구
+        CurrentShield = 0;       // 남아있는 쉴드 제거
+
+        // 상태 이상(DoT) 스택 초기화
+        BleedStacks = 0;
+        PoisonStacks = 0;
+        BurnStacks = 0;
+        HealStacks = 0;
+
+        // 버프/디버프 타이머 및 플래그 초기화
+        m_IsShocked = false;
+        m_IsSturdy = false;
+        m_ShockTimer = 0f;
+        m_SturdyTimer = 0f;
+
+        // 영주 UI 즉시 갱신 (체력바, 쉴드바, 상태 이상 아이콘)
+        UpdateHealthUI();
+        UpdateDoTUI();
+
+        // 카드 슬롯들 초기화
         for (int i = 0; i < 7; i++)
         {
-            if (m_Cards[i] != null) // 슬롯에 카드가 있다면
+            if (m_Cards[i] != null)
             {
-                m_Cards[i].ClearBattleStatBuffs(); // 스탯 초기화
-                m_Cards[i].ClearBattleFrozen(); // 빙결 초기화
-                m_Cards[i].CurrentCooldown = 0f; // 쿨타임 초기화
+                m_Cards[i].ClearBattleStatBuffs();
+                m_Cards[i].ClearBattleFrozen();
+                m_Cards[i].CurrentCooldown = 0f;
                 m_Cards[i].SetSlotIndex(i);
-                UpdateCardSlotUI(i); // UI 갱신
+                UpdateCardSlotUI(i);
             }
         }
     }

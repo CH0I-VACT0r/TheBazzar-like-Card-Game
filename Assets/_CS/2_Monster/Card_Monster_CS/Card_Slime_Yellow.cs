@@ -18,7 +18,7 @@ public class Card_Slime_Yellow : Card
         this.HasQuest = false;
         this.Durability = -1;
 
-        this.BaseShield = 10f; // 기본 보호막 5
+        this.BaseShield = 5f; // 기본 보호막 5
         this.BaseCritChance = 0.1f;
     }
 

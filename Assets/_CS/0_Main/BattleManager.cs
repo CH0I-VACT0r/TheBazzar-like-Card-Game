@@ -36,6 +36,11 @@ public class BattleManager : MonoBehaviour
 
 
     // --- 3. Unity 수명 주기 함수 ---
+    void Start() 
+    {
+        Debug.Log("[BattleManager] UI 연결 및 저장된 덱 복구 완료.");
+    }
+
     void Awake()
     {
         if (Instance == null)

@@ -18,7 +18,7 @@ public class Card_Slime_Green : Card
         this.HasQuest = false;
         this.Durability = -1;
 
-        this.BaseHeal = 10f; // 기본 회복량 5
+        this.BaseHeal = 5f; // 기본 회복량 5
         this.BaseCritChance = 0.1f; // 치명타 10%
     }
 

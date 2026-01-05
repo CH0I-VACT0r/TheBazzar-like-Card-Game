@@ -83,40 +83,37 @@ public class Lord_SevereCold_Controller : PlayerController
 
 
 
-    // [프로토타입용 하드코딩]
+    // [프로토타입용 하드코딩] -> 부모 PlayerController.cs로 이동
     // '혹한의 성주' 덱을 생성
-    public override void SetupDeck(string[] cardNames)
-    {
-        // [프로토타입용 하드코딩]
-        // (나중에는 이 'testDeck' 배열이 '전략 씬'에서 넘어옵니다)
-        string[] testDeck = new string[]
-        {
-            "card_barbarian_warrior",                  // 1번 슬롯 (인덱스 0)
-            "card_barbarian_shieldbearer",             // 2번 슬롯 
-            "card_frozenknight",                    // 3번 슬롯
-            "card_icewolf",             // 4번 슬롯
-            "card_wolffang",             // 5번 슬롯
-            "card_branch",             // 6번 슬롯
-            null              // 7번 슬롯
-        };
+    //public override void SetupDeck(string[] cardNames)
+    //{
+    //    // 기존 카드 데이터 초기화
+    //    for (int i = 0; i < 7; i++) m_Cards[i] = null;
 
-        //덱 생성
-        for (int i = 0; i < 7; i++)
-        {
-            if (!string.IsNullOrEmpty(testDeck[i])) // 덱 정보가 비어있지 않다면
-            {
-                m_Cards[i] = CardFactory.CreateCard(testDeck[i], this, i);
-                UpdateCardSlotUI(i);
-            }
-        }
+    //    // 어떤 ID 리스트를 쓸지 결정
+    //    // - 매개변수 cardNames가 들어오면 그걸 쓰고, - null이면 DeckManager에 저장된 덱을 가져옴.
+    //    string[] idsToUse = (cardNames != null) ? cardNames : DeckManager.Instance.GetEquippedIDs();
 
-        Debug.Log("[Lord_SevereCold_Controller] 덱 설정 완료.");
+    //    // 결정된 ID들로 카드 생성
+    //    for (int i = 0; i < 7; i++)
+    //    {
+    //        // 인덱스 범위 체크 및 ID 존재 여부 확인
+    //        if (i < idsToUse.Length && !string.IsNullOrEmpty(idsToUse[i]))
+    //        {
+    //            m_Cards[i] = CardFactory.CreateCard(idsToUse[i], this, i); // CardFactory를 통해 실제 객체 생성
+    //            UpdateCardSlotUI(i); // UI 업데이트
+    //            if (m_Cards[i] != null) // 쿨타임 초기화
+    //            {
+    //                m_Cards[i].CurrentCooldown = m_Cards[i].GetCurrentCooldownTime();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // 데이터가 없는 칸은 UI도 비움
+    //            UpdateCardSlotUI(i);
+    //        }
+    //    }
 
-        // 쿨타임 초기화
-        for (int i = 0; i < 7; i++)
-        {
-            if (m_Cards[i] != null)
-                m_Cards[i].CurrentCooldown = m_Cards[i].GetCurrentCooldownTime();
-        }
-    }
+    //    Debug.Log($"[{this.GetType().Name}] 덱 설정 완료.");
+    //}
 }

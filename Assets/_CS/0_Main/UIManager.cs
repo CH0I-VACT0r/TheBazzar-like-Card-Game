@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance; // 싱글톤 접근용
-
+    public VisualElement GetPlayerUIRoot() => _bottomContainer?.Q<VisualElement>("PlayerPartyContainer"); // 실제 슬롯들이 있는 부모
+    public VisualElement GetMainRoot() => _root;
     [Header("UXML Files")]
     public VisualTreeAsset mainLayoutAsset;         // "MainLayout"
     public VisualTreeAsset fixedPlayerAsset;        // "Fixed_Player"
@@ -148,6 +149,8 @@ public class UIManager : MonoBehaviour
         if (playerController != null)
         {
             playerController.InitializeUI(playerUI, _root);
+            Debug.Log("[UIManager] UI 준비 완료, 저장된 덱 복구를 시작합니다.");
+            playerController.SetupDeck(null);
         }
     }
 
