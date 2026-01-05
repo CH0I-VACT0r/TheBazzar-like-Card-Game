@@ -75,6 +75,14 @@ public class RewardManager : MonoBehaviour
             GameManager.Instance.StartNextDay();
         }
     }
+    public void SetPendingRewards(int gold, int exp, string cardID)
+    {
+        m_PendingGold = gold;
+        m_PendingExp = exp;
+        m_PendingCardID = cardID;
+
+        Debug.Log($"[Reward] 보상 예약 완료: {gold}G, {exp}XP, 재료:{cardID}");
+    }
 
     private string GetMaterialByMonster(string monsterID)
     {
