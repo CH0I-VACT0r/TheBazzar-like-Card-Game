@@ -1,34 +1,42 @@
 using UnityEngine;
 
+[CardConfig(
+    "card_wolf_dagger",
+    NameEn = "Wolf Dagger",
+    NameKo = "ëŠ‘ëŒ€ ë‹¨ê²€",
+    DescEn = "Deals damage and applies bleed.",
+    DescKo = "ì ì—ê²Œ ì¶œí˜ˆì„ ë¶€ì—¬í•©ë‹ˆë‹¤.",
+    FlavorEn = "Sharp dagger made of wolf fang.",
+    FlavorKo = "ëŠ‘ëŒ€ ì´ë¹¨ë¡œ ë§Œë“  ë‚ ì¹´ë¡œìš´ ë‹¨ê²€ì…ë‹ˆë‹¤."
+)]
 public class Card_WolfDagger : Card
 {
-    // »ı¼ºÀÚ: ÄğÅ¸ÀÓ 5ÃÊ ¼³Á¤
-    public Card_WolfDagger(object owner, int index) : base(owner, index, 5.0f, "card_wolf_dagger")
+    // íš¨ê³¼: ì¶œí˜ˆ 5 ìŠ¤íƒ ë¶€ì—¬
+    public Card_WolfDagger(object owner, int index) : base(owner, index, 5.0f)
     {
-        this.CardNameKey = "card_wolf_dagger_name"; // ´Á´ë ÀÌ»¡ ´Ü°Ë
-        this.ItemType = CardType.Consumable;   // ¼Òºñ ¾ÆÀÌÅÛÀ¸·Î ºĞ·ù (ÀåºñÃ³·³ ¾²Áö¸¸ ¼Ò¸ğ¼º)
+        // 1. NameKey / DescKey / FlavorKey are now auto-set by the base Card class using the Attribute above.
+        
+        this.ItemType = CardType.Consumable;   // ì†Œëª¨í’ˆ ë° ì¬ë£Œ ë¶„ë¥˜ (ì „íˆ¬ ì¤‘ ì†Œëª¨ë¨)
         this.CardImage = Resources.Load<Sprite>("CardImages/Consumable/Weapon/WolfDagger");
-        this.Durability = 5;       // ³»±¸µµ 5
-        this.BleedStacksToApply = 5; // ÅøÆÁ Ç¥±â¿ë (½ÇÁ¦ Àû¿ëÀº ExecuteSkill¿¡¼­)
-        this.CardSkillDescriptionKey = "card_wolfdagger_skill_desc"; // "Àû¿¡°Ô ÃâÇ÷ 5¸¦ ºÎ¿©ÇÕ´Ï´Ù."
-        this.FlavorTextKey = "card_wolfdagger_flavor";
+        this.Durability = 5;       // ë‚´êµ¬ë„ 5
+        this.BleedStacksToApply = 5; // ì¶œí˜ˆ 5ìŠ¤íƒ (ìŠ¤í‚¬ì—ì„œ ì‚¬ìš©)
+        
         SetInitPrice(2);
         this.Rarity = CardRarity.Bronze;
     }
 
     public override void ExecuteSkill()
     {
-        // 1. ÇÃ·¹ÀÌ¾î°¡ »ç¿ëÇÑ °æ¿ì
+        // 1. í”Œë ˆì´ì–´ê°€ ì‚¬ìš© ì‹œ
         if (Owner is PlayerController player)
         {
             BattleManager bm = Object.FindFirstObjectByType<BattleManager>();
             if (bm != null && bm.monsterController != null)
             {
-                // ¸ó½ºÅÍ¿¡°Ô ÃâÇ÷ 5 ºÎ¿© (5ÃÊ Áö¼Ó or 5½ºÅÃ)
-                // CardDataÀÇ BleedStacksToApply °ªÀ» »ç¿ëÇÏ°Å³ª ÇÏµåÄÚµù
+                // ì ì—ê²Œ ì¶œí˜ˆ 5 ë¶€ì—¬
                 bm.monsterController.ApplyLordStatus(StatusEffectType.Bleed, this.BleedStacksToApply);
 
-                Debug.Log($"[WolfDagger] ¸ó½ºÅÍ¿¡°Ô ÃâÇ÷ {this.BleedStacksToApply} ºÎ¿©!");
+                Debug.Log($"[WolfDagger] ì ì—ê²Œ ì¶œí˜ˆ {this.BleedStacksToApply} ë¶€ì—¬!");
             }
         }
     }
