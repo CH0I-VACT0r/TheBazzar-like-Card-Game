@@ -25,14 +25,16 @@ MonoBehaviour:
   eventType: 3
   targetLord: 0
   monsterID: slime
+  monsterMaxHP: 100
+  monsterLevel: 1
   monsterDeck:
-  - card_goblin
-  - 
-  - card_goblin
-  - 
-  - card_goblin
-  - 
-  - card_goblin
+  - card_slime_green
+  - card_slime_red
+  - card_slime_green
+  - card_slime_red
+  - card_slime_green
+  - card_slime_red
+  - card_slime_green
   rewardGold: 3
   rewardExp: 3
   rewardMaterialID: card_slime_jelly

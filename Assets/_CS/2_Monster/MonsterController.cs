@@ -19,6 +19,7 @@ public class MonsterController
     protected VisualElement m_MonsterParty; // UXML의 MonsterParty 패널
     protected VisualElement m_StatusPanel; // 몬스터 상태 패널 UI
     public List<VisualElement> Slots { get; protected set; } = new List<VisualElement>(7);
+    public int MonsterLevel { get; private set; } = 1;
 
     // 툴팁 UI 요소
     protected VisualElement m_Root;
@@ -233,6 +234,26 @@ public class MonsterController
         }
 
         Debug.Log("MonsterController UI 초기화 완료");
+    }
+
+    public void SetupMonster(float maxHP, int level, string id, bool isBossFlag)
+    {
+        this.MonsterID = id;
+        this.MonsterLevel = level;
+        this.MaxHP = maxHP;
+        this.CurrentHP = maxHP;
+        this.IsBoss = isBossFlag; // 
+        this.CurrentShield = 0;
+
+        // UI 이름표 업데이트
+        if (m_NameLabel != null)
+        {
+            string name = LocalizationManager.GetText(id);
+            // 보스라면 이름 앞에 [BOSS]를 붙이는 등의 연출 가능
+            m_NameLabel.text = IsBoss ? $"[BOSS] {name}" : name;
+        }
+
+        UpdateHealthUI();
     }
 
     // --- 6. 핵심 함수 ---

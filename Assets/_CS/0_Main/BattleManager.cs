@@ -57,8 +57,8 @@ public class BattleManager : MonoBehaviour
         monsterController.SetTarget(playerController);
 
         // 덱 설정
-        playerController.SetupDeck(null);
-        monsterController.SetupDeck(null);
+        //playerController.SetupDeck(null);
+        //monsterController.SetupDeck(null);
     }
 
     /// 매 프레임마다 Unity에 의해 호출됩니다.
