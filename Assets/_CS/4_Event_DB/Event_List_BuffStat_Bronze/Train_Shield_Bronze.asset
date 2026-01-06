@@ -15,7 +15,7 @@ MonoBehaviour:
   eventID: train_shield_bronze
   titleKey: evt_train_shield_title
   descKey: evt_train_shield_desc
-  eventImage: {fileID: 5473622961213027082, guid: fcc701cffde1e0b4890c1f3546cb2af0, type: 3}
+  eventImage: {fileID: 2665602799141285177, guid: 2d13a88fa973a64429a96ecfdf001d34, type: 3}
   targetStage: 1
   targetWeek: 1
   isBoss: 0

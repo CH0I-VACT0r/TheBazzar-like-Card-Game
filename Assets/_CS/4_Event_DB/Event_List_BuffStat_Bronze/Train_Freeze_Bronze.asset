@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_freeze_bronze
   titleKey: evt_train_freeze_title
   descKey: evt_train_freeze_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 1969952286728681698, guid: 88e0b8102c9d9b64f9e69a793327b78d, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 7
   amount: 0.1
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_freeze

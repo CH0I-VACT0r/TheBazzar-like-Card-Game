@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_bleed_bronze
   titleKey: evt_train_bleed_title
   descKey: evt_train_bleed_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 796715382747701101, guid: 7524cdb53c055714eabfafa08fd35009, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 4
   amount: 2
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_bleed

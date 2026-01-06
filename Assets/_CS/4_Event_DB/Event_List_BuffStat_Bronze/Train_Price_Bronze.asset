@@ -15,10 +15,17 @@ MonoBehaviour:
   eventID: train_price_bronze
   titleKey: evt_train_price_title
   descKey: evt_train_price_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 5955571556595049420, guid: 3f5fe1026163c054d99435132354e582, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 9
   amount: 2
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags: []

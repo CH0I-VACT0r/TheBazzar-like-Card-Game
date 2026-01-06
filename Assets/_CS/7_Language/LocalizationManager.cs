@@ -202,20 +202,20 @@ public static class LocalizationManager
         { "evt_train_heal_desc", "성녀에게 기도를 받습니다. [힐러]의 회복량을 10만큼 강화합니다." },
 
         // 지속힐
-        { "evt_train_healdot_title", "기초 약초학 수련" },
+        { "evt_train_healdot_title", "약초학 연구" },
         { "evt_train_healdot_desc", "주변에서 흔히 보는 약초를 구분합니다. [지속 회복] 부여 수치를 3만큼 강화합니다." },
         
         // 4. 출혈 (Bleed)
-        { "evt_train_bleed_title", "날카로운 숫돌" },
+        { "evt_train_bleed_title", "무기 제련하기" },
         { "evt_train_bleed_desc", "무기를 예리하게 다듬습니다. [출혈] 부여 수치를 2만큼 강화합니다." },
 
         // 5. 화상 (Burn)
-        { "evt_train_burn_title", "기초 화염 수련" },
+        { "evt_train_burn_title", "기초 화염 마법 수업" },
         { "evt_train_burn_desc", "불을 다루는 법을 익힙니다. [화상] 부여 수치를 3만큼 강화합니다." },
 
         // 6. 중독 (Poison)
-        { "evt_train_poison_title", "독약 주사" },
-        { "evt_train_poison_desc", "맹독 주사를 처방합니다. [중독] 부여 수치를 1만큼 강화합니다." },
+        { "evt_train_poison_title", "독약 주사 개발" },
+        { "evt_train_poison_desc", "맹독 주사를 개발합니다. [중독] 부여 수치를 1만큼 강화합니다." },
 
         // 7. 빙결 (Freeze)
         { "evt_train_freeze_title", "얼음물 입수" },

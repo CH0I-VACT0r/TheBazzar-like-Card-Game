@@ -22,7 +22,7 @@ MonoBehaviour:
   minStage: 1
   maxStage: 99
   rarity: 0
-  eventType: 0
+  eventType: 7
   targetLord: 0
   minGold: 0
   maxGold: 0

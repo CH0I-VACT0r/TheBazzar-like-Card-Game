@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_poison_bronze
   titleKey: evt_train_poison_title
   descKey: evt_train_poison_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 4294263225797114755, guid: 8a5746666ec372d4fb6916453b85dd4d, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 5
   amount: 1
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_poison

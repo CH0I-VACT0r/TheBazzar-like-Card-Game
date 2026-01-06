@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_burn_bronze
   titleKey: evt_train_burn_title
   descKey: evt_train_burn_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 878598258288939794, guid: 3e926b3e9e869ac4dad579a7d4d7e77c, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 6
   amount: 3
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_burn

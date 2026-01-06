@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_regen_bronze
   titleKey: evt_train_healdot_title
   descKey: evt_train_healdot_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: -4004104814789916134, guid: 19ae5e7f5c04cbe428e29217a6555be7, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 3
   amount: 3
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_regen

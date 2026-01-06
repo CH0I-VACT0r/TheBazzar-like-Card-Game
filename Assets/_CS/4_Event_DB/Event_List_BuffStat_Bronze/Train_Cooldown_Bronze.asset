@@ -15,10 +15,17 @@ MonoBehaviour:
   eventID: train_cooldown_bronze
   titleKey: evt_train_cooldown_title
   descKey: evt_train_cooldown_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 1680635488782544505, guid: 72b467d1d52594a44989e621b958763e, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 0
+  targetLord: 0
   buffType: 8
   amount: 0.02
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags: []

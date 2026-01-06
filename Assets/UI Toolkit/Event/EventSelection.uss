@@ -39,14 +39,20 @@ VisualElement {}
     
     background-color: #EFE7DA; /* 짙은 갈색 배경 */
     border-width: 4px;
-    border-color: #8D6E63;     /* 테두리 색 */
+    border-color: black;     /* 테두리 색 */
     border-radius: 15px;       /* 둥근 모서리 */
     
     margin: 100px;              /* 카드끼리의 간격 */
-    padding: 15px;             /* 내부 여백 */
+    padding:15px;
+    padding-left: 40px;
+    padding-right: 40px;
+    
     
     align-items: center;       /* 내부 텍스트/이미지 중앙 정렬 */
     
+    flex-grow: 0;
+    flex-shrink: 0;
+
     /* 부드러운 애니메이션 효과 */
     transition-duration: 0.1s; 
     transition-property: scale, border-color, background-color;
@@ -55,7 +61,7 @@ VisualElement {}
 /* [핵심] 마우스 올렸을 때 (Hover) 효과 */
 .event-card:hover {
     scale: 1.1;                /* 1.1배 커짐 */
-    border-color: #FFD54F;     /* 금색 테두리로 변경 */
+    border-color: red;     /* 금색 테두리로 변경 */
     background-color: #CAB399; /* 배경색 살짝 밝게 */
 }
 
@@ -67,6 +73,9 @@ VisualElement {}
     margin-bottom: 15px;
     border-radius: 10px;
     -unity-background-scale-mode: scale-to-fit; /* 비율 유지하며 맞춤 */
+    overflow: hidden;
+    border-width: 3px;       /* 테두리 두께 (2px ~ 4px 추천) */
+    border-color: white;
 }
 
 /* 6. 이벤트 이름 텍스트 */
@@ -77,6 +86,7 @@ VisualElement {}
     white-space: normal;       /* 글자가 길면 줄바꿈 */
     -unity-text-align: middle-center;
     margin-bottom: 5px;
+    flex-shrink: 1;
 }
 
 .border-bronze {
