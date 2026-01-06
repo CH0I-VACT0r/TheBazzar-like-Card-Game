@@ -9,7 +9,8 @@ public enum EventType
     Battle,          // 전투
     RandomEncounter, // 랜덤 만남
     Crafting,        // 제작
-    Quest            // 의뢰  
+    Quest,           // 의뢰  
+    Instant,         // 즉시 보상
 }
 
 public abstract class GameEvent : ScriptableObject

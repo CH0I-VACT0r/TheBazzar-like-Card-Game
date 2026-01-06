@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a312cfc572511d74abe07d4b2017d3be, type: 3}
+  m_Name: Event_InstantReward
+  m_EditorClassIdentifier: Assembly-CSharp::Event_InstantReward
+  eventID: 
+  titleKey: 
+  descKey: 
+  eventImage: {fileID: 0}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
+  rarity: 0
+  eventType: 0
+  targetLord: 0
+  minGold: 0
+  maxGold: 0
+  rewardCardPool: []
+  cardCount: 1
