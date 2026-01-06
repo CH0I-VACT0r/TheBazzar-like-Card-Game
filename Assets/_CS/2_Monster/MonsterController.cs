@@ -245,6 +245,8 @@ public class MonsterController
         this.IsBoss = isBossFlag; // 
         this.CurrentShield = 0;
 
+        Debug.Log($"[Monster-Spawn] ID: {id}, 설정된 MaxHP: {maxHP}, 현재 CurrentHP: {this.CurrentHP}");
+
         // UI 이름표 업데이트
         if (m_NameLabel != null)
         {
@@ -1298,7 +1300,7 @@ public class MonsterController
             {
                 m_Cards[i].ClearBattleStatBuffs();
                 m_Cards[i].ClearBattleFrozen();
-                m_Cards[i].CurrentCooldown = 0f;
+                m_Cards[i].CurrentCooldown = m_Cards[i].GetCurrentCooldownTime();
                 m_Cards[i].SetSlotIndex(i);
                 UpdateCardSlotUI(i);
             }

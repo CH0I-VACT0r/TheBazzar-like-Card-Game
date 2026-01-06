@@ -15,11 +15,18 @@ MonoBehaviour:
   eventID: train_damage_bronze
   titleKey: evt_train_damage_title
   descKey: evt_train_damage_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 4413674743425418208, guid: 89dfe99df6754e744899bedeccd5960e, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 2
+  targetLord: 0
   buffType: 0
   amount: 10
+  ignoreTypeCheck: 0
   requiredType: 0
   requiredTags:
   - tag_dealer

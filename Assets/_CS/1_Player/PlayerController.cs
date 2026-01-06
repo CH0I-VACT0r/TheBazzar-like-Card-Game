@@ -1416,7 +1416,7 @@ public class PlayerController
             {
                 m_Cards[i].ClearBattleStatBuffs(); // 전투 버프 삭제
                 m_Cards[i].ClearBattleFrozen();    // 빙결 해제
-                m_Cards[i].CurrentCooldown = 0f;   // 쿨타임 초기화
+                m_Cards[i].CurrentCooldown = m_Cards[i].GetCurrentCooldownTime();   // 쿨타임 초기화
                 m_Cards[i].SetSlotIndex(i);
             }
             UpdateCardSlotUI(i);
