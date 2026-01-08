@@ -15,9 +15,15 @@ MonoBehaviour:
   eventID: shop_potion
   titleKey: evt_shop_potion_title
   descKey: evt_shop_potion_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: -785639436989729959, guid: cc996fc2ff9c2ad468be684f28d9220f, type: 3}
+  targetStage: 1
+  targetWeek: 1
+  isBoss: 0
+  minStage: 1
+  maxStage: 99
   rarity: 0
   eventType: 0
+  targetLord: 0
   priceMultiplier: 1
   rerollPrice: 3
   targetRarity: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   eventID: shop_bronze_merc
   titleKey: evt_shop_bronze_title
   descKey: evt_shop_bronze_desc
-  eventImage: {fileID: 0}
+  eventImage: {fileID: -2572457392705796598, guid: b5c637d210fa918469add7de1b8b148d, type: 3}
   targetStage: 1
   targetWeek: 1
   isBoss: 0
@@ -24,9 +24,6 @@ MonoBehaviour:
   rarity: 0
   eventType: 0
   targetLord: 0
-  rewardGold: 0
-  rewardExp: 0
-  rewardCardID: 
   priceMultiplier: 1
   rerollPrice: 3
   targetRarity: 0
