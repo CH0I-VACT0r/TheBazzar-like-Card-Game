@@ -53,3 +53,47 @@ The architecture prioritizes modularity, data-driven design, and maintainability
 - Card execution pipeline
 - Damage calculation
 - Status effect handling
+
+---
+
+## Demo
+
+### 🃏 Card Logic
+
+<p align="center">
+  <img src="demo/Card-Logics.gif" width="800">
+</p>
+
+Implementation of core card gameplay mechanics including card activation, turn processing, and effect resolution.
+
+---
+
+### 💬 Tooltip UI
+
+<p align="center">
+  <img src="demo/Tooltip-UI.gif" width="800">
+</p>
+
+Dynamic tooltip system displaying card information, keywords, and item descriptions through reusable UI components.
+
+---
+
+### 🎒 Inventory System
+
+<p align="center">
+  <img src="demo/Inventory-System.gif" width="800">
+</p>
+
+Grid-based inventory with drag-and-drop interactions, item swapping, equipment management, and real-time UI synchronization.
+
+---
+
+### 🔨 Card Crafting
+
+<p align="center">
+  <img src="demo/Card-Crafting.gif" width="800">
+</p>
+
+Card upgrade and crafting system allowing players to combine resources and strengthen their deck.
+
+---
