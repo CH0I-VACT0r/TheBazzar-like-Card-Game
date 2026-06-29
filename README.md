@@ -13,7 +13,17 @@ The architecture prioritizes modularity, data-driven design, and maintainability
 
 
 ## Technical Features
-
+- ScriptableObject-based card definitions
+- Tag-driven card classification
+- Automatic card role classification
+- Key-based localization manager
+- Modular gameplay architecture
+- Drag-and-drop interaction system
+- Inventory & equipment management
+- Event-driven UI architecture
+- Reusable tooltip framework
+- Card crafting and upgrade mechanics
+  
 ### Data-driven Card System
 
 - ScriptableObject-based card definitions
