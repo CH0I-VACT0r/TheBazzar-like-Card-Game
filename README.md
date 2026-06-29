@@ -2,7 +2,7 @@
 
 A Unity prototype inspired by The Bazaar that focuses on scalable gameplay architecture rather than complete game content.
 
-The project emphasizes modular game systems including deckbuilding, inventory management, drag-and-drop interactions, ScriptableObject-based data management, and event-driven UI.
+The project emphasizes scalable game architecture through data-driven design, including ScriptableObject-based cards, tag-driven classification, automatic role identification, and event-driven gameplay systems.
 
 
 ## Design Goals
