@@ -12,7 +12,7 @@ The primary objective of this project was not to build a complete game, but to d
 The architecture prioritizes modularity, data-driven design, and maintainability.
 
 
-## Technical Features
+## Highlights
 - ScriptableObject-based card definitions
 - Tag-driven card classification
 - Automatic card role classification
@@ -23,6 +23,8 @@ The architecture prioritizes modularity, data-driven design, and maintainability
 - Event-driven UI architecture
 - Reusable tooltip framework
 - Card crafting and upgrade mechanics
+
+## Technical Features
   
 ### Data-driven Card System
 
