@@ -1,4 +1,4 @@
-# Bazaar-style Card Game Prototype
+# The Bazaar-style Card Game Prototype
 
 A Unity prototype inspired by The Bazaar that focuses on scalable gameplay architecture rather than complete game content.
 
